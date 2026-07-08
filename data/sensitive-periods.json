@@ -1,0 +1,154 @@
+{
+  "description": "青少年儿童身体素质发展敏感期理论数据库 - 基于巴伊长期运动发展模型(LTAD)与国内运动生理学教材",
+  "source": "《运动生理学》(王瑞元)、《运动训练学》(田麦久)、巴伊LTAD模型、国家体育总局体科所儿童青少年体适能培训课程",
+  "ageGroups": {
+    "early_childhood": {
+      "name": "学龄前期",
+      "ageRange": "3-6岁",
+      "gradeRange": "幼儿园",
+      "developmentFocus": ["柔韧性", "协调性", "基本动作技能"],
+      "sensitivePeriods": ["柔韧性(4-5岁起步)", "协调性(6岁起步)", "基本动作技能"],
+      "trainingPrinciple": "以游戏化活动为主，发展基本动作技能(走、跑、跳、投、攀爬)，培养运动兴趣，避免专项化训练",
+      "avoidItems": ["大负荷力量训练", "长时间耐力训练", "高度专项化训练"],
+      "maxHeartRate": "不超过170次/分"
+    },
+    "lower_primary": {
+      "name": "小学低段",
+      "ageRange": "6-9岁",
+      "gradeRange": "1-3年级",
+      "developmentFocus": ["柔韧性", "协调性", "速度(动作频率)", "灵敏素质", "基本运动技能"],
+      "sensitivePeriods": [
+        "柔韧性第一敏感期(男5-8/女4-7岁)",
+        "协调性敏感期(6-9岁，一般协调能力)",
+        "速度第一敏感期(男7-9/女5-8岁)",
+        "节奏感敏感期(6-12岁)"
+      ],
+      "trainingPrinciple": "以多样化运动体验为主，重点发展一般协调能力和动作频率，柔韧性训练贯穿始终，游戏化短距离跑发展速度",
+      "avoidItems": ["专项力量训练", "大强度无氧训练", "长时间单调耐力跑"],
+      "maxHeartRate": "不超过180次/分"
+    },
+    "upper_primary": {
+      "name": "小学高段",
+      "ageRange": "9-12岁",
+      "gradeRange": "4-6年级",
+      "developmentFocus": ["速度", "灵敏素质", "协调性(专项)", "柔韧性", "有氧耐力(入门)", "核心力量(入门)"],
+      "sensitivePeriods": [
+        "速度敏感期(7-13岁步频自然增长)",
+        "灵敏素质敏感期(10-12岁)",
+        "协调性敏感期(9-13岁，专门协调能力)",
+        "反应速度敏感期(9-12岁，12岁达第一次高峰)",
+        "平衡与准确能力敏感期(9-13岁)",
+        "柔韧性第二敏感期临近(男12-14/女11-13岁)",
+        "有氧耐力可训练期(8岁起步)"
+      ],
+      "trainingPrinciple": "速度训练以短距离、高频次为主；灵敏训练结合多变方向和反应练习；开始有氧耐力适应性训练；核心力量以自重为主；保持柔韧性训练",
+      "avoidItems": ["大重量力量训练", "长时间力竭性耐力", "高度专项化训练"],
+      "maxHeartRate": "不超过190次/分"
+    },
+    "junior_high": {
+      "name": "初中阶段",
+      "ageRange": "12-15岁",
+      "gradeRange": "7-9年级",
+      "developmentFocus": ["力量(一般力量)", "速度(第二敏感期)", "有氧耐力", "柔韧性(第二敏感期)", "速度力量"],
+      "sensitivePeriods": [
+        "力量第一敏感期/一般力量(12-15岁)",
+        "速度第二敏感期(男13-16/女11-14岁)",
+        "柔韧性第二敏感期(男12-14/女11-13岁)",
+        "有氧耐力敏感期(男10-17/女9-14岁)",
+        "速度力量快速增长期(男7-16/女7-13岁)",
+        "技术敏感期后期(6-13岁接近尾声)"
+      ],
+      "trainingPrinciple": "青春期生长突增期，力量训练以徒手和轻负荷为主，注重全身协调发展；速度训练结合力量发展；有氧耐力为主要训练方向；注意柔韧性维持，防止生长突增导致下降；女生注意月经期训练调整",
+      "avoidItems": ["脊柱大负荷力量练习", "最大力量测试", "过度无氧训练(15岁前)", "骨骺板损伤风险动作"],
+      "maxHeartRate": "不超过200次/分",
+      "specialNotes": "青春期生长突增期，骨骼生长快于肌肉韧带，易出现柔韧性下降和协调性暂时紊乱，需特别注意损伤预防"
+    },
+    "senior_high": {
+      "name": "高中阶段",
+      "ageRange": "15-18岁",
+      "gradeRange": "10-12年级",
+      "developmentFocus": ["专项力量", "无氧耐力", "速度力量/爆发力", "速度耐力", "专项协调性"],
+      "sensitivePeriods": [
+        "专项力量敏感期(15-17岁)",
+        "无氧耐力敏感期(男10-20/女9-18岁)",
+        "爆发力敏感期(男16-22/女15-21岁)",
+        "有氧耐力深度发展期(16-17岁可大强度)"
+      ],
+      "trainingPrinciple": "可进行系统化力量训练，注重专项力量与技术结合；无氧耐力训练比例增加；爆发力训练可引入高级方法；结合心率监控科学安排负荷；注意左右对称发展和关节保护",
+      "avoidItems": ["过度训练", "忽视热身和放松", "单一训练模式"],
+      "maxHeartRate": "200次/分(可按220-年龄估算)",
+      "specialNotes": "身体发育趋于成熟，可承受接近成人的训练负荷，但仍需注意骨骺未完全闭合(通常18-20岁)，避免极端负荷"
+    }
+  },
+  "qualitySensitivePeriods": {
+    "flexibility": {
+      "name": "柔韧性",
+      "periods": [
+        { "gender": "男", "firstStart": 5, "firstEnd": 8, "secondStart": 12, "secondEnd": 14, "label": "第一敏感期5-8岁 / 第二敏感期12-14岁" },
+        { "gender": "女", "firstStart": 4, "firstEnd": 7, "secondStart": 11, "secondEnd": 13, "label": "第一敏感期4-7岁 / 第二敏感期11-13岁" }
+      ],
+      "methods": ["动态拉伸", "静态拉伸", "PNF拉伸", "主动牵拉", "被动牵拉", "双人牵拉"],
+      "keyPoints": "儿童多用缓慢式和主动伸展；13-16岁快速生长期柔韧性下降，防止过分扭转"
+    },
+    "coordination": {
+      "name": "协调性",
+      "periods": [
+        { "gender": "通用", "generalStart": 6, "generalEnd": 9, "specialStart": 9, "specialEnd": 13, "peak": 14, "label": "一般协调6-9岁 / 专门协调9-13岁 / 14岁达高峰" }
+      ],
+      "methods": ["多样化运动体验", "手脚配合练习", "敏捷梯", "舞蹈体操", "球类活动"],
+      "keyPoints": "6-12岁发展节奏感，7-14岁发展灵活性和空间定向，9-13岁发展平衡与准确性"
+    },
+    "agility": {
+      "name": "灵敏素质",
+      "periods": [
+        { "gender": "通用", "start": 10, "end": 12, "label": "敏感期10-12岁" }
+      ],
+      "methods": ["T型跑", "绕标志物", "听信号变向", "绳梯训练", "反应抓握", "反应脚步"],
+      "keyPoints": "训练时间不宜过长，注意与其他身体素质练习交替进行"
+    },
+    "speed": {
+      "name": "速度素质",
+      "periods": [
+        { "gender": "男", "firstStart": 7, "firstEnd": 9, "secondStart": 13, "secondEnd": 16, "label": "第一敏感期7-9岁 / 第二敏感期13-16岁" },
+        { "gender": "女", "firstStart": 5, "firstEnd": 8, "secondStart": 11, "secondEnd": 14, "label": "第一敏感期5-8岁 / 第二敏感期11-14岁" },
+        { "gender": "通用", "reactionStart": 9, "reactionEnd": 12, "reactionPeak": 12, "label": "反应速度敏感期9-12岁，12岁达第一次高峰" },
+        { "gender": "通用", "frequencyStart": 7, "frequencyEnd": 13, "label": "动作频率自然增长期7-13岁" }
+      ],
+      "methods": ["短距离跑(30-60m)", "接力跑", "听信号起跑", "追逐游戏", "各种跳跃练习", "上下坡跑"],
+      "keyPoints": "7-11岁以动作速度和频率为主；12-14岁结合力量发展速度；避免始终用最高速度训练导致速度障碍"
+    },
+    "strength": {
+      "name": "力量素质",
+      "periods": [
+        { "gender": "通用", "generalStart": 12, "generalEnd": 15, "label": "一般力量敏感期12-15岁" },
+        { "gender": "通用", "specialStart": 15, "specialEnd": 17, "label": "专项力量敏感期15-17岁" },
+        { "gender": "男", "speedStrengthStart": 7, "speedStrengthEnd": 16, "label": "速度力量(男)7-16岁快速增长" },
+        { "gender": "女", "speedStrengthStart": 7, "speedStrengthEnd": 13, "label": "速度力量(女)7-13岁快速增长" },
+        { "gender": "男", "explosiveStart": 16, "explosiveEnd": 22, "label": "爆发力(男)16-22岁" },
+        { "gender": "女", "explosiveStart": 15, "explosiveEnd": 21, "label": "爆发力(女)15-21岁" }
+      ],
+      "methods": ["自重训练(俯卧撑/深蹲/平板支撑)", "弹力带训练", "药球训练", "跳深练习", "壶铃训练(高年级)", "哑铃训练(高年级)"],
+      "keyPoints": "15岁前以速度力量为主，不宜纯力量练习；动力性练习为主，少做静力性；避免憋气；13-15岁不宜脊柱大负荷"
+    },
+    "endurance": {
+      "name": "耐力素质",
+      "periods": [
+        { "gender": "男", "aerobicStart": 10, "aerobicEnd": 17, "label": "有氧耐力(男)10-17岁" },
+        { "gender": "女", "aerobicStart": 9, "aerobicEnd": 14, "aerobicSecondStart": 16, "aerobicSecondEnd": 17, "label": "有氧耐力(女)9-14岁及16-17岁" },
+        { "gender": "男", "anaerobicStart": 10, "anaerobicEnd": 20, "label": "无氧耐力(男)10-20岁" },
+        { "gender": "女", "anaerobicStart": 9, "anaerobicEnd": 18, "label": "无氧耐力(女)9-18岁" }
+      ],
+      "methods": ["匀速持续跑", "间歇跑", "法特莱克跑", "跳绳", "游泳", "自行车", "球类游戏", "登山"],
+      "keyPoints": "8岁起步有氧训练；11-12岁以有氧为主；15-16岁逐步增加无氧；16-17岁可大强度有氧及无氧"
+    },
+    "technique": {
+      "name": "技术/运动技能",
+      "periods": [
+        { "gender": "通用", "start": 6, "end": 13, "label": "技术敏感期6-13岁" },
+        { "gender": "通用", "basicSkillStart": 3, "basicSkillEnd": 7, "label": "基本动作技能3-7岁" }
+      ],
+      "methods": ["多样化运动体验", "基本动作技能练习", "游戏化技术学习"],
+      "keyPoints": "11-12岁前掌握基本动作技能；儿童早期多样化60% vs 专项化40%；避免过早单一专项化"
+    }
+  }
+}

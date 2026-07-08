@@ -1,0 +1,12 @@
+node_modules/
+*.log
+.vercel/
+.wrangler/
+*.png
+*.bat
+start-server.js
+diag.html
+SUPABASE_SETUP.md
+项目交接说明.md
+feature-roadmap.md
+cloud-upgrade-plan.md

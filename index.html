@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>上门体育智能体</title>
+    <link rel="stylesheet" href="styles.css?v=20260708c">
+    <!-- Supabase SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+    <!-- 文档解析依赖库 -->
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script>Tesseract=Tesseract||{}</script>
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+    <script>
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    </script>
+    <!-- PDF/Excel 导出库 -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+    <div id="app">
+        <!-- 侧边栏导航 -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h1 class="app-title">🏃 上门体育</h1>
+                <p class="app-subtitle">智能体</p>
+            </div>
+            <nav class="nav-menu">
+                <button class="nav-item active" data-page="students">
+                    <span class="nav-icon">👥</span>
+                    <span class="nav-text">学生档案</span>
+                </button>
+                <button class="nav-item" data-page="test">
+                    <span class="nav-icon">📋</span>
+                    <span class="nav-text">体测录入</span>
+                </button>
+                <button class="nav-item" data-page="report">
+                    <span class="nav-icon">📊</span>
+                    <span class="nav-text">报告管理</span>
+                </button>
+                <button class="nav-item" data-page="training">
+                    <span class="nav-icon">💪</span>
+                    <span class="nav-text">训练方案</span>
+                </button>
+                <button class="nav-item" data-page="history">
+                    <span class="nav-icon">📈</span>
+                    <span class="nav-text">历史记录</span>
+                </button>
+                <button class="nav-item" data-page="schedule">
+                    <span class="nav-icon">📅</span>
+                    <span class="nav-text">课程管理</span>
+                </button>
+            </nav>
+            <div class="sidebar-footer">
+                <button class="btn-secondary" onclick="backupData()" style="width:100%;">💾 备份数据</button>
+                <button class="btn-secondary" onclick="document.getElementById('restoreInput').click()" style="width:100%;margin-top:8px;">📂 恢复数据</button>
+                <input type="file" id="restoreInput" accept=".json" style="display:none;" onchange="restoreData(event)">
+                <div class="theme-switcher" style="margin-top:12px;">
+                    <select id="themeSelect" onchange="changeTheme(this.value)" style="width:100%;padding:8px 10px;border-radius:8px;border:1px solid var(--border);background:var(--card-bg);color:var(--text);font-size:13px;cursor:pointer;">
+                        <option value="light">☀️ 浅色</option>
+                        <option value="dark">🌙 深色</option>
+                        <option value="system">💻 跟随系统</option>
+                    </select>
+                </div>
+                <button class="btn-secondary" onclick="signOut()" style="width:100%;margin-top:8px;">🚪 退出登录</button>
+            </div>
+        </aside>
+
+        <!-- 移动端侧边栏遮罩 -->
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+        <!-- 移动端顶部导航 -->
+        <header class="mobile-header" id="mobileHeader">
+            <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+            <h2 class="page-title" id="pageTitle">学生档案</h2>
+        </header>
+
+        <!-- 主内容区 -->
+        <main class="main-content" id="mainContent">
+            <!-- 学生档案页 -->
+            <section class="page active" id="page-students">
+                <div class="page-header">
+                    <h2>学生档案</h2>
+                    <button class="btn-primary" onclick="openStudentModal()">+ 新增学生</button>
+                </div>
+                <div class="search-bar">
+                    <input type="text" id="studentSearch" placeholder="搜索学生姓名/学校..." oninput="filterStudents()">
+                    <select id="gradeFilter" onchange="filterStudents()">
+                        <option value="">全部年级</option>
+                        <option value="1">一年级</option>
+                        <option value="2">二年级</option>
+                        <option value="3">三年级</option>
+                        <option value="4">四年级</option>
+                        <option value="5">五年级</option>
+                        <option value="6">六年级</option>
+                        <option value="7">初一</option>
+                        <option value="8">初二</option>
+                        <option value="9">初三</option>
+                        <option value="10">高一</option>
+                        <option value="11">高二</option>
+                        <option value="12">高三</option>
+                    </select>
+                </div>
+                <div class="student-list" id="studentList">
+                    <!-- 学生卡片列表 -->
+                </div>
+
+                <!-- 课时概览面板 -->
+                <div class="hours-overview" id="hoursOverview">
+                    <div class="hours-overview-header">
+                        <h3>💎 课时概览</h3>
+                        <button class="btn-secondary btn-sm" onclick="openRechargeModal()">+ 充值课时</button>
+                    </div>
+                    <div class="hours-stats-row" id="hoursStatsRow"></div>
+                    <div class="hours-list" id="hoursList"></div>
+                </div>
+            </section>
+
+            <!-- 体测录入页 -->
+            <section class="page" id="page-test">
+                <div class="page-header">
+                    <h2>体测录入</h2>
+                </div>
+                <div class="test-form">
+                    <!-- 文档上传区 -->
+                    <div class="form-section upload-section">
+                        <h3>📄 文档上传（可选）</h3>
+                        <p style="font-size:13px;color:var(--text-light);margin-bottom:16px">
+                            支持 Excel、PDF、图片文件。自动识别体测数据，无需手动输入。
+                        </p>
+                        <div class="upload-tabs">
+                            <button type="button" class="upload-tab active" data-type="excel" onclick="switchUploadTab('excel')">📊 Excel</button>
+                            <button type="button" class="upload-tab" data-type="pdf" onclick="switchUploadTab('pdf')">📄 PDF</button>
+                            <button type="button" class="upload-tab" data-type="image" onclick="switchUploadTab('image')">🖼️ 图片</button>
+                        </div>
+                        <div class="upload-zone active" id="uploadZone">
+                            <input type="file" id="docUpload" accept=".xlsx,.xls,.pdf,.jpg,.jpeg,.png" class="file-input-hidden" onchange="handleDocUpload(event)">
+                            <label class="upload-hint" id="uploadHint" for="docUpload">
+                                <div class="upload-icon">📂</div>
+                                <div class="upload-text">
+                                    <strong id="uploadTitle">点击上传 Excel 文件</strong>
+                                    <span id="uploadDesc">系统将根据学生年级自动过滤不适用项目</span>
+                                </div>
+                                <div class="upload-formats">支持 .xlsx .xls .pdf .jpg .png · 建议先选择学生</div>
+                            </label>
+                            <div class="upload-progress" id="uploadProgress" style="display:none">
+                                <div class="progress-info">
+                                    <span class="progress-icon">⏳</span>
+                                    <span class="progress-text" id="progressText">正在解析文档...</span>
+                                </div>
+                                <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:30%"></div></div>
+                            </div>
+                        </div>
+                        <!-- 图片预览与旋转 -->
+                        <div class="image-preview-wrap" id="uploadImagePreview" style="display:none">
+                            <p class="image-preview-tip">📸 图片预览（可旋转后再识别）</p>
+                            <div class="image-preview-container">
+                                <canvas id="imagePreviewCanvas"></canvas>
+                            </div>
+                            <div class="image-preview-controls">
+                                <button class="btn-icon" onclick="rotateImage(-90)" title="左转90°">↺</button>
+                                <span class="rotation-angle" id="rotationAngle">0°</span>
+                                <button class="btn-icon" onclick="rotateImage(90)" title="右转90°">↻</button>
+                            </div>
+                            <div class="image-preview-actions">
+                                <button class="btn-secondary btn-sm" onclick="cancelImagePreview()">重新选择</button>
+                                <button class="btn-primary btn-sm" onclick="startImageOCR()">🔍 开始识别</button>
+                            </div>
+                        </div>
+                        <div class="upload-result" id="uploadResult" style="display:none">
+                            <div class="result-header">
+                                <span class="result-icon">✅</span>
+                                <span class="result-text" id="resultText">文档解析成功</span>
+                            </div>
+                            <div class="result-preview" id="resultPreview"></div>
+                            <div class="result-actions">
+                                <button class="btn-secondary btn-sm" onclick="clearUploadResult()">重新上传</button>
+                                <button class="btn-primary btn-sm" onclick="applyExtractedData()">应用数据</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3>选择学生</h3>
+                        <select id="testStudentSelect" onchange="loadStudentInfo()">
+                            <option value="">-- 请选择学生 --</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-section" id="basicInfoSection" style="display:none;">
+                        <h3>基本信息</h3>
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <label>姓名</label>
+                                <span id="infoName">-</span>
+                            </div>
+                            <div class="info-item">
+                                <label>性别</label>
+                                <span id="infoGender">-</span>
+                            </div>
+                            <div class="info-item">
+                                <label>年级</label>
+                                <span id="infoGrade">-</span>
+                            </div>
+                            <div class="info-item">
+                                <label>学校</label>
+                                <span id="infoSchool">-</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section" id="healthSection">
+                        <h3>健康声明 <span class="required">*</span></h3>
+                        <div class="health-checklist">
+                            <label class="checkbox-item">
+                                <input type="checkbox" id="healthNoIssue" onchange="toggleHealthDeclaration()">
+                                <span>无任何疾病或身体不适</span>
+                            </label>
+                        </div>
+                        <div class="health-details" id="healthDetails">
+                            <div class="health-item">
+                                <label>先天性心脏病</label>
+                                <div class="radio-group">
+                                    <label><input type="radio" name="heartDisease" value="no" checked> 无</label>
+                                    <label><input type="radio" name="heartDisease" value="yes"> 有</label>
+                                </div>
+                            </div>
+                            <div class="health-item">
+                                <label>高血压/低血压</label>
+                                <div class="radio-group">
+                                    <label><input type="radio" name="bloodPressure" value="no" checked> 无</label>
+                                    <label><input type="radio" name="bloodPressure" value="yes"> 有</label>
+                                </div>
+                            </div>
+                            <div class="health-item">
+                                <label>哮喘/呼吸系统疾病</label>
+                                <div class="radio-group">
+                                    <label><input type="radio" name="asthma" value="no" checked> 无</label>
+                                    <label><input type="radio" name="asthma" value="yes"> 有</label>
+                                </div>
+                            </div>
+                            <div class="health-item">
+                                <label>关节疾病或损伤</label>
+                                <div class="radio-group">
+                                    <label><input type="radio" name="jointIssue" value="no" checked> 无</label>
+                                    <label><input type="radio" name="jointIssue" value="yes"> 有</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3>体测项目</h3>
+                        <div class="test-items" id="testItems">
+                            <!-- 动态生成测试项目 -->
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button class="btn-primary" onclick="submitTest()">提交体测</button>
+                        <button class="btn-secondary" onclick="clearTest()">清空</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 报告管理页 -->
+            <section class="page" id="page-report">
+                <div class="page-header">
+                    <h2>报告管理</h2>
+                    <button class="btn-secondary btn-sm" onclick="toggleCompareMode()" id="compareModeBtn">📊 对比模式</button>
+                </div>
+                <div class="report-form">
+                    <div class="form-section">
+                        <h3>选择学生</h3>
+                        <select id="reportStudentSelect" onchange="loadReportData()">
+                            <option value="">-- 请选择学生 --</option>
+                        </select>
+                    </div>
+                    
+                    <!-- 对比模式选择区 -->
+                    <div class="form-section" id="compareSection" style="display:none;">
+                        <h3>选择对比的两次测试</h3>
+                        <div style="display:flex;gap:12px;flex-wrap:wrap;">
+                            <div style="flex:1;min-width:200px;">
+                                <label>第一次测试</label>
+                                <select id="compareTest1" onchange="loadCompareData()">
+                                    <option value="">-- 请选择 --</option>
+                                </select>
+                            </div>
+                            <div style="flex:1;min-width:200px;">
+                                <label>第二次测试</label>
+                                <select id="compareTest2" onchange="loadCompareData()">
+                                    <option value="">-- 请选择 --</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 趋势图区域 -->
+                    <div class="form-section" id="trendSection" style="display:none;">
+                        <h3>📈 体测数据趋势图</h3>
+                        <div style="display:flex;gap:12px;margin-bottom:16px;">
+                            <button class="btn-primary btn-sm" onclick="showTrendChart()">显示趋势图</button>
+                            <button class="btn-secondary btn-sm" onclick="hideTrendChart()">隐藏趋势图</button>
+                        </div>
+                        <div id="trendChartWrap" style="position:relative;height:400px;width:100%;">
+                            <canvas id="trendChart"></canvas>
+                        </div>
+                        <div id="trendEmpty" style="display:none;padding:40px;text-align:center;color:var(--text-secondary);">
+                            📉 数据不足：至少需要 2 次体测记录才能生成趋势图
+                        </div>
+                    </div>
+                    
+                    <div class="form-section">
+                        <h3>数据导入</h3>
+                        <p style="font-size:13px;color:var(--text-light);margin-bottom:12px">
+                            上传之前导出的 JSON 数据文件，批量导入学生档案和体测记录。
+                        </p>
+                        <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center">
+                            <label class="btn-secondary" style="cursor:pointer">
+                                📂 上传数据文件
+                                <input type="file" accept=".json" style="display:none" onchange="handleReportUpload(event)">
+                            </label>
+                            <button class="btn-secondary btn-sm" onclick="downloadTemplate()">📥 下载导入模板</button>
+                        </div>
+                    </div>
+                    
+                    <div id="reportPreview"></div>
+                    
+                    <div class="form-actions">
+                        <button class="btn-primary" onclick="generatePDF()">导出PDF</button>
+                        <button class="btn-primary" onclick="generateExcel()">导出Excel</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 训练方案页 -->
+            <section class="page" id="page-training">
+                <div class="page-header">
+                    <h2>个性化训练方案</h2>
+                </div>
+                <div class="training-form">
+                    <div class="form-section">
+                        <h3>选择学生</h3>
+                        <select id="trainingStudentSelect" onchange="onTrainingStudentChange()">
+                            <option value="">-- 请选择学生 --</option>
+                        </select>
+                    </div>
+
+                    <div class="form-section" id="trainingModeSection" style="display:none;">
+                        <h3>训练目标</h3>
+                        <select id="trainingGoalSelect" onchange="onTrainingGoalChange()" style="margin-bottom:12px;">
+                            <option value="general">常规体能提升</option>
+                            <option value="weight_loss">减重控脂</option>
+                            <option value="height_growth">追高助长</option>
+                            <option value="exam_prep">中考体育专项训练</option>
+                        </select>
+
+                        <div class="form-row" id="examCityRow" style="display:none; margin-bottom:12px;">
+                            <div class="form-group" style="flex:1;">
+                                <label style="font-size:13px; color:var(--text-light);">选择中考所在城市</label>
+                                <select id="examCitySelect" onchange="onExamCityChange()">
+                                    <option value="">-- 请选择城市 --</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div id="examInfoBox" style="margin-bottom:12px;"></div>
+
+                        <h3>训练方案生成方式</h3>
+                        <div class="training-mode-tabs">
+                            <button class="mode-tab active" id="modeTabAuto" onclick="switchTrainingMode('auto')">基于体测报告自动生成</button>
+                            <button class="mode-tab" id="modeTabManual" onclick="switchTrainingMode('manual')">教练手动选择薄弱项</button>
+                        </div>
+
+                        <!-- 自动模式：显示体测分析 -->
+                        <div id="autoModePanel" class="mode-panel">
+                            <p class="mode-hint">系统将根据学生最近一次体测成绩，自动分析薄弱项并生成科学的1小时训练方案</p>
+                        </div>
+
+                        <!-- 手动模式：教练选择薄弱项 -->
+                        <div id="manualModePanel" class="mode-panel" style="display:none;">
+                            <p class="mode-hint">请勾选学生需要重点提升的体能素质（可多选）：</p>
+                            <div class="weakness-checkbox-grid" id="weaknessCheckboxGrid"></div>
+                            <button class="btn-primary" style="margin-top:12px;" onclick="generateTrainingPlan()">生成训练方案</button>
+                        </div>
+                    </div>
+
+                    <div class="training-content" id="trainingContent">
+                        <!-- 训练方案内容 -->
+                    </div>
+
+                    <div class="form-actions" id="trainingActions" style="display:none;">
+                        <button class="btn-primary" onclick="saveTrainingPlan()">保存方案</button>
+                        <button class="btn-secondary" onclick="exportTrainingPlan()">导出</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 历史记录页 -->
+            <section class="page" id="page-history">
+                <div class="page-header">
+                    <h2>历史记录</h2>
+                </div>
+                <div class="history-content" id="historyContent">
+                    <!-- 历史记录内容 -->
+                </div>
+            </section>
+
+            <!-- 课程管理页（排课日历 + 签到） -->
+            <section class="page" id="page-schedule">
+                <div class="page-header">
+                    <h2>课程管理</h2>
+                    <div class="page-header-actions">
+                        <button class="btn-secondary" onclick="goToToday()">今天</button>
+                        <button class="btn-primary" onclick="openScheduleModal()">+ 新建课程</button>
+                    </div>
+                </div>
+
+                <!-- 视图切换 + 日期导航 -->
+                <div class="schedule-toolbar">
+                    <div class="date-nav">
+                        <button class="date-nav-btn" onclick="navigateDate(-1)">‹</button>
+                        <h3 id="scheduleTitle" class="date-title">2026 年 7 月</h3>
+                        <button class="date-nav-btn" onclick="navigateDate(1)">›</button>
+                    </div>
+                    <div class="view-toggle">
+                        <button class="view-btn active" data-view="month" onclick="switchView('month')">月</button>
+                        <button class="view-btn" data-view="week" onclick="switchView('week')">周</button>
+                    </div>
+                </div>
+
+                <!-- 月视图 -->
+                <div class="calendar-view" id="monthView">
+                    <div class="calendar-weekdays">
+                        <div class="calendar-weekday">日</div>
+                        <div class="calendar-weekday">一</div>
+                        <div class="calendar-weekday">二</div>
+                        <div class="calendar-weekday">三</div>
+                        <div class="calendar-weekday">四</div>
+                        <div class="calendar-weekday">五</div>
+                        <div class="calendar-weekday">六</div>
+                    </div>
+                    <div id="monthGrid" class="month-grid"></div>
+                </div>
+
+                <!-- 周视图 -->
+                <div class="calendar-view" id="weekView" style="display:none;">
+                    <div class="week-grid" id="weekGrid"></div>
+                </div>
+
+                <!-- 当日课表 -->
+                <div class="schedule-day-detail" id="dayDetail">
+                    <h3>当日课程</h3>
+                    <div id="dayDetailContent"></div>
+                </div>
+
+                <!-- 课时统计概览 -->
+                <div class="schedule-stats">
+                    <h3>课时概览</h3>
+                    <div class="stats-grid" id="scheduleStatsGrid"></div>
+                </div>
+            </section>
+        </main>
+
+    <!-- 课程编辑弹窗 -->
+    <div class="modal" id="scheduleModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="scheduleModalTitle">新建课程</h3>
+                <button class="close-btn" onclick="closeScheduleModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <form id="scheduleForm">
+                    <input type="hidden" id="scheduleId">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>学生 <span class="required">*</span></label>
+                            <select id="scheduleStudent" required>
+                                <option value="">请选择学生</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>课程类型 <span class="required">*</span></label>
+                            <select id="scheduleType" required>
+                                <option value="体能训练">体能训练</option>
+                                <option value="体测强化">体测强化</option>
+                                <option value="中考专项">中考专项</option>
+                                <option value="一对一">一对一私教</option>
+                                <option value="体验课">体验课</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>上课日期 <span class="required">*</span></label>
+                            <input type="date" id="scheduleDate" required>
+                        </div>
+                        <div class="form-group">
+                            <label>上课时间 <span class="required">*</span></label>
+                            <input type="time" id="scheduleTime" required>
+                        </div>
+                        <div class="form-group">
+                            <label>时长（分钟） <span class="required">*</span></label>
+                            <input type="number" id="scheduleDuration" min="30" step="15" value="60" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>教练</label>
+                            <input type="text" id="scheduleCoach" placeholder="如：王教练">
+                        </div>
+                        <div class="form-group">
+                            <label>上课地点</label>
+                            <input type="text" id="scheduleLocation" placeholder="如：奥森公园">
+                        </div>
+                        <div class="form-group">
+                            <label>消耗课时</label>
+                            <input type="number" id="scheduleCost" min="0" step="0.5" value="1">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>备注</label>
+                        <textarea id="scheduleNote" rows="2" placeholder="可选：训练重点、家长要求等"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeScheduleModal()">取消</button>
+                <button class="btn-primary" onclick="saveSchedule()">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 课程详情 / 签到弹窗 -->
+    <div class="modal" id="scheduleDetailModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>课程详情</h3>
+                <button class="close-btn" onclick="closeScheduleDetail()">×</button>
+            </div>
+            <div class="modal-body" id="scheduleDetailBody">
+                <!-- 动态渲染 -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn-danger" onclick="deleteScheduleFromDetail()">删除</button>
+                <button class="btn-secondary" onclick="editScheduleFromDetail()">编辑</button>
+                <button class="btn-primary" onclick="closeScheduleDetail()">关闭</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 课时充值弹窗 -->
+    <div class="modal" id="rechargeModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>充值课时</h3>
+                <button class="close-btn" onclick="closeRechargeModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>选择学生 <span class="required">*</span></label>
+                    <select id="rechargeStudent">
+                        <option value="">请选择学生</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>充值课时 <span class="required">*</span></label>
+                    <input type="number" id="rechargeHours" min="0.5" step="0.5" placeholder="如：10">
+                </div>
+                <div class="form-group">
+                    <label>备注</label>
+                    <input type="text" id="rechargeNote" placeholder="如：续费 20 节课">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeRechargeModal()">取消</button>
+                <button class="btn-primary" onclick="confirmRecharge()">确认充值</button>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <!-- 学生信息弹窗 -->
+    <div class="modal" id="studentModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">新增学生</h3>
+                <button class="close-btn" onclick="closeStudentModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <form id="studentForm">
+                    <input type="hidden" id="studentId">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>学生姓名 <span class="required">*</span></label>
+                            <input type="text" id="studentName" required>
+                        </div>
+                        <div class="form-group">
+                            <label>性别 <span class="required">*</span></label>
+                            <select id="studentGender" required>
+                                <option value="">请选择</option>
+                                <option value="男">男</option>
+                                <option value="女">女</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>出生日期</label>
+                            <input type="date" id="studentBirthday">
+                        </div>
+                        <div class="form-group">
+                            <label>年级 <span class="required">*</span></label>
+                            <select id="studentGrade" required>
+                                <option value="">请选择</option>
+                                <option value="1">小学一年级</option>
+                                <option value="2">小学二年级</option>
+                                <option value="3">小学三年级</option>
+                                <option value="4">小学四年级</option>
+                                <option value="5">小学五年级</option>
+                                <option value="6">小学六年级</option>
+                                <option value="7">初中一年级(初一)</option>
+                                <option value="8">初中二年级(初二)</option>
+                                <option value="9">初中三年级(初三)</option>
+                                <option value="10">高中一年级(高一)</option>
+                                <option value="11">高中二年级(高二)</option>
+                                <option value="12">高中三年级(高三)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>所在学校</label>
+                            <input type="text" id="studentSchool">
+                        </div>
+                        <div class="form-group">
+                            <label>班级</label>
+                            <input type="text" id="studentClass">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>家长姓名</label>
+                            <input type="text" id="parentName">
+                        </div>
+                        <div class="form-group">
+                            <label>联系电话</label>
+                            <input type="tel" id="parentPhone">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>紧急联系人</label>
+                        <input type="text" id="emergencyContact">
+                    </div>
+                    <div class="form-group">
+                        <label>紧急电话</label>
+                        <input type="tel" id="emergencyPhone">
+                    </div>
+                    <div class="form-group">
+                        <label>备注</label>
+                        <textarea id="studentNote" rows="3"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeStudentModal()">取消</button>
+                <button class="btn-primary" onclick="saveStudent()">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast 提示 -->
+    <div class="toast" id="toast"></div>
+
+    <!-- Supabase 数据层（内联，避免外部 JS 缓存问题） -->
+    <script>
+        // ======== supabase-client.js ========
+        var SUPABASE_URL = 'https://svaqwyoafearzoqljzpq.supabase.co';
+        var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN2YXF3eW9hZmVhcnpvcWxqenBxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMxNDQyNTEsImV4cCI6MjA5ODcyMDI1MX0.FqixJCt1zNmJPlotOp7-IUFpfRWtwJD4MsG0kUFTf-o';
+        var _supabaseClient = null;
+        var currentSession = null;
+        var authStateCallbacks = [];
+
+        function getSupabase() {
+            if (_supabaseClient) return _supabaseClient;
+            if (typeof window.supabase === 'undefined' || !window.supabase.createClient) {
+                console.error('Supabase SDK 未加载');
+                return null;
+            }
+            try {
+                _supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+                    auth: { autoRefreshToken: true, persistSession: true, detectSessionInUrl: true, storage: window.localStorage }
+                });
+                console.log('Supabase client created');
+            } catch (e) {
+                console.error('Supabase 初始化失败:', e);
+                return null;
+            }
+            return _supabaseClient;
+        }
+        function getCoachId() { return currentSession?.user?.id || null; }
+        function getCoach() { return currentSession?.user || null; }
+        function onAuthStateChange(callback) {
+            authStateCallbacks.push(callback);
+            var sb = getSupabase(); if (!sb) return;
+            sb.auth.onAuthStateChange(function(event, session) {
+                currentSession = session;
+                authStateCallbacks.forEach(function(cb) { try { cb(session, session?.user); } catch (e) { console.error(e); } });
+            });
+        }
+        async function signOut() {
+            var sb = getSupabase();
+            if (sb) { try { await sb.auth.signOut(); } catch(e){} }
+            currentSession = null;
+            window.location.replace('./login.html');
+        }
+
+        // ======== auth.js ========
+        function mapAuthError(error) {
+            var map = {
+                'Invalid login credentials': '邮箱或密码错误',
+                'User already registered': '该邮箱已注册，请直接登录',
+                'Password should be at least 6 characters': '密码至少需要 6 位',
+                'Email rate limit exceeded': '操作太频繁，请稍后再试',
+                'Email not confirmed': '请先验证邮箱',
+                'For security purposes, you can only request this after': '操作太频繁，请 60 秒后再试'
+            };
+            return map[error.message] || error.message;
+        }
+        async function handleRegister(name, email, password) {
+            var sb = getSupabase(); if (!sb) return { success: false, error: '客户端未初始化' };
+            try {
+                var result = await sb.auth.signUp({ email: email, password: password, options: { data: { name: name } } });
+                if (result.error) return { success: false, error: mapAuthError(result.error) };
+                if (result.data.user) {
+                    try { await sb.from('coach_profiles').update({ name: name, updated_at: new Date().toISOString() }).eq('id', result.data.user.id); } catch (e) { console.log('profile update skipped:', e.message); }
+                }
+                return { success: true, user: result.data.user, needsEmailConfirm: result.data.user && result.data.user.identities && result.data.user.identities.length === 0 };
+            } catch (e) { console.error('handleRegister error:', e); return { success: false, error: '注册失败，请稍后重试' }; }
+        }
+        async function handleLogin(email, password) {
+            var sb = getSupabase(); if (!sb) return { success: false, error: '客户端未初始化' };
+            var result = await sb.auth.signInWithPassword({ email: email, password: password });
+            if (result.error) return { success: false, error: mapAuthError(result.error) };
+            return { success: true, user: result.data.user };
+        }
+        async function handleResetPassword(email) {
+            var sb = getSupabase(); if (!sb) return { success: false, error: '客户端未初始化' };
+            var result = await sb.auth.resetPasswordForEmail(email, { redirectTo: window.location.origin + '/reset-password.html' });
+            if (result.error) return { success: false, error: mapAuthError(result.error) };
+            return { success: true };
+        }
+    </script>
+    <!-- db.js + app.js（外部引用，带版本号） -->
+    <script src="js/db.js?v=20260708c"></script>
+    <!-- 应用主逻辑 -->
+    <script src="app.js?v=20260708c"></script>
+</body>
+</html>

@@ -1,0 +1,11 @@
+*.md
+*.png
+*.bat
+start-server.js
+diag.html
+sql/
+SUPABASE_SETUP.md
+项目交接说明.md
+feature-roadmap.md
+cloud-upgrade-plan.md
+启动.bat
