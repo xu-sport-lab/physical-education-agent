@@ -1,0 +1,311 @@
+{
+  "description": "《国家学生体质健康标准（2014年修订）》评分表",
+  "units": {
+    "height": "cm",
+    "weight": "kg",
+    "bmi": "-",
+    "vital_capacity": "ml",
+    "run_50m": "秒",
+    "sit_and_reach": "cm",
+    "jump_rope_1min": "次",
+    "sit_up_1min": "次",
+    "pull_up": "次",
+    "run_50m_8": "分'秒",
+    "run_800m": "分'秒",
+    "run_1000m": "分'秒",
+    "standing_long_jump": "cm",
+    "balance_stand": "秒"
+  },
+  "grades": {
+    "excellent": {"name": "非常棒", "min": 90, "color": "#22c55e"},
+    "good": {"name": "还不错", "min": 80, "color": "#3b82f6"},
+    "pass": {"name": "刚达标", "min": 60, "color": "#f59e0b"},
+    "fail": {"name": "待提升", "min": 0, "color": "#ef4444"}
+  },
+  "scoring": {
+    "小学_男生": {
+      "1年级": {
+        "height": {"low": 106.1, "high": 129.9},
+        "weight": {"low": 15.9, "high": 30.1},
+        "vital_capacity": {"low": 600, "high": 1700, "step": 50},
+        "run_50m": {"low": 12.4, "high": 18.0, "step": 0.3, "reverse": true},
+        "sit_and_reach": {"low": 4.0, "high": 18.0, "step": 2.0},
+        "jump_rope_1min": {"low": 10, "high": 120, "step": 5},
+        "standing_long_jump": {"low": 85, "high": 185, "step": 10, "reverse": true},
+        "balance_stand": {"low": 3, "high": 60, "step": 3}
+      },
+      "2年级": {
+        "height": {"low": 111.1, "high": 135.9},
+        "weight": {"low": 17.7, "high": 34.3},
+        "vital_capacity": {"low": 700, "high": 1900, "step": 50},
+        "run_50m": {"low": 11.3, "high": 16.7, "step": 0.3, "reverse": true},
+        "sit_and_reach": {"low": 4.0, "high": 18.0, "step": 2.0},
+        "jump_rope_1min": {"low": 15, "high": 130, "step": 5},
+        "standing_long_jump": {"low": 95, "high": 195, "step": 10, "reverse": true},
+        "balance_stand": {"low": 4, "high": 70, "step": 3}
+      },
+      "3年级": {
+        "height": {"low": 116.1, "high": 141.9},
+        "weight": {"low": 19.5, "high": 38.9},
+        "vital_capacity": {"low": 900, "high": 2200, "step": 50},
+        "run_50m": {"low": 10.2, "high": 15.7, "step": 0.3, "reverse": true},
+        "sit_and_reach": {"low": 5.0, "high": 19.0, "step": 2.0},
+        "jump_rope_1min": {"low": 20, "high": 140, "step": 5},
+        "sit_up_1min": {"low": 5, "high": 50, "step": 3},
+        "standing_long_jump": {"low": 100, "high": 205, "step": 10, "reverse": true},
+        "balance_stand": {"low": 5, "high": 80, "step": 5}
+      },
+      "4年级": {
+        "height": {"low": 121.1, "high": 147.9},
+        "weight": {"low": 21.5, "high": 43.7},
+        "vital_capacity": {"low": 1100, "high": 2500, "step": 50},
+        "run_50m": {"low": 9.5, "high": 14.7, "step": 0.3, "reverse": true},
+        "sit_and_reach": {"low": 5.0, "high": 19.0, "step": 2.0},
+        "jump_rope_1min": {"low": 25, "high": 150, "step": 5},
+        "sit_up_1min": {"low": 10, "high": 55, "step": 3},
+        "standing_long_jump": {"low": 110, "high": 215, "step": 10, "reverse": true},
+        "balance_stand": {"low": 6, "high": 90, "step": 5}
+      },
+      "5年级": {
+        "height": {"low": 125.8, "high": 153.9},
+        "weight": {"low": 23.7, "high": 48.7},
+        "vital_capacity": {"low": 1300, "high": 2800, "step": 50},
+        "run_50m": {"low": 9.1, "high": 13.7, "step": 0.3, "reverse": true},
+        "sit_and_reach": {"low": 6.0, "high": 20.0, "step": 2.0},
+        "jump_rope_1min": {"low": 30, "high": 160, "step": 5},
+        "sit_up_1min": {"low": 15, "high": 60, "step": 3},
+        "run_50m_8": {"low": "1'20\"", "high": "2'20\"", "reverse": true},
+        "standing_long_jump": {"low": 120, "high": 225, "step": 10, "reverse": true},
+        "balance_stand": {"low": 7, "high": 100, "step": 5}
+      },
+      "6年级": {
+        "height": {"low": 130.0, "high": 159.9},
+        "weight": {"low": 25.9, "high": 54.0},
+        "vital_capacity": {"low": 1500, "high": 3100, "step": 50},
+        "run_50m": {"low": 8.7, "high": 12.7, "step": 0.3, "reverse": true},
+        "sit_and_reach": {"low": 6.0, "high": 21.0, "step": 2.0},
+        "jump_rope_1min": {"low": 35, "high": 170, "step": 5},
+        "sit_up_1min": {"low": 20, "high": 65, "step": 3},
+        "run_50m_8": {"low": "1'15\"", "high": "2'10\"", "reverse": true},
+        "standing_long_jump": {"low": 130, "high": 235, "step": 10, "reverse": true},
+        "balance_stand": {"low": 8, "high": 110, "step": 5}
+      }
+    },
+    "小学_女生": {
+      "1年级": {
+        "height": {"low": 105.1, "high": 129.9},
+        "weight": {"low": 15.4, "high": 28.9},
+        "vital_capacity": {"low": 500, "high": 1500, "step": 50},
+        "run_50m": {"low": 13.0, "high": 18.7, "step": 0.3, "reverse": true},
+        "sit_and_reach": {"low": 6.0, "high": 19.0, "step": 2.0},
+        "jump_rope_1min": {"low": 10, "high": 115, "step": 5},
+        "standing_long_jump": {"low": 75, "high": 175, "step": 10, "reverse": true},
+        "balance_stand": {"low": 3, "high": 55, "step": 3}
+      },
+      "2年级": {
+        "height": {"low": 110.1, "high": 135.9},
+        "weight": {"low": 17.2, "high": 33.1},
+        "vital_capacity": {"low": 600, "high": 1700, "step": 50},
+        "run_50m": {"low": 11.9, "high": 17.4, "step": 0.3, "reverse": true},
+        "sit_and_reach": {"low": 6.0, "high": 19.0, "step": 2.0},
+        "jump_rope_1min": {"low": 15, "high": 125, "step": 5},
+        "standing_long_jump": {"low": 85, "high": 185, "step": 10, "reverse": true},
+        "balance_stand": {"low": 4, "high": 65, "step": 3}
+      },
+      "3年级": {
+        "height": {"low": 115.1, "high": 141.9},
+        "weight": {"low": 18.8, "high": 37.5},
+        "vital_capacity": {"low": 700, "high": 2000, "step": 50},
+        "run_50m": {"low": 10.8, "high": 16.4, "step": 0.3, "reverse": true},
+        "sit_and_reach": {"low": 7.0, "high": 20.0, "step": 2.0},
+        "jump_rope_1min": {"low": 20, "high": 135, "step": 5},
+        "sit_up_1min": {"low": 5, "high": 50, "step": 3},
+        "standing_long_jump": {"low": 90, "high": 195, "step": 10, "reverse": true},
+        "balance_stand": {"low": 5, "high": 75, "step": 5}
+      },
+      "4年级": {
+        "height": {"low": 120.1, "high": 147.9},
+        "weight": {"low": 20.8, "high": 42.5},
+        "vital_capacity": {"low": 900, "high": 2300, "step": 50},
+        "run_50m": {"low": 10.0, "high": 15.2, "step": 0.3, "reverse": true},
+        "sit_and_reach": {"low": 7.0, "high": 20.0, "step": 2.0},
+        "jump_rope_1min": {"low": 25, "high": 145, "step": 5},
+        "sit_up_1min": {"low": 10, "high": 55, "step": 3},
+        "standing_long_jump": {"low": 100, "high": 205, "step": 10, "reverse": true},
+        "balance_stand": {"low": 6, "high": 85, "step": 5}
+      },
+      "5年级": {
+        "height": {"low": 125.0, "high": 153.9},
+        "weight": {"low": 23.0, "high": 47.3},
+        "vital_capacity": {"low": 1100, "high": 2600, "step": 50},
+        "run_50m": {"low": 9.5, "high": 14.1, "step": 0.3, "reverse": true},
+        "sit_and_reach": {"low": 8.0, "high": 21.0, "step": 2.0},
+        "jump_rope_1min": {"low": 30, "high": 155, "step": 5},
+        "sit_up_1min": {"low": 15, "high": 60, "step": 3},
+        "run_50m_8": {"low": "1'25\"", "high": "2'25\"", "reverse": true},
+        "standing_long_jump": {"low": 110, "high": 215, "step": 10, "reverse": true},
+        "balance_stand": {"low": 7, "high": 95, "step": 5}
+      },
+      "6年级": {
+        "height": {"low": 128.8, "high": 159.9},
+        "weight": {"low": 25.3, "high": 52.0},
+        "vital_capacity": {"low": 1200, "high": 2900, "step": 50},
+        "run_50m": {"low": 9.1, "high": 13.2, "step": 0.3, "reverse": true},
+        "sit_and_reach": {"low": 8.0, "high": 21.5, "step": 2.0},
+        "jump_rope_1min": {"low": 35, "high": 165, "step": 5},
+        "sit_up_1min": {"low": 20, "high": 65, "step": 3},
+        "run_50m_8": {"low": "1'20\"", "high": "2'15\"", "reverse": true},
+        "standing_long_jump": {"low": 120, "high": 225, "step": 10, "reverse": true},
+        "balance_stand": {"low": 8, "high": 105, "step": 5}
+      }
+    },
+    "初中_男生": {
+      "7年级": {
+        "height": {"low": 142.0, "high": 170.9},
+        "weight": {"low": 33.5, "high": 60.0},
+        "vital_capacity": {"low": 1900, "high": 3700, "step": 100},
+        "run_50m": {"low": 8.1, "high": 11.5, "step": 0.3, "reverse": true},
+        "sit_and_reach": {"low": 6.0, "high": 21.0, "step": 2.0},
+        "pull_up": {"low": 3, "high": 15, "step": 1},
+        "run_1000m": {"low": "3'25\"", "high": "5'30\"", "reverse": true},
+        "standing_long_jump": {"low": 150, "high": 260, "step": 10, "reverse": true}
+      },
+      "8年级": {
+        "height": {"low": 148.0, "high": 175.9},
+        "weight": {"low": 37.0, "high": 65.0},
+        "vital_capacity": {"low": 2200, "high": 4100, "step": 100},
+        "run_50m": {"low": 7.6, "high": 10.9, "step": 0.3, "reverse": true},
+        "sit_and_reach": {"low": 7.0, "high": 22.0, "step": 2.0},
+        "pull_up": {"low": 4, "high": 17, "step": 1},
+        "run_1000m": {"low": "3'15\"", "high": "5'10\"", "reverse": true},
+        "standing_long_jump": {"low": 160, "high": 270, "step": 10, "reverse": true}
+      },
+      "9年级": {
+        "height": {"low": 153.0, "high": 179.9},
+        "weight": {"low": 40.5, "high": 70.0},
+        "vital_capacity": {"low": 2500, "high": 4500, "step": 100},
+        "run_50m": {"low": 7.2, "high": 10.3, "step": 0.3, "reverse": true},
+        "sit_and_reach": {"low": 7.5, "high": 23.0, "step": 2.0},
+        "pull_up": {"low": 5, "high": 19, "step": 1},
+        "run_1000m": {"low": "3'05\"", "high": "4'50\"", "reverse": true},
+        "standing_long_jump": {"low": 170, "high": 280, "step": 10, "reverse": true}
+      }
+    },
+    "初中_女生": {
+      "7年级": {
+        "height": {"low": 142.0, "high": 166.9},
+        "weight": {"low": 32.0, "high": 57.0},
+        "vital_capacity": {"low": 1600, "high": 3200, "step": 100},
+        "run_50m": {"low": 9.0, "high": 12.5, "step": 0.3, "reverse": true},
+        "sit_and_reach": {"low": 11.0, "high": 25.0, "step": 2.0},
+        "sit_up_1min": {"low": 20, "high": 55, "step": 3},
+        "run_800m": {"low": "3'30\"", "high": "5'30\"", "reverse": true},
+        "standing_long_jump": {"low": 130, "high": 210, "step": 10, "reverse": true}
+      },
+      "8年级": {
+        "height": {"low": 146.0, "high": 169.9},
+        "weight": {"low": 35.0, "high": 60.0},
+        "vital_capacity": {"low": 1800, "high": 3500, "step": 100},
+        "run_50m": {"low": 8.7, "high": 11.9, "step": 0.3, "reverse": true},
+        "sit_and_reach": {"low": 12.0, "high": 26.0, "step": 2.0},
+        "sit_up_1min": {"low": 22, "high": 58, "step": 3},
+        "run_800m": {"low": "3'25\"", "high": "5'15\"", "reverse": true},
+        "standing_long_jump": {"low": 135, "high": 220, "step": 10, "reverse": true}
+      },
+      "9年级": {
+        "height": {"low": 148.0, "high": 172.9},
+        "weight": {"low": 38.0, "high": 62.0},
+        "vital_capacity": {"low": 2000, "high": 3800, "step": 100},
+        "run_50m": {"low": 8.4, "high": 11.5, "step": 0.3, "reverse": true},
+        "sit_and_reach": {"low": 12.5, "high": 27.0, "step": 2.0},
+        "sit_up_1min": {"low": 25, "high": 62, "step": 3},
+        "run_800m": {"low": "3'20\"", "high": "5'00\"", "reverse": true},
+        "standing_long_jump": {"low": 140, "high": 230, "step": 10, "reverse": true}
+      }
+    },
+    "高中_男生": {
+      "10年级": {
+        "height": {"low": 158.0, "high": 180.9},
+        "weight": {"low": 44.0, "high": 75.0},
+        "vital_capacity": {"low": 2900, "high": 4800, "step": 100},
+        "run_50m": {"low": 6.9, "high": 9.8, "step": 0.2, "reverse": true},
+        "sit_and_reach": {"low": 8.0, "high": 24.0, "step": 2.0},
+        "pull_up": {"low": 6, "high": 20, "step": 1},
+        "run_1000m": {"low": "3'00\"", "high": "4'40\"", "reverse": true},
+        "standing_long_jump": {"low": 180, "high": 290, "step": 10, "reverse": true}
+      },
+      "11年级": {
+        "height": {"low": 160.0, "high": 182.9},
+        "weight": {"low": 46.0, "high": 78.0},
+        "vital_capacity": {"low": 3100, "high": 5000, "step": 100},
+        "run_50m": {"low": 6.8, "high": 9.6, "step": 0.2, "reverse": true},
+        "sit_and_reach": {"low": 8.5, "high": 25.0, "step": 2.0},
+        "pull_up": {"low": 7, "high": 21, "step": 1},
+        "run_1000m": {"low": "2'55\"", "high": "4'30\"", "reverse": true},
+        "standing_long_jump": {"low": 185, "high": 295, "step": 10, "reverse": true}
+      },
+      "12年级": {
+        "height": {"low": 161.0, "high": 183.9},
+        "weight": {"low": 47.0, "high": 80.0},
+        "vital_capacity": {"low": 3200, "high": 5200, "step": 100},
+        "run_50m": {"low": 6.7, "high": 9.5, "step": 0.2, "reverse": true},
+        "sit_and_reach": {"low": 9.0, "high": 25.5, "step": 2.0},
+        "pull_up": {"low": 8, "high": 22, "step": 1},
+        "run_1000m": {"low": "2'50\"", "high": "4'20\"", "reverse": true},
+        "standing_long_jump": {"low": 190, "high": 300, "step": 10, "reverse": true}
+      }
+    },
+    "高中_女生": {
+      "10年级": {
+        "height": {"low": 152.0, "high": 174.9},
+        "weight": {"low": 41.0, "high": 65.0},
+        "vital_capacity": {"low": 2200, "high": 4000, "step": 100},
+        "run_50m": {"low": 8.3, "high": 11.0, "step": 0.2, "reverse": true},
+        "sit_and_reach": {"low": 13.0, "high": 28.0, "step": 2.0},
+        "sit_up_1min": {"low": 28, "high": 65, "step": 3},
+        "run_800m": {"low": "3'10\"", "high": "4'50\"", "reverse": true},
+        "standing_long_jump": {"low": 145, "high": 235, "step": 10, "reverse": true}
+      },
+      "11年级": {
+        "height": {"low": 153.0, "high": 175.9},
+        "weight": {"low": 42.0, "high": 66.0},
+        "vital_capacity": {"low": 2300, "high": 4100, "step": 100},
+        "run_50m": {"low": 8.2, "high": 10.8, "step": 0.2, "reverse": true},
+        "sit_and_reach": {"low": 13.5, "high": 28.5, "step": 2.0},
+        "sit_up_1min": {"low": 30, "high": 68, "step": 3},
+        "run_800m": {"low": "3'05\"", "high": "4'40\"", "reverse": true},
+        "standing_long_jump": {"low": 148, "high": 240, "step": 10, "reverse": true}
+      },
+      "12年级": {
+        "height": {"low": 153.5, "high": 176.9},
+        "weight": {"low": 43.0, "high": 67.0},
+        "vital_capacity": {"low": 2400, "high": 4200, "step": 100},
+        "run_50m": {"low": 8.1, "high": 10.6, "step": 0.2, "reverse": true},
+        "sit_and_reach": {"low": 14.0, "high": 29.0, "step": 2.0},
+        "sit_up_1min": {"low": 32, "high": 70, "step": 3},
+        "run_800m": {"low": "3'00\"", "high": "4'30\"", "reverse": true},
+        "standing_long_jump": {"low": 150, "high": 245, "step": 10, "reverse": true}
+      }
+    }
+  },
+  "project_weights": {
+    "小学": {
+      "必测": ["height", "weight", "vital_capacity", "run_50m", "sit_and_reach"],
+      "选测力量": ["jump_rope_1min", "sit_up_1min", "pull_up"],
+      "选测耐力": ["run_50m_8"],
+      "选测其他": ["standing_long_jump", "balance_stand"]
+    },
+    "初中": {
+      "必测": ["height", "weight", "vital_capacity", "run_50m", "sit_and_reach"],
+      "男生专项": ["pull_up", "run_1000m"],
+      "女生专项": ["sit_up_1min", "run_800m"],
+      "选测": ["standing_long_jump"]
+    },
+    "高中": {
+      "必测": ["height", "weight", "vital_capacity", "run_50m", "sit_and_reach"],
+      "男生专项": ["pull_up", "run_1000m"],
+      "女生专项": ["sit_up_1min", "run_800m"],
+      "选测": ["standing_long_jump"]
+    }
+  }
+}

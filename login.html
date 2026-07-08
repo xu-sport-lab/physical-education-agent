@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>登录 - 上门体育智能体</title>
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        :root {
+            --bg: #f0f5f0; --card-bg: #ffffff; --text: #1a1a2e; --text-light: #6b7280;
+            --primary: #2e7d32; --primary-hover: #1b5e20; --border: #e5e7eb;
+            --error: #ef4444; --success: #22c55e; --input-bg: #f9fafb;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg); min-height: 100vh; display: flex;
+            align-items: center; justify-content: center; padding: 20px; color: var(--text);
+        }
+        .login-container { width: 100%; max-width: 400px; }
+        .login-header { text-align: center; margin-bottom: 32px; }
+        .login-header .logo { font-size: 48px; margin-bottom: 8px; }
+        .login-header h1 { font-size: 24px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+        .login-header p { font-size: 14px; color: var(--text-light); }
+        .login-card {
+            background: var(--card-bg); border-radius: 16px; padding: 32px 28px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 20px rgba(0,0,0,0.04);
+        }
+        .tab-switch { display: flex; background: var(--input-bg); border-radius: 10px; padding: 4px; margin-bottom: 24px; }
+        .tab-btn {
+            flex: 1; padding: 10px 16px; border: none; background: transparent;
+            border-radius: 8px; font-size: 14px; font-weight: 500;
+            color: var(--text-light); cursor: pointer; transition: all 0.2s;
+        }
+        .tab-btn.active { background: var(--card-bg); color: var(--text); box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+        .form-group { margin-bottom: 16px; }
+        .form-group label { display: block; font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 6px; }
+        .form-group input {
+            width: 100%; padding: 10px 14px; border: 1.5px solid var(--border);
+            border-radius: 10px; font-size: 15px; background: var(--input-bg);
+            color: var(--text); transition: border-color 0.2s, box-shadow 0.2s; outline: none;
+        }
+        .form-group input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(46,125,50,0.1); }
+        .btn-primary {
+            width: 100%; padding: 12px 20px; border: none; border-radius: 10px;
+            background: var(--primary); color: white; font-size: 15px; font-weight: 600;
+            cursor: pointer; transition: background 0.2s, transform 0.1s; margin-top: 8px;
+        }
+        .btn-primary:hover { background: var(--primary-hover); }
+        .btn-primary:active { transform: scale(0.98); }
+        .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
+        .error-msg { color: var(--error); font-size: 13px; margin-top: 4px; display: none; }
+        .error-msg.show { display: block; }
+        .success-msg {
+            background: #f0fdf4; border: 1px solid #bbf7d0; color: #166534;
+            padding: 12px 14px; border-radius: 10px; font-size: 13px; line-height: 1.6;
+            display: none; margin-bottom: 16px;
+        }
+        .success-msg.show { display: block; }
+        .forgot-link { display: block; text-align: center; font-size: 13px; color: var(--primary); margin-top: 16px; cursor: pointer; text-decoration: none; }
+        .forgot-link:hover { text-decoration: underline; }
+        .loading-spinner {
+            display: inline-block; width: 16px; height: 16px;
+            border: 2px solid rgba(255,255,255,0.3); border-top-color: white;
+            border-radius: 50%; animation: spin 0.6s linear infinite;
+            vertical-align: middle; margin-right: 6px;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        #resetPanel { display: none; }
+        .version-tag { text-align: center; font-size: 11px; color: #ccc; margin-top: 16px; }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-header">
+            <div class="logo">🏃</div>
+            <h1>上门体育智能体</h1>
+            <p>体质健康管理 · 训练方案 · 课程排班</p>
+        </div>
+
+        <div class="login-card">
+            <div class="tab-switch" id="tabSwitch">
+                <button class="tab-btn active" data-tab="login">登录</button>
+                <button class="tab-btn" data-tab="register">注册</button>
+            </div>
+
+            <div class="success-msg" id="successMsg"></div>
+            <div class="error-msg" id="errorMsg"></div>
+
+            <form id="loginForm" onsubmit="return false;">
+                <div class="form-group">
+                    <label>邮箱</label>
+                    <input type="email" id="loginEmail" placeholder="your@email.com" autocomplete="email" required>
+                </div>
+                <div class="form-group">
+                    <label>密码</label>
+                    <input type="password" id="loginPassword" placeholder="请输入密码" autocomplete="current-password" required>
+                </div>
+                <button type="submit" class="btn-primary" id="loginBtn" onclick="doLogin()">登 录</button>
+                <a class="forgot-link" onclick="showResetPanel()">忘记密码？</a>
+            </form>
+
+            <form id="registerForm" style="display:none;" onsubmit="return false;">
+                <div class="form-group">
+                    <label>姓名</label>
+                    <input type="text" id="regName" placeholder="请输入您的姓名" required>
+                </div>
+                <div class="form-group">
+                    <label>邮箱</label>
+                    <input type="email" id="regEmail" placeholder="your@email.com" autocomplete="email" required>
+                </div>
+                <div class="form-group">
+                    <label>密码（至少 6 位）</label>
+                    <input type="password" id="regPassword" placeholder="至少 6 位密码" autocomplete="new-password" required minlength="6">
+                </div>
+                <button type="submit" class="btn-primary" id="regBtn" onclick="doRegister()">注 册</button>
+            </form>
+
+            <div id="resetPanel">
+                <div class="form-group">
+                    <label>请输入注册邮箱</label>
+                    <input type="email" id="resetEmail" placeholder="your@email.com" required>
+                </div>
+                <button class="btn-primary" onclick="doReset()">发送重置链接</button>
+                <a class="forgot-link" onclick="hideResetPanel()">← 返回登录</a>
+            </div>
+        </div>
+        <div class="version-tag" id="versionTag">v20260708b</div>
+    </div>
+
+    <!--
+        单文件策略：所有 JS 内联在一个 script 块中。
+        原因：外部 js/auth.js 因不明原因未被浏览器执行（可能是移动端缓存、CDN 干扰、或 MIME 问题）。
+        将全部代码内联可 100% 消除外部加载失败的风险。
+    -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+    <script>
+        // ======== Supabase 客户端 ========
+        var SUPABASE_URL = 'https://svaqwyoafearzoqljzpq.supabase.co';
+        var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN2YXF3eW9hZmVhcnpvcWxqenBxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMxNDQyNTEsImV4cCI6MjA5ODcyMDI1MX0.FqixJCt1zNmJPlotOp7-IUFpfRWtwJD4MsG0kUFTf-o';
+        var _supabaseClient = null;
+        var currentSession = null;
+
+        function getSupabase() {
+            if (_supabaseClient) return _supabaseClient;
+            if (typeof window.supabase === 'undefined' || !window.supabase.createClient) {
+                console.error('Supabase SDK 未加载');
+                return null;
+            }
+            try {
+                _supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+                    auth: { autoRefreshToken: true, persistSession: true, detectSessionInUrl: true }
+                });
+                console.log('Supabase client created');
+            } catch (e) {
+                console.error('Supabase 初始化失败:', e);
+                return null;
+            }
+            return _supabaseClient;
+        }
+
+        function mapAuthError(error) {
+            var map = {
+                'Invalid login credentials': '邮箱或密码错误',
+                'User already registered': '该邮箱已注册，请直接登录',
+                'Password should be at least 6 characters': '密码至少需要 6 位',
+                'Email rate limit exceeded': '操作太频繁，请稍后再试',
+                'Email not confirmed': '请先验证邮箱',
+                'For security purposes, you can only request this after': '操作太频繁，请 60 秒后再试'
+            };
+            return map[error.message] || error.message;
+        }
+
+        async function handleRegister(name, email, password) {
+            var sb = getSupabase();
+            if (!sb) return { success: false, error: '客户端未初始化，请检查网络' };
+            try {
+                var result = await sb.auth.signUp({
+                    email: email,
+                    password: password,
+                    options: { data: { name: name } }
+                });
+                if (result.error) return { success: false, error: mapAuthError(result.error) };
+                return {
+                    success: true,
+                    user: result.data.user,
+                    needsEmailConfirm: result.data.user && result.data.user.identities && result.data.user.identities.length === 0
+                };
+            } catch (e) {
+                console.error('handleRegister error:', e);
+                return { success: false, error: '注册失败：' + e.message };
+            }
+        }
+
+        async function handleLogin(email, password) {
+            var sb = getSupabase();
+            if (!sb) return { success: false, error: '客户端未初始化，请检查网络' };
+            try {
+                var result = await sb.auth.signInWithPassword({ email: email, password: password });
+                if (result.error) return { success: false, error: mapAuthError(result.error) };
+                return { success: true, user: result.data.user };
+            } catch (e) {
+                console.error('handleLogin error:', e);
+                return { success: false, error: '登录失败：' + e.message };
+            }
+        }
+
+        async function handleResetPassword(email) {
+            var sb = getSupabase();
+            if (!sb) return { success: false, error: '客户端未初始化' };
+            var result = await sb.auth.resetPasswordForEmail(email, {
+                redirectTo: window.location.origin + '/reset-password.html'
+            });
+            if (result.error) return { success: false, error: mapAuthError(result.error) };
+            return { success: true };
+        }
+
+        async function signOut() {
+            var sb = getSupabase();
+            if (sb) { try { await sb.auth.signOut(); } catch(e){} }
+            currentSession = null;
+            window.location.replace('./login.html');
+        }
+
+        // ======== UI 逻辑 ========
+        var currentTab = 'login';
+
+        document.getElementById('tabSwitch').addEventListener('click', function(e) {
+            var btn = e.target.closest('.tab-btn');
+            if (!btn) return;
+            currentTab = btn.dataset.tab;
+            document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+            btn.classList.add('active');
+            document.getElementById('loginForm').style.display = currentTab === 'login' ? 'block' : 'none';
+            document.getElementById('registerForm').style.display = currentTab === 'register' ? 'block' : 'none';
+            document.getElementById('resetPanel').style.display = 'none';
+            hideError();
+        });
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                if (currentTab === 'login') doLogin();
+                else doRegister();
+            }
+        });
+
+        function showError(msg) {
+            var el = document.getElementById('errorMsg');
+            el.textContent = msg;
+            el.classList.add('show');
+        }
+        function hideError() { document.getElementById('errorMsg').classList.remove('show'); }
+        function showSuccess(msg) {
+            var el = document.getElementById('successMsg');
+            el.textContent = msg;
+            el.classList.add('show');
+        }
+        function setLoading(btnId, loading) {
+            var b = document.getElementById(btnId);
+            if (loading) {
+                b.disabled = true;
+                b.innerHTML = '<span class="loading-spinner"></span>处理中...';
+            } else {
+                b.disabled = false;
+                b.innerHTML = currentTab === 'login' ? '登 录' : '注 册';
+            }
+        }
+
+        async function doLogin() {
+            hideError();
+            var email = document.getElementById('loginEmail').value.trim();
+            var password = document.getElementById('loginPassword').value;
+            if (!email || !password) { showError('请填写邮箱和密码'); return; }
+            setLoading('loginBtn', true);
+            try {
+                var result = await handleLogin(email, password);
+                if (result.success) {
+                    window.location.replace('./index.html');
+                } else {
+                    showError(result.error);
+                }
+            } catch (e) {
+                showError('登录失败：' + (e.message || '网络错误'));
+            } finally {
+                setLoading('loginBtn', false);
+            }
+        }
+
+        async function doRegister() {
+            hideError();
+            var name = document.getElementById('regName').value.trim();
+            var email = document.getElementById('regEmail').value.trim();
+            var password = document.getElementById('regPassword').value;
+            if (!name || !email || !password) { showError('请填写所有字段'); return; }
+            if (password.length < 6) { showError('密码至少需要 6 位'); return; }
+            setLoading('regBtn', true);
+            try {
+                var result = await handleRegister(name, email, password);
+                if (result.success) {
+                    if (result.needsEmailConfirm) {
+                        showSuccess('注册成功！请检查邮箱（包括垃圾邮箱）中的验证邮件，点击链接完成验证后即可登录。');
+                    } else {
+                        window.location.replace('./index.html');
+                    }
+                } else {
+                    showError(result.error);
+                }
+            } catch (e) {
+                showError('注册失败：' + (e.message || '网络错误'));
+            } finally {
+                setLoading('regBtn', false);
+            }
+        }
+
+        function showResetPanel() {
+            document.getElementById('loginForm').style.display = 'none';
+            document.getElementById('registerForm').style.display = 'none';
+            document.getElementById('resetPanel').style.display = 'block';
+            document.getElementById('tabSwitch').style.display = 'none';
+            hideError();
+        }
+        function hideResetPanel() {
+            document.getElementById('loginForm').style.display = 'block';
+            document.getElementById('registerForm').style.display = 'none';
+            document.getElementById('resetPanel').style.display = 'none';
+            document.getElementById('tabSwitch').style.display = 'flex';
+            hideError();
+        }
+        async function doReset() {
+            hideError();
+            var email = document.getElementById('resetEmail').value.trim();
+            if (!email) { showError('请输入邮箱'); return; }
+            var result = await handleResetPassword(email);
+            if (result.success) {
+                showSuccess('密码重置链接已发送到 ' + email + '，请检查邮箱。');
+            } else {
+                showError(result.error);
+            }
+        }
+
+        // 已登录则自动跳转
+        (async function() {
+            try {
+                var sb = getSupabase();
+                if (!sb) return;
+                var sess = await sb.auth.getSession();
+                if (sess.data && sess.data.session) {
+                    var refresh = await sb.auth.refreshSession();
+                    if (refresh.error || !refresh.data.session) {
+                        await sb.auth.signOut();
+                        return;
+                    }
+                    window.location.replace('./index.html');
+                }
+            } catch (e) {
+                console.log('Auto-login check:', e.message);
+            }
+        })();
+    </script>
+</body>
+</html>
