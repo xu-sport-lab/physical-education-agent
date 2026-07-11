@@ -1625,7 +1625,7 @@ async function generatePDF() {
 <meta charset="UTF-8">
 <title>体质测试反馈表 — ${student.name}</title>
 <style>
-  @page { size: A4; margin: 12mm 14mm; }
+  @page { size: A4; margin: 10mm 14mm; }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   html, body {
     font-family: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", -apple-system, sans-serif;
@@ -1636,22 +1636,22 @@ async function generatePDF() {
 
   /* 品牌条 */
   .brand-bar {
-    height: 4px; background: linear-gradient(90deg, #10b981 0%, #3b82f6 50%, #f59e0b 100%);
-    margin-bottom: 14px; border-radius: 0 0 2px 2px;
+    height: 3px; background: linear-gradient(90deg, #10b981 0%, #3b82f6 50%, #f59e0b 100%);
+    margin-bottom: 8px; border-radius: 0 0 2px 2px;
     -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; color-adjust: exact !important;
   }
 
   /* 标题区 */
-  .header { margin-bottom: 14px; display: flex; justify-content: space-between; align-items: baseline; }
-  .header h1 { font-size: 20px; font-weight: 700; letter-spacing: -0.3px; color: #111; }
+  .header { margin-bottom: 10px; display: flex; justify-content: space-between; align-items: baseline; }
+  .header h1 { font-size: 18px; font-weight: 700; letter-spacing: -0.3px; color: #111; }
   .header .subtitle { font-size: 10px; color: #888; letter-spacing: 0.5px; }
 
   /* 信息网格 — 3列紧凑 */
   .info-grid {
-    display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; margin-bottom: 14px;
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; margin-bottom: 10px;
   }
   .info-item {
-    display: flex; justify-content: space-between; padding: 5px 8px;
+    display: flex; justify-content: space-between; padding: 4px 8px;
     background: #f8f9fa; border-radius: 4px;
     -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; color-adjust: exact !important;
   }
@@ -1666,12 +1666,12 @@ async function generatePDF() {
   }
 
   /* 成绩表格 */
-  .score-table { width: 100%; border-collapse: collapse; margin-bottom: 10px; }
+  .score-table { width: 100%; border-collapse: collapse; margin-bottom: 8px; }
   .score-table th {
     text-align: left; font-size: 9px; font-weight: 600; color: #888;
     letter-spacing: 0.5px; padding: 0 0 4px 0; border-bottom: 1.5px solid #e0e0e0;
   }
-  .score-table td { padding: 4px 0; border-bottom: 1px solid #f2f2f2; font-size: 11px; }
+  .score-table td { padding: 3px 0; border-bottom: 1px solid #f2f2f2; font-size: 11px; }
   .score-table td.score { font-weight: 700; font-size: 12px; }
   .score-table .unit { font-size: 9px; color: #aaa; margin-left: 1px; }
 
@@ -1682,12 +1682,12 @@ async function generatePDF() {
   }
 
   /* 总分卡片 */
-  .summary-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px; }
+  .summary-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px; }
   .summary-card {
-    background: #f8f9fa; padding: 10px 14px; border-radius: 6px; text-align: center;
+    background: #f8f9fa; padding: 7px 14px; border-radius: 6px; text-align: center;
     -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; color-adjust: exact !important;
   }
-  .summary-card .big-number { font-size: 26px; font-weight: 800; letter-spacing: -0.5px; line-height: 1.1; }
+  .summary-card .big-number { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; line-height: 1.1; }
   .summary-card .big-label { font-size: 9px; color: #888; margin-top: 2px; letter-spacing: 0.3px; }
 
   /* 得分进度条 — 双列紧凑 */
@@ -1699,8 +1699,8 @@ async function generatePDF() {
   .bar-score { font-size: 9px; font-weight: 700; width: 24px; text-align: right; flex-shrink: 0; }
 
   /* 优势/薄弱 */
-  .strength-weak { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px; }
-  .sw-card { padding: 8px 10px; border-radius: 6px; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; color-adjust: exact !important; }
+  .strength-weak { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px; }
+  .sw-card { padding: 6px 10px; border-radius: 6px; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; color-adjust: exact !important; }
   .sw-card.sw-strong { background: #d1fae5; border: 1px solid #6ee7b7; }
   .sw-card.sw-weak { background: #fef3c7; border: 1px solid #fcd34d; }
   .sw-card h4 { font-size: 10px; font-weight: 700; margin-bottom: 3px; }
@@ -1708,40 +1708,18 @@ async function generatePDF() {
   .sw-card.sw-weak h4 { color: #d97706; }
   .sw-card p { font-size: 10px; color: #555; }
 
-  /* 中考评分标准表 */
-  .exam-standards-box {
-    margin-bottom: 10px; padding: 10px 12px;
-    background: #eff6ff; border-radius: 6px; border-left: 3px solid #3b82f6;
-    -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; color-adjust: exact !important;
-  }
-  .exam-standards-box h4 { font-size: 11px; font-weight: 700; color: #1e40af; margin-bottom: 6px; }
-  .exam-standards-box .es-sub { font-size: 9px; color: #6b7280; margin-bottom: 6px; }
-  .es-table { width: 100%; border-collapse: collapse; font-size: 10px; }
-  .es-table th { background: #1e40af; color: #fff; padding: 4px 6px; text-align: left; font-weight: 600; border-radius: 3px 3px 0 0; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; color-adjust: exact !important; }
-  .es-table td { padding: 3px 6px; border-bottom: 1px solid #dbeafe; color: #374151; }
-  .es-table tr:last-child td { border-bottom: none; }
-  .es-table .es-full { color: #059669; font-weight: 600; }
-  .es-table .es-pass { color: #d97706; font-weight: 600; }
-
   /* 建议区 */
-  .suggestions { margin-bottom: 10px; }
+  .suggestions { margin-bottom: 8px; }
   .sug-item {
-    padding: 5px 8px; background: #eff6ff; border-radius: 4px; margin-bottom: 3px;
+    padding: 4px 8px; background: #eff6ff; border-radius: 4px; margin-bottom: 2px;
     font-size: 10px; border-left: 3px solid #3b82f6; line-height: 1.5;
     -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; color-adjust: exact !important;
   }
   .sug-item .tag { font-weight: 700; margin-right: 4px; font-size: 10px; }
 
-  /* 健康注意 */
-  .health-alert {
-    padding: 4px 8px; background: #fee2e2; border-left: 3px solid #ef4444;
-    border-radius: 4px; font-size: 10px; margin-bottom: 10px; color: #dc2626; line-height: 1.5;
-    -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; color-adjust: exact !important;
-  }
-
   /* 页脚 */
   .footer {
-    margin-top: 10px; padding-top: 6px; border-top: 1px solid #e8e8e8;
+    margin-top: 8px; padding-top: 6px; border-top: 1px solid #e8e8e8;
     display: flex; justify-content: space-between; font-size: 9px; color: #aaa;
   }
   .footer .coach-line { border-top: 1px solid #ccc; width: 80px; display: inline-block; margin: 0 4px; }
@@ -1789,8 +1767,6 @@ async function generatePDF() {
     ${breakdown}
   </div>
 
-  ${examStandardsHTML}
-
   <div class="strength-weak">
     <div class="sw-card sw-strong">
       <h4>&#x25B2; 优势项目</h4>
@@ -1812,8 +1788,7 @@ async function generatePDF() {
     <span>教练签字: <span class="coach-line"></span></span>
   </div>
   <div class="footer-note">
-    <p>* 身高、体重为生长发育参考指标，不参与体测评分；体型评估以 BMI 指数为准</p>
-    <p>* 评分标准参考《国家学生体质健康标准（2014年修订）》</p>
+    <p>* 身高体重为参考指标不参与评分 | 评分依据：《国家学生体质健康标准（2014年修订）》</p>
   </div>
 </div>
 <script>window.onload=function(){setTimeout(function(){window.print();},200);};</script>
@@ -2033,7 +2008,7 @@ async function renderComparePDF(student, test1, test2) {
 <meta charset="UTF-8">
 <title>体测对比报告 — ${student.name}</title>
 <style>
-  @page { size: A4; margin: 12mm 14mm; }
+  @page { size: A4; margin: 10mm 14mm; }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
     font-family: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", -apple-system, sans-serif;
@@ -2042,18 +2017,18 @@ async function renderComparePDF(student, test1, test2) {
   }
   .page { max-width: 182mm; margin: 0 auto; }
   .brand-bar {
-    height: 4px; background: linear-gradient(90deg, #10b981 0%, #3b82f6 50%, #f59e0b 100%);
-    margin-bottom: 14px; border-radius: 0 0 2px 2px;
+    height: 3px; background: linear-gradient(90deg, #10b981 0%, #3b82f6 50%, #f59e0b 100%);
+    margin-bottom: 8px; border-radius: 0 0 2px 2px;
   }
-  .header { margin-bottom: 14px; display: flex; justify-content: space-between; align-items: baseline; }
-  .header h1 { font-size: 20px; font-weight: 700; letter-spacing: -0.3px; color: #111; }
+  .header { margin-bottom: 10px; display: flex; justify-content: space-between; align-items: baseline; }
+  .header h1 { font-size: 18px; font-weight: 700; letter-spacing: -0.3px; color: #111; }
   .header .subtitle { font-size: 10px; color: #888; letter-spacing: 0.5px; }
 
   .info-grid {
-    display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; margin-bottom: 14px;
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; margin-bottom: 10px;
   }
   .info-item {
-    display: flex; justify-content: space-between; padding: 5px 8px;
+    display: flex; justify-content: space-between; padding: 4px 8px;
     background: #f8f9fa; border-radius: 4px;
   }
   .info-item .label { color: #999; font-size: 10px; }
@@ -2298,7 +2273,24 @@ function getAgeGroup(grade) {
     return 'high';
 }
 
-// 根据薄弱项生成训练建议（素质方向 + 年龄段适配知识点）
+// 素质方向 → 精简训练建议（单行）
+const QUALITY_SHORT_TIPS = {
+    '速度素质': '短距冲刺+反应起跑训练，提升步频与爆发力',
+    '爆发力': '跳跃与药球抛掷，发展快速发力能力',
+    '柔韧性': '每日动态拉伸10分钟，运动前后重点牵拉',
+    '核心力量': '平板支撑+卷腹，注重动作质量而非时长',
+    '肌肉耐力': '中多次数自重训练，提升持续抗疲劳能力',
+    '心肺耐力': '间歇跑+跳绳，循序渐进提升有氧能力',
+    '平衡能力': '单脚站立+平衡垫，强化本体感觉',
+    '本体感觉': '闭眼单脚站立+不稳定面训练',
+    '协调性': '跳绳+敏捷梯，提升手脚配合节奏感',
+    '上肢力量': '引体向上+俯卧撑，逐步增加负荷',
+    '下肢爆发力': '跳箱+立定跳远，注重落地缓冲技术',
+    '速度耐力': '200-400米间歇跑，控制组间休息',
+    '灵敏素质': 'T字跑+变向追逐，提升快速变向能力'
+};
+
+// 根据薄弱项生成训练建议（精简单行版）
 function generateSuggestions(lastTest, grade) {
     if (!lastTest.itemScores) return '<div class="sug-item">暂无训练数据</div>';
     const weak = Object.entries(lastTest.itemScores)
@@ -2307,7 +2299,6 @@ function generateSuggestions(lastTest, grade) {
     if (weak.length === 0) {
         return '<div class="sug-item" style="border-left-color:#22c55e; background:#f0fdf4;"><span class="tag" style="color:#166534;">非常棒</span>各项成绩均衡，继续保持当前训练节奏。</div>';
     }
-    const ageGroup = getAgeGroup(grade);
     // 收集薄弱项对应的素质方向（去重，按严重程度排序）
     const qualitySet = new Map();
     weak.forEach(([key]) => {
@@ -2322,12 +2313,11 @@ function generateSuggestions(lastTest, grade) {
     });
     const qualities = Array.from(qualitySet.entries()).slice(0, 3);
     return qualities.map(([quality, fromItem]) => {
-        const tipObj = QUALITY_TIPS[quality] || {};
-        const tip = tipObj[ageGroup] || tipObj.primary || '';
+        const shortTip = QUALITY_SHORT_TIPS[quality] || '针对性强化训练';
         return `<div class="sug-item" style="border-left-color:#2563eb;">
             <span class="tag" style="color:#1e40af;">${quality}</span>
-            <span style="color:var(--text-light);font-size:12px;margin-left:4px;">（参考项目：${fromItem}）</span>
-            <p style="margin:4px 0 0;font-size:13px;color:var(--text);">${tip}</p>
+            <span style="color:#94a3b8;margin-left:4px;">${fromItem}</span>
+            <span style="color:#374151;margin-left:6px;">${shortTip}</span>
         </div>`;
     }).join('');
 }
