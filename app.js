@@ -3079,57 +3079,106 @@ const TRAINING_DB = {
             { id:"wu_007", name:"神经激活反应练习", targetQualities:["速度","灵敏素质"], ageRange:[10,18], difficulty:2, equipment:["cone","disc"], duration:4, sets:"1组", reps:"6-8次反应", description:"用不同颜色标志盘/标志桶作为信号，学生根据信号快速做出反应动作（红=下蹲、蓝=起跳、绿=冲刺5米）", coachingPoints:"信号要突然且多变；反应动作要求快速准确", safetyNotes:"确保反应方向无障碍物" }
         ],
         speed: [
-            { id:"sp_001", name:"30米加速跑", targetQualities:["速度"], ageRange:[7,14], difficulty:1, equipment:["cone"], duration:8, sets:"4-6组", reps:"30米", restBetween:"60-90秒", description:"用标志桶标记起点和30米终点，站立式起跑全力加速跑30米", coachingPoints:"起跑重心前倾，前3步小而快；手臂前后有力摆动", safetyNotes:"跑道平整无障碍；7-11岁以频率为主" },
-            { id:"sp_002", name:"反应起跑", targetQualities:["速度","灵敏素质"], ageRange:[9,14], difficulty:2, equipment:["cone"], duration:8, sets:"6-8组", reps:"15-20米", restBetween:"45-60秒", description:"用标志桶标记终点线，背对跑动方向站立或蹲下，听到信号后快速转身起跑15-20米", coachingPoints:"听到信号第一时间反应，转身流畅；快速进入加速状态", safetyNotes:"9-12岁是反应速度敏感期，重点训练" },
-            { id:"sp_003", name:"追逐游戏-抓尾巴", targetQualities:["速度","灵敏素质","协调性"], ageRange:[6,12], difficulty:1, equipment:["tape"], duration:10, sets:"4-5轮", reps:"每轮2分钟", restBetween:"60秒", description:"用皮尺或布条塞腰后当'尾巴'，在标志桶划定区域内互相追逐抢夺，同时保护自己", coachingPoints:"鼓励多变向移动和急停急起；注重观察和预判", safetyNotes:"场地需有足够缓冲空间" },
-            { id:"sp_004", name:"接力跑", targetQualities:["速度","协调性","心肺耐力"], ageRange:[7,14], difficulty:1, equipment:["cone"], duration:10, sets:"3-4轮", reps:"4×30米接力", restBetween:"90秒", description:"用标志桶标记折返点，4人一组30米折返接力跑，注重交接技术和团队配合", coachingPoints:"交接时两人同向跑动；培养团队协作意识", safetyNotes:"交接区域需留足空间" },
-            { id:"sp_005", name:"标志桶短冲", targetQualities:["速度","灵敏素质"], ageRange:[12,18], difficulty:2, equipment:["cone"], duration:10, sets:"6组", reps:"40-60米", restBetween:"90-120秒", description:"设3个标志桶(间隔10米)，冲刺→急停→变向→冲刺→急停→冲刺终点", coachingPoints:"急停降低重心，外侧脚制动；变向内侧脚蹬地", safetyNotes:"12岁以上结合力量发展速度" },
-            { id:"sp_006", name:"弹力带阻力冲刺跑", targetQualities:["速度","下肢爆发力"], ageRange:[13,18], difficulty:3, equipment:["band"], duration:10, sets:"5组", reps:"20-30米", restBetween:"120秒", description:"弹力带系腰部，同伴后方提供阻力，全力冲刺20-30米后释放阻力自由冲刺10米", coachingPoints:"阻力适中不影响技术；释放瞬间加速感明显", safetyNotes:"仅限13岁以上有力量基础者；弹力带质量需检查" },
-            { id:"sp_007", name:"50米冲刺技术训练", targetQualities:["速度"], ageRange:[12,18], difficulty:2, equipment:["cone","tape"], duration:10, sets:"5-6组", reps:"50米", restBetween:"90秒", description:"用皮尺精确测量50米距离，标志桶标记起终点和30米处。练习起跑→加速→途中跑→冲刺四阶段技术", coachingPoints:"起跑阶段(0-10m)重心低、步频快；加速阶段(10-30m)逐步抬体、加大步幅；途中跑(30-45m)保持最高速度；冲刺(45-50m)保持技术不减速", safetyNotes:"中考50米跑专项训练；充分热身后进行" }
+            { id:"sp_001", name:"30米加速跑", targetQualities:["速度"], ageRange:[7,14], difficulty:1, equipment:["cone"], duration:8, sets:"4-6组", reps:"30米", restBetween:"60-90秒", description:"用标志桶标记起点和30米终点，站立式起跑全力加速跑30米", coachingPoints:"起跑重心前倾，前3步小而快；手臂前后有力摆动", safetyNotes:"跑道平整无障碍；7-11岁以频率为主",
+              levels:{ regression:{ name:"15米起跑加速", sets:"4组", reps:"15米", restBetween:"90秒", coachingPoints:"先掌握起跑预备姿势，前3步小步高频，不追求步幅" }, progression:{ name:"40米全力冲刺", sets:"6组", reps:"40米", restBetween:"60秒", coachingPoints:"加速后段保持步幅不减速，手臂摆动充分，注重途中跑最高速度维持" } } },
+            { id:"sp_002", name:"反应起跑", targetQualities:["速度","灵敏素质"], ageRange:[9,14], difficulty:2, equipment:["cone"], duration:8, sets:"6-8组", reps:"15-20米", restBetween:"45-60秒", description:"用标志桶标记终点线，背对跑动方向站立或蹲下，听到信号后快速转身起跑15-20米", coachingPoints:"听到信号第一时间反应，转身流畅；快速进入加速状态", safetyNotes:"9-12岁是反应速度敏感期，重点训练",
+              levels:{ regression:{ name:"正面听信号起跑", sets:"5组", reps:"10米", restBetween:"60秒", coachingPoints:"先从正面起跑练起，重点缩短反应时间，听到信号即刻蹬地" }, progression:{ name:"蹲踞式反应起跑", sets:"8组", reps:"20米", restBetween:"45秒", coachingPoints:"从蹲下姿势起跑，增加难度，注重腿部爆发力和反应速度的结合" } } },
+            { id:"sp_003", name:"追逐游戏-抓尾巴", targetQualities:["速度","灵敏素质","协调性"], ageRange:[6,12], difficulty:1, equipment:["tape"], duration:10, sets:"4-5轮", reps:"每轮2分钟", restBetween:"60秒", description:"用皮尺或布条塞腰后当'尾巴'，在标志桶划定区域内互相追逐抢夺，同时保护自己", coachingPoints:"鼓励多变向移动和急停急起；注重观察和预判", safetyNotes:"场地需有足够缓冲空间",
+              levels:{ regression:{ name:"单人抓尾练习", sets:"3轮", reps:"每轮90秒", restBetween:"60秒", coachingPoints:"教练慢速移动，学生专注于快速抢夺和变向" }, progression:{ name:"双人互追+障碍", sets:"5轮", reps:"每轮2分钟", restBetween:"45秒", coachingPoints:"加入标志桶障碍物，增加变向难度，提升复杂环境下的速度和灵敏" } } },
+            { id:"sp_004", name:"接力跑", targetQualities:["速度","协调性","心肺耐力"], ageRange:[7,14], difficulty:1, equipment:["cone"], duration:10, sets:"3-4轮", reps:"4×30米接力", restBetween:"90秒", description:"用标志桶标记折返点，4人一组30米折返接力跑，注重交接技术和团队配合", coachingPoints:"交接时两人同向跑动；培养团队协作意识", safetyNotes:"交接区域需留足空间",
+              levels:{ regression:{ name:"2人短距接力", sets:"3轮", reps:"2×15米", restBetween:"90秒", coachingPoints:"缩短距离，先掌握交接节奏和手型" }, progression:{ name:"4×50米接力", sets:"4轮", reps:"4×50米", restBetween:"60秒", coachingPoints:"增加距离和速度，注重高速交接中的稳定性和默契" } } },
+            { id:"sp_005", name:"标志桶短冲", targetQualities:["速度","灵敏素质"], ageRange:[12,18], difficulty:2, equipment:["cone"], duration:10, sets:"6组", reps:"40-60米", restBetween:"90-120秒", description:"设3个标志桶(间隔10米)，冲刺→急停→变向→冲刺→急停→冲刺终点", coachingPoints:"急停降低重心，外侧脚制动；变向内侧脚蹬地", safetyNotes:"12岁以上结合力量发展速度",
+              levels:{ regression:{ name:"直线冲刺+急停", sets:"4组", reps:"20米×2", restBetween:"90秒", coachingPoints:"先掌握急停技术，降低重心，外侧脚制动缓冲" }, progression:{ name:"S型连续变向冲刺", sets:"6组", reps:"60米", restBetween:"120秒", coachingPoints:"连续变向不减速，注重每次变向的爆发力和身体重心的快速转移" } } },
+            { id:"sp_006", name:"弹力带阻力冲刺跑", targetQualities:["速度","下肢爆发力"], ageRange:[13,18], difficulty:3, equipment:["band"], duration:10, sets:"5组", reps:"20-30米", restBetween:"120秒", description:"弹力带系腰部，同伴后方提供阻力，全力冲刺20-30米后释放阻力自由冲刺10米", coachingPoints:"阻力适中不影响技术；释放瞬间加速感明显", safetyNotes:"仅限13岁以上有力量基础者；弹力带质量需检查",
+              levels:{ regression:{ name:"上坡冲刺跑", sets:"4组", reps:"20米", restBetween:"90秒", coachingPoints:"利用自然坡度增加阻力，无需器材，注重蹬地充分和身体前倾" }, progression:{ name:"弹力带+负重背心冲刺", sets:"5组", reps:"30米", restBetween:"120秒", coachingPoints:"双重阻力训练，释放后自由冲刺，模拟比赛末段冲刺能力" } } },
+            { id:"sp_007", name:"50米冲刺技术训练", targetQualities:["速度"], ageRange:[12,18], difficulty:2, equipment:["cone","tape"], duration:10, sets:"5-6组", reps:"50米", restBetween:"90秒", description:"用皮尺精确测量50米距离，标志桶标记起终点和30米处。练习起跑→加速→途中跑→冲刺四阶段技术", coachingPoints:"起跑阶段(0-10m)重心低、步频快；加速阶段(10-30m)逐步抬体、加大步幅；途中跑(30-45m)保持最高速度；冲刺(45-50m)保持技术不减速", safetyNotes:"中考50米跑专项训练；充分热身后进行",
+              levels:{ regression:{ name:"分段技术练习", sets:"4组", reps:"10-15米分段", restBetween:"90秒", coachingPoints:"分阶段练习起跑(10m)和加速(15m)，不跑全程，先纠正各阶段技术" }, progression:{ name:"50米模拟测试", sets:"6组", reps:"50米全程", restBetween:"120秒", coachingPoints:"模拟考试流程，从预备到冲刺全程计时，注重技术稳定性" } } },
+            { id:"sp_008", name:"高抬腿加速跑", targetQualities:["速度","协调性","核心力量"], ageRange:[7,14], difficulty:1, equipment:["cone"], duration:8, sets:"5组", reps:"20米", restBetween:"60秒", description:"原地高抬腿5秒后迅速前冲20米，训练步频到步幅的转换能力", coachingPoints:"高抬腿阶段大腿抬至水平，前冲时重心前倾逐步加大步幅", safetyNotes:"注意大腿后侧肌肉预先激活",
+              levels:{ regression:{ name:"原地高抬腿+走步", sets:"4组", reps:"高抬腿10次+走15米", restBetween:"60秒", coachingPoints:"先掌握高抬腿动作标准，再过渡到走步前冲" }, progression:{ name:"高抬腿+30米冲刺", sets:"6组", reps:"高抬腿5秒+30米", restBetween:"45秒", coachingPoints:"延长冲刺距离，提升步频到最高速度的转换效率" } } },
+            { id:"sp_009", name:"后退跑转冲刺", targetQualities:["速度","灵敏素质"], ageRange:[8,14], difficulty:1, equipment:["cone"], duration:8, sets:"5组", reps:"后退10米+冲刺15米", restBetween:"60秒", description:"背对终点方向慢跑10米，听到信号后快速转身冲刺15米，训练后退跑转前冲的加速能力", coachingPoints:"转身时降低重心，外侧脚蹬地转体，快速进入加速状态", safetyNotes:"确保后退方向无障碍物",
+              levels:{ regression:{ name:"侧向滑步转冲刺", sets:"4组", reps:"侧滑10米+冲刺15米", restBetween:"60秒", coachingPoints:"先从侧向滑步练习转身，降低难度，注重转身后的加速" }, progression:{ name:"后退跑+变向冲刺", sets:"6组", reps:"后退10米+变向冲刺20米", restBetween:"45秒", coachingPoints:"增加变向动作，提升转身后复杂路线的加速能力" } } },
+            { id:"sp_010", name:"绳梯速度步法", targetQualities:["速度","协调性"], ageRange:[7,14], difficulty:1, equipment:["ladder"], duration:8, sets:"4种步法×3组", reps:"每种步法1趟", restBetween:"45秒", description:"绳梯上快速步法：高抬腿入格→单脚快速入格→双脚快速入格→侧向快速入格，注重步频", coachingPoints:"前脚掌着地，脚步轻快；由慢到快，注重步频而非步幅", safetyNotes:"绳梯需平铺固定",
+              levels:{ regression:{ name:"基础步法慢速", sets:"3种×2组", reps:"每种1趟", restBetween:"60秒", coachingPoints:"先掌握基本步法，不追求速度，注重准确性" }, progression:{ name:"绳梯+5米冲刺", sets:"4种×3组", reps:"每种1趟+冲刺", restBetween:"30秒", coachingPoints:"出绳梯后立即冲刺5米，训练步频到步幅的快速转换" } } }
         ],
         agility: [
-            { id:"ag_001", name:"绳梯基础步法", targetQualities:["灵敏素质","协调性","速度"], ageRange:[6,14], difficulty:1, equipment:["ladder"], duration:10, sets:"4-5种步法×3组", reps:"每种步法1趟", restBetween:"30-45秒", description:"绳梯上多种步法：单脚依次入格→双脚同时入格→横向滑步→进进出出→交叉步", coachingPoints:"前脚掌着地脚步轻快；由慢到快；眼睛平视前方", safetyNotes:"6-9岁步法以简单为主" },
-            { id:"ag_002", name:"T型灵敏测试训练", targetQualities:["灵敏素质","速度"], ageRange:[10,18], difficulty:2, equipment:["cone"], duration:10, sets:"6-8组", reps:"1趟T型路线", restBetween:"45-60秒", description:"用标志桶摆T型路线：向前冲刺10米→左侧滑步5米→右侧滑步10米→左侧滑步5米→倒退跑10米回起点", coachingPoints:"滑步双脚不交叉；倒退重心略后倾；全程低重心", safetyNotes:"10-12岁是灵敏素质敏感期" },
-            { id:"ag_003", name:"听信号变向跑", targetQualities:["灵敏素质","速度","协调性"], ageRange:[8,14], difficulty:2, equipment:["cone"], duration:8, sets:"6组", reps:"每组15-20秒", restBetween:"45秒", description:"用标志桶围5×5米区域，教练随机指向四方向，学生快速变向跑向该方向", coachingPoints:"变向外侧脚蹬地；保持低重心和视野开阔", safetyNotes:"场地需平整防滑" },
-            { id:"ag_004", name:"Z字变向跑", targetQualities:["灵敏素质","速度","下肢爆发力"], ageRange:[10,18], difficulty:2, equipment:["cone"], duration:8, sets:"5-6组", reps:"1趟Z字路线", restBetween:"60秒", description:"用标志桶摆Z字型(间距3-4米)，最快速度绕过每个标志桶", coachingPoints:"接近标志桶减速，绕过后加速；身体重心向内侧倾斜", safetyNotes:"绕桶时膝盖不要内扣" },
-            { id:"ag_005", name:"镜像追拍游戏", targetQualities:["灵敏素质","协调性","反应速度"], ageRange:[8,14], difficulty:1, equipment:["none"], duration:8, sets:"4-5轮", reps:"每轮30-45秒", restBetween:"30秒", description:"两人面对面，一人做领队各种移动，另一人做镜子跟随模仿，每轮交换角色", coachingPoints:"领队动作多变突然；跟随者低重心快速反应", safetyNotes:"确保两人间有足够空间" },
-            { id:"ag_006", name:"多方向跳跃落地", targetQualities:["灵敏素质","下肢爆发力","平衡能力"], ageRange:[10,18], difficulty:2, equipment:["disc","tape"], duration:8, sets:"4组", reps:"每组8次跳跃", restBetween:"60秒", description:"用标志盘和皮尺画十字标记，双脚起跳向前/后/左/右跳跃，落地稳定1秒再跳下一方向", coachingPoints:"落地屈膝屈髋缓冲，膝盖对准脚尖；稳定后再起跳", safetyNotes:"落地技术差者降低跳跃距离" },
-            { id:"ag_007", name:"绳梯高级灵敏组合", targetQualities:["灵敏素质","协调性","速度"], ageRange:[10,18], difficulty:2, equipment:["ladder","cone"], duration:10, sets:"5种组合×3组", reps:"每种组合1趟", restBetween:"45秒", description:"绳梯+标志桶组合：绳梯快速步法→出绳梯后5米冲刺绕标志桶→返回。包含高抬腿入格+变向冲刺、侧向滑步+急停转身等", coachingPoints:"绳梯内注重节奏和准确性，出绳梯后立即加速；标志桶变向降低重心", safetyNotes:"10岁以上适合；绳梯需平铺固定" }
+            { id:"ag_001", name:"绳梯基础步法", targetQualities:["灵敏素质","协调性","速度"], ageRange:[6,14], difficulty:1, equipment:["ladder"], duration:10, sets:"4-5种步法×3组", reps:"每种步法1趟", restBetween:"30-45秒", description:"绳梯上多种步法：单脚依次入格→双脚同时入格→横向滑步→进进出出→交叉步", coachingPoints:"前脚掌着地脚步轻快；由慢到快；眼睛平视前方", safetyNotes:"6-9岁步法以简单为主" ,
+              levels:{ regression:{name:'单步入格慢速',sets:'3种×2组',reps:'每种1趟',restBetween:'60秒',coaching:'先掌握单脚依次入格，不追求速度'} , progression:{name:'绳梯双步+冲刺',sets:'5种×3组',reps:'每种1趟+5米冲刺',restBetween:'30秒',coaching:'步法完成后立即冲刺，提升步频到速度的转换'} } },
+            { id:"ag_002", name:"T型灵敏测试训练", targetQualities:["灵敏素质","速度"], ageRange:[10,18], difficulty:2, equipment:["cone"], duration:10, sets:"6-8组", reps:"1趟T型路线", restBetween:"45-60秒", description:"用标志桶摆T型路线：向前冲刺10米→左侧滑步5米→右侧滑步10米→左侧滑步5米→倒退跑10米回起点", coachingPoints:"滑步双脚不交叉；倒退重心略后倾；全程低重心", safetyNotes:"10-12岁是灵敏素质敏感期" ,
+              levels:{ regression:{name:'简化T型路线',sets:'4组',reps:'5米×3',restBetween:'60秒',coaching:'缩短距离，先掌握滑步技术'} , progression:{name:'T型+转身冲刺',sets:'8组',reps:'1趟+10米冲刺',restBetween:'45秒',coaching:'完成T型路线后立即加速冲刺10米'} } },
+            { id:"ag_003", name:"听信号变向跑", targetQualities:["灵敏素质","速度","协调性"], ageRange:[8,14], difficulty:2, equipment:["cone"], duration:8, sets:"6组", reps:"每组15-20秒", restBetween:"45秒", description:"用标志桶围5×5米区域，教练随机指向四方向，学生快速变向跑向该方向", coachingPoints:"变向外侧脚蹬地；保持低重心和视野开阔", safetyNotes:"场地需平整防滑" ,
+              levels:{ regression:{name:'双方向变向跑',sets:'4组',reps:'15秒',restBetween:'45秒',coaching:'先从两个方向练起，降低难度'} , progression:{name:'四方向+地标记向',sets:'6组',reps:'20秒',restBetween:'30秒',coaching:'增加地面标志物，提升视觉反应和方向变换速度'} } },
+            { id:"ag_004", name:"Z字变向跑", targetQualities:["灵敏素质","速度","下肢爆发力"], ageRange:[10,18], difficulty:2, equipment:["cone"], duration:8, sets:"5-6组", reps:"1趟Z字路线", restBetween:"60秒", description:"用标志桶摆Z字型(间距3-4米)，最快速度绕过每个标志桶", coachingPoints:"接近标志桶减速，绕过后加速；身体重心向内侧倾斜", safetyNotes:"绕桶时膝盖不要内扣" ,
+              levels:{ regression:{name:'大间距Z字跑',sets:'4组',reps:'间距5米',restBetween:'60秒',coaching:'加大间距降低变向难度，注重减速控制'} , progression:{name:'小间距Z字+冲刺',sets:'6组',reps:'间距2米+10米冲刺',restBetween:'45秒',coaching:'小间距快频变向后立即冲刺，训练灵敏到速度的转换'} } },
+            { id:"ag_005", name:"镜像追拍游戏", targetQualities:["灵敏素质","协调性","反应速度"], ageRange:[8,14], difficulty:1, equipment:["none"], duration:8, sets:"4-5轮", reps:"每轮30-45秒", restBetween:"30秒", description:"两人面对面，一人做领队各种移动，另一人做镜子跟随模仿，每轮交换角色", coachingPoints:"领队动作多变突然；跟随者低重心快速反应", safetyNotes:"确保两人间有足够空间" ,
+              levels:{ regression:{name:'慢速镜像跟拍',sets:'3轮',reps:'30秒',restBetween:'30秒',coaching:'领队慢速移动，跟随者专注于模仿动作'} , progression:{name:'高速镜像+变向',sets:'5轮',reps:'45秒',restBetween:'20秒',coaching:'领队高速多变向，跟随者低重心快速反应'} } },
+            { id:"ag_006", name:"多方向跳跃落地", targetQualities:["灵敏素质","下肢爆发力","平衡能力"], ageRange:[10,18], difficulty:2, equipment:["disc","tape"], duration:8, sets:"4组", reps:"每组8次跳跃", restBetween:"60秒", description:"用标志盘和皮尺画十字标记，双脚起跳向前/后/左/右跳跃，落地稳定1秒再跳下一方向", coachingPoints:"落地屈膝屈髋缓冲，膝盖对准脚尖；稳定后再起跳", safetyNotes:"落地技术差者降低跳跃距离" ,
+              levels:{ regression:{name:'双向跳跃落地',sets:'3组',reps:'前后左右各4次',restBetween:'60秒',coaching:'先从前后跳跃练起，缩短距离注重落地稳定'} , progression:{name:'多方向连续跳+转体',sets:'5组',reps:'8次含转体',restBetween:'45秒',coaching:'加入转体跳跃，提升空中控制和落地稳定性'} } },
+            { id:"ag_007", name:"绳梯高级灵敏组合", targetQualities:["灵敏素质","协调性","速度"], ageRange:[10,18], difficulty:2, equipment:["ladder","cone"], duration:10, sets:"5种组合×3组", reps:"每种组合1趟", restBetween:"45秒", description:"绳梯+标志桶组合：绳梯快速步法→出绳梯后5米冲刺绕标志桶→返回。包含高抬腿入格+变向冲刺、侧向滑步+急停转身等", coachingPoints:"绳梯内注重节奏和准确性，出绳梯后立即加速；标志桶变向降低重心", safetyNotes:"10岁以上适合；绳梯需平铺固定" ,
+              levels:{ regression:{name:'绳梯单步+冲刺',sets:'3种×2组',reps:'1趟+3米冲刺',restBetween:'45秒',coaching:'先掌握基本步法加短距离冲刺'} , progression:{name:'绳梯组合+标志桶变向',sets:'5种×3组',reps:'1趟+变向冲刺',restBetween:'30秒',coaching:'出绳梯后绕标志桶变向冲刺，提升复杂路线灵敏度'} } },
+            { id:"ag_008", name:"信号灯反应冲刺", targetQualities:["灵敏素质","速度","反应速度"], ageRange:[8,14], difficulty:1, equipment:["cone","disc"], duration:8, sets:"5组", reps:"每组5次", restBetween:"45秒", description:"用红/绿标志盘模拟信号灯，红=原地不动、绿=5米冲刺。教练随机举色盘，学生快速反应", coachingPoints:"注意力集中，反应要快；冲刺时全力加速", safetyNotes:"确保冲刺方向无障碍物",
+              levels:{ regression:{name:'单色冲刺',sets:'4组',reps:'5米',restBetween:'60秒',coaching:'只用绿色信号，简化反应'} , progression:{name:'三色+变向',sets:'6组',reps:'5米+变向',restBetween:'30秒',coaching:'三色信号，加入变向动作提升复杂度'} } },
+            { id:"ag_009", name:"绳梯侧向灵敏", targetQualities:["灵敏素质","协调性","下肢爆发力"], ageRange:[8,14], difficulty:2, equipment:["ladder"], duration:8, sets:"4种×3组", reps:"每种1趟", restBetween:"45秒", description:"绳横向放置，侧向移动完成各种步法：侧向入格→交叉步→侧向进进出出→快速侧向", coachingPoints:"侧向移动注重左右均衡；前脚掌着地快速蹬地", safetyNotes:"绳梯需平铺固定；注意两侧空间",
+              levels:{ regression:{name:'侧向慢速入格',sets:'2种×2组',reps:'1趟',restBetween:'60秒',coaching:'先掌握侧向入格基本步法'} , progression:{name:'侧向+冲刺变向',sets:'5种×3组',reps:'1趟+5米冲刺',restBetween:'30秒',coaching:'侧向步法完成后立即冲刺变向'} } }
         ],
         strength: [
-            { id:"st_001", name:"动物步行力量循环", targetQualities:["核心力量","上肢力量","协调性"], ageRange:[6,10], difficulty:1, equipment:["none"], duration:10, sets:"3组循环", reps:"每个动作10米", restBetween:"60秒", description:"循环：熊爬→螃蟹爬→毛毛虫爬→青蛙跳→鸭子走，每个10米", coachingPoints:"保持核心收紧，动作标准比速度重要", safetyNotes:"6-9岁以全身各部位肌肉力量训练为主，避免负重" },
-            { id:"st_002", name:"自重力量循环", targetQualities:["核心力量","上肢力量","肌肉耐力"], ageRange:[10,15], difficulty:2, equipment:["yoga_mat"], duration:12, sets:"3-4组循环", reps:"每个动作30秒", restBetween:"60秒", description:"瑜伽垫上：俯卧撑(可屈膝)→平板支撑→仰卧起坐→臀桥→侧平板(每侧)，各30秒", coachingPoints:"注重动作质量而非数量；身体成一条直线", safetyNotes:"12-15岁以徒手力量为主，强度不宜过大；避免憋气" },
-            { id:"st_003", name:"网球投掷力量训练", targetQualities:["上肢力量","核心力量","下肢爆发力"], ageRange:[10,18], difficulty:2, equipment:["tennis","cone"], duration:10, sets:"4组", reps:"每组8-10次", restBetween:"60秒", description:"用网球进行：过头抛球→转体抛球→下蹲推球→侧抛球，各8-10次。标志桶标记投掷目标", coachingPoints:"发力从下肢开始经核心传递到上肢；全身协调发力；注重出手速度", safetyNotes:"网球较轻，注重动作模式训练而非绝对力量" },
-            { id:"st_004", name:"弹力带力量训练", targetQualities:["上肢力量","核心力量","下肢爆发力"], ageRange:[12,18], difficulty:2, equipment:["band"], duration:12, sets:"3组", reps:"每个动作12-15次", restBetween:"45秒", description:"弹力带：深蹲划船→站姿推举→站姿划船→侧向行走→胸前推，各12-15次", coachingPoints:"动作匀速有控制，注重离心阶段；核心始终收紧", safetyNotes:"12-15岁着重发展快速力量；弹力带需检查无破损" },
-            { id:"st_005", name:"栏架跳跃力量组合", targetQualities:["下肢爆发力","速度力量"], ageRange:[10,18], difficulty:2, equipment:["low_hurdle","high_hurdle","jump_mat"], duration:10, sets:"4组", reps:"每个动作6-8次", restBetween:"60-90秒", description:"连续跳过低栏架6次→跳远垫上立定跳远6次→连续跳过高栏架8次→单腿跳(每侧5次)→侧向跳跃栏架8次", coachingPoints:"每次全力爆发；落地屈膝屈髋缓冲；注重落地稳定性", safetyNotes:"10-13岁以低栏架为主；膝盖不要内扣" },
-            { id:"st_006", name:"核心稳定性训练", targetQualities:["核心力量","平衡能力"], ageRange:[10,18], difficulty:2, equipment:["yoga_mat"], duration:10, sets:"3组", reps:"每个动作30-45秒", restBetween:"30秒", description:"瑜伽垫上：平板支撑→侧平板(每侧)→臀桥→死虫式→鸟狗式→登山者，各30-45秒", coachingPoints:"核心始终收紧，骨盆中立位；呼吸均匀不憋气", safetyNotes:"腰部不适者降低时长或改为膝支撑" },
-            { id:"st_007", name:"弹力带进阶力量训练", targetQualities:["上肢力量","核心力量","下肢爆发力"], ageRange:[15,18], difficulty:3, equipment:["band"], duration:15, sets:"3-4组", reps:"每个动作10-12次", restBetween:"60-90秒", description:"弹力带：高脚杯深蹲→弹力带推举→弹力带划船→弓步蹲→罗马尼亚硬拉，各10-12次", coachingPoints:"深蹲膝盖对准脚尖，背部平直；注重离心阶段控制", safetyNotes:"仅限15岁以上；弹力带阻力从轻开始逐步增加" },
-            { id:"st_008", name:"引体向上进阶训练", targetQualities:["上肢力量","核心力量"], ageRange:[12,18], difficulty:2, equipment:["band"], duration:12, sets:"4组", reps:"每组力竭", restBetween:"90秒", description:"弹力带辅助引体向上：用弹力带绕于单杠辅助，完成引体向上。从厚带(辅助大)逐步过渡到薄带(辅助小)，最终过渡到自重引体", coachingPoints:"发力时肩胛骨下回旋，胸部触杠；下放时缓慢控制(2-3秒)；核心始终收紧", safetyNotes:"中考引体向上专项训练；需有单杠设施；弹力带辅助量根据能力调整" }
+            { id:"st_001", name:"动物步行力量循环", targetQualities:["核心力量","上肢力量","协调性"], ageRange:[6,10], difficulty:1, equipment:["none"], duration:10, sets:"3组循环", reps:"每个动作10米", restBetween:"60秒", description:"循环：熊爬→螃蟹爬→毛毛虫爬→青蛙跳→鸭子走，每个10米", coachingPoints:"保持核心收紧，动作标准比速度重要", safetyNotes:"6-9岁以全身各部位肌肉力量训练为主，避免负重" ,
+              levels:{ regression:{name:'单一动物步行',sets:'2组',reps:'每个动作5米',restBetween:'60秒',coaching:'先掌握单个动作，缩短距离'} , progression:{name:'动物步行+负重',sets:'3组',reps:'每个动作15米',restBetween:'45秒',coaching:'增加距离，可穿轻量负重背心提升负荷'} } },
+            { id:"st_002", name:"自重力量循环", targetQualities:["核心力量","上肢力量","肌肉耐力"], ageRange:[10,15], difficulty:2, equipment:["yoga_mat"], duration:12, sets:"3-4组循环", reps:"每个动作30秒", restBetween:"60秒", description:"瑜伽垫上：俯卧撑(可屈膝)→平板支撑→仰卧起坐→臀桥→侧平板(每侧)，各30秒", coachingPoints:"注重动作质量而非数量；身体成一条直线", safetyNotes:"12-15岁以徒手力量为主，强度不宜过大；避免憋气" ,
+              levels:{ regression:{name:'屈膝俯卧撑+短时平板',sets:'3组',reps:'每个15秒',restBetween:'60秒',coaching:'降低难度，屈膝俯卧撑，平板支撑时间减半'} , progression:{name:'标准俯卧撑+加长平板',sets:'4组',reps:'每个45秒',restBetween:'45秒',coaching:'标准俯卧撑，延长支撑时间提升耐力'} } },
+            { id:"st_003", name:"网球投掷力量训练", targetQualities:["上肢力量","核心力量","下肢爆发力"], ageRange:[10,18], difficulty:2, equipment:["tennis","cone"], duration:10, sets:"4组", reps:"每组8-10次", restBetween:"60秒", description:"用网球进行：过头抛球→转体抛球→下蹲推球→侧抛球，各8-10次。标志桶标记投掷目标", coachingPoints:"发力从下肢开始经核心传递到上肢；全身协调发力；注重出手速度", safetyNotes:"网球较轻，注重动作模式训练而非绝对力量" ,
+              levels:{ regression:{name:'近距离投掷',sets:'3组',reps:'6次',restBetween:'60秒',coaching:'缩短投掷距离，注重基本发力模式'} , progression:{name:'远距离+目标投掷',sets:'5组',reps:'10次',restBetween:'45秒',coaching:'增加距离和目标精度，提升爆发力和控制力'} } },
+            { id:"st_004", name:"弹力带力量训练", targetQualities:["上肢力量","核心力量","下肢爆发力"], ageRange:[12,18], difficulty:2, equipment:["band"], duration:12, sets:"3组", reps:"每个动作12-15次", restBetween:"45秒", description:"弹力带：深蹲划船→站姿推举→站姿划船→侧向行走→胸前推，各12-15次", coachingPoints:"动作匀速有控制，注重离心阶段；核心始终收紧", safetyNotes:"12-15岁着重发展快速力量；弹力带需检查无破损" ,
+              levels:{ regression:{name:'轻阻力弹力带',sets:'2组',reps:'10次',restBetween:'60秒',coaching:'使用轻阻力弹力带，注重动作标准'} , progression:{name:'重阻力+复合动作',sets:'4组',reps:'15次',restBetween:'45秒',coaching:'增加阻力，结合多关节复合动作提升训练效率'} } },
+            { id:"st_005", name:"栏架跳跃力量组合", targetQualities:["下肢爆发力","速度力量"], ageRange:[10,18], difficulty:2, equipment:["low_hurdle","high_hurdle","jump_mat"], duration:10, sets:"4组", reps:"每个动作6-8次", restBetween:"60-90秒", description:"连续跳过低栏架6次→跳远垫上立定跳远6次→连续跳过高栏架8次→单腿跳(每侧5次)→侧向跳跃栏架8次", coachingPoints:"每次全力爆发；落地屈膝屈髋缓冲；注重落地稳定性", safetyNotes:"10-13岁以低栏架为主；膝盖不要内扣" ,
+              levels:{ regression:{name:'低栏架跳跃',sets:'3组',reps:'4次',restBetween:'90秒',coaching:'仅用低栏架，减少次数注重落地技术'} , progression:{name:'高栏架+组合跳',sets:'5组',reps:'8次',restBetween:'60秒',coaching:'加入高栏架和组合跳跃，提升爆发力和协调性'} } },
+            { id:"st_006", name:"核心稳定性训练", targetQualities:["核心力量","平衡能力"], ageRange:[10,18], difficulty:2, equipment:["yoga_mat"], duration:10, sets:"3组", reps:"每个动作30-45秒", restBetween:"30秒", description:"瑜伽垫上：平板支撑→侧平板(每侧)→臀桥→死虫式→鸟狗式→登山者，各30-45秒", coachingPoints:"核心始终收紧，骨盆中立位；呼吸均匀不憋气", safetyNotes:"腰部不适者降低时长或改为膝支撑" ,
+              levels:{ regression:{name:'短时核心支撑',sets:'2组',reps:'每个20秒',restBetween:'30秒',coaching:'缩短支撑时间，注重骨盆中立位'} , progression:{name:'长时+动态核心',sets:'4组',reps:'每个60秒',restBetween:'20秒',coaching:'延长支撑时间并加入动态动作，提升核心耐力'} } },
+            { id:"st_007", name:"弹力带进阶力量训练", targetQualities:["上肢力量","核心力量","下肢爆发力"], ageRange:[15,18], difficulty:3, equipment:["band"], duration:15, sets:"3-4组", reps:"每个动作10-12次", restBetween:"60-90秒", description:"弹力带：高脚杯深蹲→弹力带推举→弹力带划船→弓步蹲→罗马尼亚硬拉，各10-12次", coachingPoints:"深蹲膝盖对准脚尖，背部平直；注重离心阶段控制", safetyNotes:"仅限15岁以上；弹力带阻力从轻开始逐步增加" ,
+              levels:{ regression:{name:'轻阻力基础动作',sets:'2组',reps:'8次',restBetween:'90秒',coaching:'使用轻弹力带，注重深蹲和推举的基本动作模式'} , progression:{name:'重阻力+单侧训练',sets:'4组',reps:'12次',restBetween:'60秒',coaching:'增加阻力，加入单侧训练提升核心抗旋转能力'} } },
+            { id:"st_008", name:"引体向上进阶训练", targetQualities:["上肢力量","核心力量"], ageRange:[12,18], difficulty:2, equipment:["band"], duration:12, sets:"4组", reps:"每组力竭", restBetween:"90秒", description:"弹力带辅助引体向上：用弹力带绕于单杠辅助，完成引体向上。从厚带(辅助大)逐步过渡到薄带(辅助小)，最终过渡到自重引体", coachingPoints:"发力时肩胛骨下回旋，胸部触杠；下放时缓慢控制(2-3秒)；核心始终收紧", safetyNotes:"中考引体向上专项训练；需有单杠设施；弹力带辅助量根据能力调整" ,
+              levels:{ regression:{name:'厚弹力带辅助',sets:'3组',reps:'5次',restBetween:'90秒',coaching:'使用厚弹力带提供较大辅助，先掌握动作模式'} , progression:{name:'自重引体+负重',sets:'5组',reps:'力竭',restBetween:'120秒',coaching:'过渡到自重引体，可穿轻量负重背心提升负荷'} } }
         ],
         endurance: [
-            { id:"en_001", name:"趣味接力耐力跑", targetQualities:["心肺耐力","速度"], ageRange:[8,12], difficulty:1, equipment:["cone"], duration:12, sets:"3-4轮", reps:"每轮200-400米", restBetween:"90秒", description:"用标志桶标记接力路线，分组200-400米接力跑，每人跑50-100米后交接", coachingPoints:"中等强度心率150-170次/分；注重团队配合和节奏感", safetyNotes:"8岁以上可进行有氧耐力练习；负荷不宜过大" },
-            { id:"en_002", name:"间歇跑训练", targetQualities:["心肺耐力","速度耐力"], ageRange:[11,15], difficulty:2, equipment:["cone"], duration:12, sets:"6-8组", reps:"200米", restBetween:"60-90秒慢走", description:"用标志桶标记200米距离，中高强度跑(心率170-185次/分)，间歇60-90秒慢走恢复", coachingPoints:"11-12岁以有氧为主心率160-175次/分；注重呼吸节奏", safetyNotes:"11-12岁主要为有氧训练；有心律问题者需医生评估" },
-            { id:"en_003", name:"法特莱克跑", targetQualities:["心肺耐力","速度"], ageRange:[10,18], difficulty:2, equipment:["none"], duration:15, sets:"1组", reps:"15分钟", restBetween:"无固定休息", description:"变速跑：快跑30秒→慢跑1分钟→快跑1分钟→慢走2分钟交替进行15分钟", coachingPoints:"快跑心率达170-180，慢跑/走降至130-140；自主调控节奏", safetyNotes:"选择平整安全路线；10-12岁快跑比例不超过30%" },
-            { id:"en_004", name:"游戏化耐力-追逐跑", targetQualities:["心肺耐力","灵敏素质","协调性"], ageRange:[8,12], difficulty:1, equipment:["cone"], duration:12, sets:"3轮", reps:"每轮3-4分钟", restBetween:"60秒", description:"标志桶划定区域内1-2人当'追捕者'追逐其他人，被追到者原地5个开合跳后成为追捕者", coachingPoints:"持续移动不静止；注重变向和加速结合", safetyNotes:"场地有足够空间和缓冲" },
-            { id:"en_005", name:"栏架连续跳耐力", targetQualities:["心肺耐力","协调性","肌肉耐力"], ageRange:[8,18], difficulty:2, equipment:["low_hurdle"], duration:10, sets:"5组", reps:"每组2分钟", restBetween:"45秒", description:"连续跳跃低栏架2分钟×5组(8-10个栏架循环跳)，组间休息45秒，可变换跳法保持节奏", coachingPoints:"匀速心率150-170次/分；前脚掌着地膝盖微屈", safetyNotes:"选择平整地面；手腕和膝盖有伤者降低强度" },
-            { id:"en_006", name:"400米间歇跑", targetQualities:["速度耐力","心肺耐力"], ageRange:[13,18], difficulty:3, equipment:["cone"], duration:15, sets:"4-5组", reps:"400米", restBetween:"2-3分钟", description:"用标志桶标记400米距离，中高强度跑(目标配速比全力慢10-15%)，间歇2-3分钟慢走", coachingPoints:"13-14岁逐步增加无氧耐力；注重配速控制和呼吸", safetyNotes:"仅限13岁以上；充分热身后进行" },
-            { id:"en_007", name:"1000米/800米配速训练", targetQualities:["心肺耐力","速度耐力"], ageRange:[13,18], difficulty:2, equipment:["cone","tape"], duration:15, sets:"3-4组", reps:"400米", restBetween:"2分钟", description:"用皮尺和标志桶精确标记400米圈道。按目标配速跑400米(男生1000米目标配速÷2.5，女生800米目标配速÷2)，间歇2分钟。培养配速感", coachingPoints:"前200米控制节奏不可过快；中间200米保持稳定；呼吸两步一呼两步一吸；最后100米可适当加速", safetyNotes:"中考1000米/800米专项训练；有心律问题者需医生评估" }
+            { id:"en_001", name:"趣味接力耐力跑", targetQualities:["心肺耐力","速度"], ageRange:[8,12], difficulty:1, equipment:["cone"], duration:12, sets:"3-4轮", reps:"每轮200-400米", restBetween:"90秒", description:"用标志桶标记接力路线，分组200-400米接力跑，每人跑50-100米后交接", coachingPoints:"中等强度心率150-170次/分；注重团队配合和节奏感", safetyNotes:"8岁以上可进行有氧耐力练习；负荷不宜过大" ,
+              levels:{ regression:{name:'短距接力跑',sets:'2轮',reps:'100米',restBetween:'120秒',coaching:'缩短距离，注重基本跑姿和呼吸节奏'} , progression:{name:'长距接力+计时',sets:'4轮',reps:'400米',restBetween:'60秒',coaching:'增加距离并计时，提升有氧耐力和配速控制'} } },
+            { id:"en_002", name:"间歇跑训练", targetQualities:["心肺耐力","速度耐力"], ageRange:[11,15], difficulty:2, equipment:["cone"], duration:12, sets:"6-8组", reps:"200米", restBetween:"60-90秒慢走", description:"用标志桶标记200米距离，中高强度跑(心率170-185次/分)，间歇60-90秒慢走恢复", coachingPoints:"11-12岁以有氧为主心率160-175次/分；注重呼吸节奏", safetyNotes:"11-12岁主要为有氧训练；有心律问题者需医生评估" ,
+              levels:{ regression:{name:'长间歇慢速跑',sets:'4组',reps:'200米',restBetween:'120秒',coaching:'降低配速，延长间歇，先建立有氧基础'} , progression:{name:'短间歇高速跑',sets:'8组',reps:'200米',restBetween:'45秒',coaching:'提升配速缩短间歇，增加无氧训练比例'} } },
+            { id:"en_003", name:"法特莱克跑", targetQualities:["心肺耐力","速度"], ageRange:[10,18], difficulty:2, equipment:["none"], duration:15, sets:"1组", reps:"15分钟", restBetween:"无固定休息", description:"变速跑：快跑30秒→慢跑1分钟→快跑1分钟→慢走2分钟交替进行15分钟", coachingPoints:"快跑心率达170-180，慢跑/走降至130-140；自主调控节奏", safetyNotes:"选择平整安全路线；10-12岁快跑比例不超过30%" ,
+              levels:{ regression:{name:'短时法特莱克',sets:'1组',reps:'10分钟',restBetween:'无',coaching:'缩短总时间，快跑比例降低'} , progression:{name:'长时+高比例快跑',sets:'1组',reps:'20分钟',restBetween:'无',coaching:'延长时间，增加快跑比例，提升有氧无氧混合能力'} } },
+            { id:"en_004", name:"游戏化耐力-追逐跑", targetQualities:["心肺耐力","灵敏素质","协调性"], ageRange:[8,12], difficulty:1, equipment:["cone"], duration:12, sets:"3轮", reps:"每轮3-4分钟", restBetween:"60秒", description:"标志桶划定区域内1-2人当'追捕者'追逐其他人，被追到者原地5个开合跳后成为追捕者", coachingPoints:"持续移动不静止；注重变向和加速结合", safetyNotes:"场地有足够空间和缓冲" ,
+              levels:{ regression:{name:'小场地追逐',sets:'2轮',reps:'2分钟',restBetween:'60秒',coaching:'缩小场地降低强度，注重持续移动'} , progression:{name:'大场地+多人追逐',sets:'4轮',reps:'4分钟',restBetween:'45秒',coaching:'扩大场地增加人数，提升持续高强度移动能力'} } },
+            { id:"en_005", name:"栏架连续跳耐力", targetQualities:["心肺耐力","协调性","肌肉耐力"], ageRange:[8,18], difficulty:2, equipment:["low_hurdle"], duration:10, sets:"5组", reps:"每组2分钟", restBetween:"45秒", description:"连续跳跃低栏架2分钟×5组(8-10个栏架循环跳)，组间休息45秒，可变换跳法保持节奏", coachingPoints:"匀速心率150-170次/分；前脚掌着地膝盖微屈", safetyNotes:"选择平整地面；手腕和膝盖有伤者降低强度" ,
+              levels:{ regression:{name:'低栏架慢跳',sets:'3组',reps:'1分钟',restBetween:'60秒',coaching:'降低栏架高度和跳跃速度，注重节奏'} , progression:{name:'变跳法+加速跳',sets:'6组',reps:'2分钟',restBetween:'30秒',coaching:'变换跳法并加速，提升协调性和心肺负荷'} } },
+            { id:"en_006", name:"400米间歇跑", targetQualities:["速度耐力","心肺耐力"], ageRange:[13,18], difficulty:3, equipment:["cone"], duration:15, sets:"4-5组", reps:"400米", restBetween:"2-3分钟", description:"用标志桶标记400米距离，中高强度跑(目标配速比全力慢10-15%)，间歇2-3分钟慢走", coachingPoints:"13-14岁逐步增加无氧耐力；注重配速控制和呼吸", safetyNotes:"仅限13岁以上；充分热身后进行" ,
+              levels:{ regression:{name:'300米间歇',sets:'3组',reps:'300米',restBetween:'3分钟',coaching:'缩短距离，注重配速控制'} , progression:{name:'500米间歇+短间歇',sets:'5组',reps:'400米',restBetween:'90秒',coaching:'增加距离缩短间歇，提升乳酸耐受能力'} } },
+            { id:"en_007", name:"1000米/800米配速训练", targetQualities:["心肺耐力","速度耐力"], ageRange:[13,18], difficulty:2, equipment:["cone","tape"], duration:15, sets:"3-4组", reps:"400米", restBetween:"2分钟", description:"用皮尺和标志桶精确标记400米圈道。按目标配速跑400米(男生1000米目标配速÷2.5，女生800米目标配速÷2)，间歇2分钟。培养配速感", coachingPoints:"前200米控制节奏不可过快；中间200米保持稳定；呼吸两步一呼两步一吸；最后100米可适当加速", safetyNotes:"中考1000米/800米专项训练；有心律问题者需医生评估" ,
+              levels:{ regression:{name:'400米慢配速',sets:'2组',reps:'400米',restBetween:'3分钟',coaching:'以慢于目标配速10秒的速度跑，建立配速感'} , progression:{name:'600米+目标配速',sets:'4组',reps:'400米',restBetween:'90秒',coaching:'以目标配速或更快的速度跑，提升比赛配速能力'} } }
         ],
         flexibility: [
-            { id:"fl_001", name:"全身静态拉伸", targetQualities:["柔韧性"], ageRange:[6,18], difficulty:1, equipment:["yoga_mat"], duration:8, sets:"1组", reps:"每个动作15-30秒", description:"瑜伽垫上主要肌群静态拉伸：股四头肌→腘绳肌→小腿→髋屈肌→臀大肌→背阔肌→胸大肌→肩部", coachingPoints:"拉伸到紧绷无痛感位置；深呼吸放松；不弹震", safetyNotes:"柔韧性敏感期应重点训练；13-16岁快速生长期幅度宜小" },
-            { id:"fl_002", name:"PNF拉伸", targetQualities:["柔韧性"], ageRange:[12,18], difficulty:2, equipment:["yoga_mat","band"], duration:8, sets:"1组", reps:"每个肌群2轮", description:"瑜伽垫上同伴辅助或弹力带辅助PNF：被动拉伸至紧绷位→主动收缩6秒→放松→加深拉伸", coachingPoints:"收缩时对抗阻力约70%；放松阶段呼气加深", safetyNotes:"仅限12岁以上；感觉疼痛立即停止" },
-            { id:"fl_003", name:"瑜伽流动放松", targetQualities:["柔韧性","平衡能力","协调性"], ageRange:[8,18], difficulty:1, equipment:["yoga_mat"], duration:8, sets:"1组", reps:"每个体式3-5次呼吸", description:"瑜伽垫上：猫牛式→下犬式→婴儿式→鸽子式→坐姿前屈→快乐婴儿式，每个3-5次呼吸", coachingPoints:"配合呼吸节奏流动；不追求体式深度，注重身体感受", safetyNotes:"膝盖不适者垫毛巾" },
-            { id:"fl_004", name:"坐位体前屈专项训练", targetQualities:["柔韧性"], ageRange:[10,18], difficulty:1, equipment:["yoga_mat"], duration:8, sets:"1组", reps:"每个动作20-30秒×3轮", description:"瑜伽垫上坐姿体前屈专项：直腿坐体前屈(保持20秒)→分腿体前屈(每侧20秒)→单腿体前屈(每侧20秒)→同伴辅助加深(20秒)，循环3轮", coachingPoints:"从髋部折叠而非弯腰；膝盖伸直但不锁死；呼气时加深幅度；中考坐位体前屈专项训练", safetyNotes:"不要弹震式拉伸；拉伸感为紧绷而非疼痛" }
+            { id:"fl_001", name:"全身静态拉伸", targetQualities:["柔韧性"], ageRange:[6,18], difficulty:1, equipment:["yoga_mat"], duration:8, sets:"1组", reps:"每个动作15-30秒", description:"瑜伽垫上主要肌群静态拉伸：股四头肌→腘绳肌→小腿→髋屈肌→臀大肌→背阔肌→胸大肌→肩部", coachingPoints:"拉伸到紧绷无痛感位置；深呼吸放松；不弹震", safetyNotes:"柔韧性敏感期应重点训练；13-16岁快速生长期幅度宜小" ,
+              levels:{ regression:{name:'短时轻柔拉伸',sets:'1组',reps:'每个10-15秒',restBetween:'无',coaching:'缩短拉伸时间，幅度宜小，注重放松'} , progression:{name:'长时深度拉伸',sets:'2组',reps:'每个30-45秒',restBetween:'无',coaching:'延长拉伸时间加深幅度，配合PNF收缩放松技巧'} } },
+            { id:"fl_002", name:"PNF拉伸", targetQualities:["柔韧性"], ageRange:[12,18], difficulty:2, equipment:["yoga_mat","band"], duration:8, sets:"1组", reps:"每个肌群2轮", description:"瑜伽垫上同伴辅助或弹力带辅助PNF：被动拉伸至紧绷位→主动收缩6秒→放松→加深拉伸", coachingPoints:"收缩时对抗阻力约70%；放松阶段呼气加深", safetyNotes:"仅限12岁以上；感觉疼痛立即停止" ,
+              levels:{ regression:{name:'弹力带轻辅助',sets:'1组',reps:'每肌群1轮',restBetween:'无',coaching:'使用轻阻力弹力带，注重基本拉伸感'} , progression:{name:'同伴辅助+深位PNF',sets:'2组',reps:'每肌群3轮',restBetween:'无',coaching:'同伴辅助加深拉伸幅度，增加PNF轮次提升效果'} } },
+            { id:"fl_003", name:"瑜伽流动放松", targetQualities:["柔韧性","平衡能力","协调性"], ageRange:[8,18], difficulty:1, equipment:["yoga_mat"], duration:8, sets:"1组", reps:"每个体式3-5次呼吸", description:"瑜伽垫上：猫牛式→下犬式→婴儿式→鸽子式→坐姿前屈→快乐婴儿式，每个3-5次呼吸", coachingPoints:"配合呼吸节奏流动；不追求体式深度，注重身体感受", safetyNotes:"膝盖不适者垫毛巾" ,
+              levels:{ regression:{name:'简化体式流动',sets:'1组',reps:'4个体式',restBetween:'无',coaching:'选择简单体式，注重呼吸和放松'} , progression:{name:'完整体式+平衡挑战',sets:'2组',reps:'8个体式',restBetween:'无',coaching:'增加体式数量和难度，加入平衡挑战体式'} } },
+            { id:"fl_004", name:"坐位体前屈专项训练", targetQualities:["柔韧性"], ageRange:[10,18], difficulty:1, equipment:["yoga_mat"], duration:8, sets:"1组", reps:"每个动作20-30秒×3轮", description:"瑜伽垫上坐姿体前屈专项：直腿坐体前屈(保持20秒)→分腿体前屈(每侧20秒)→单腿体前屈(每侧20秒)→同伴辅助加深(20秒)，循环3轮", coachingPoints:"从髋部折叠而非弯腰；膝盖伸直但不锁死；呼气时加深幅度；中考坐位体前屈专项训练", safetyNotes:"不要弹震式拉伸；拉伸感为紧绷而非疼痛" ,
+              levels:{ regression:{name:'微屈膝前屈',sets:'1组',reps:'每个15秒×2轮',restBetween:'无',coaching:'膝盖微屈降低难度，先建立基本拉伸感'} , progression:{name:'直腿+负重前屈',sets:'1组',reps:'每个30秒×4轮',restBetween:'无',coaching:'膝盖完全伸直，可手持轻重量加深幅度'} } }
         ],
         coordination: [
-            { id:"co_001", name:"网球抛接协调训练", targetQualities:["协调性","反应速度"], ageRange:[6,12], difficulty:1, equipment:["tennis"], duration:8, sets:"4-5种练习×3组", reps:"每组10-15次", restBetween:"30秒", description:"用网球进行：自抛自接→双手交替抛接→对墙抛接→双人互抛→抛球击掌后接球", coachingPoints:"眼睛盯球，手部提前准备；注重节奏感", safetyNotes:"6-9岁发展一般协调能力，以多样化体验为主" },
-            { id:"co_002", name:"绳梯手脚协调组合", targetQualities:["协调性","灵敏素质"], ageRange:[8,14], difficulty:2, equipment:["ladder"], duration:10, sets:"4-5种组合×3组", reps:"每种组合1趟", restBetween:"30秒", description:"绳梯上：高抬腿入格→开合跳入格→单双脚交替跳→手脚不对称动作", coachingPoints:"先慢速掌握动作模式再加快；注重左右协调", safetyNotes:"9-13岁发展专门协调能力，可结合专项技术" },
-            { id:"co_003", name:"节奏拍打游戏", targetQualities:["协调性","反应速度"], ageRange:[6,10], difficulty:1, equipment:["none"], duration:8, sets:"3-4轮", reps:"每轮2分钟", restBetween:"30秒", description:"教练拍手打节奏(快/慢/停/变)，学生根据节奏做相应动作(快跑/慢走/定住/变方向)", coachingPoints:"6-12岁是节奏感发展敏感期；从简单到复杂循序渐进", safetyNotes:"场地平整无障碍物" },
-            { id:"co_004", name:"网球平衡协调挑战", targetQualities:["协调性","平衡能力"], ageRange:[8,14], difficulty:2, equipment:["tennis","low_hurdle"], duration:8, sets:"4个动作×3组", reps:"每个动作30秒", restBetween:"30秒", description:"低栏架上行走+网球抛接→单脚站立+网球抛接→闭眼单脚站立→栏架上侧向行走，各30秒", coachingPoints:"核心收紧目光平视固定点；从简单到难循序渐进", safetyNotes:"9-13岁是平衡能力发展敏感期；栏架旁需有保护者" }
+            { id:"co_001", name:"网球抛接协调训练", targetQualities:["协调性","反应速度"], ageRange:[6,12], difficulty:1, equipment:["tennis"], duration:8, sets:"4-5种练习×3组", reps:"每组10-15次", restBetween:"30秒", description:"用网球进行：自抛自接→双手交替抛接→对墙抛接→双人互抛→抛球击掌后接球", coachingPoints:"眼睛盯球，手部提前准备；注重节奏感", safetyNotes:"6-9岁发展一般协调能力，以多样化体验为主" ,
+              levels:{ regression:{name:'双手自抛自接',sets:'2种×2组',reps:'8次',restBetween:'45秒',coaching:'先从双手自抛自接练起，注重手眼协调'} , progression:{name:'多球+非对称抛接',sets:'5种×3组',reps:'15次',restBetween:'20秒',coaching:'增加练习种类和次数，加入非对称动作提升挑战'} } },
+            { id:"co_002", name:"绳梯手脚协调组合", targetQualities:["协调性","灵敏素质"], ageRange:[8,14], difficulty:2, equipment:["ladder"], duration:10, sets:"4-5种组合×3组", reps:"每种组合1趟", restBetween:"30秒", description:"绳梯上：高抬腿入格→开合跳入格→单双脚交替跳→手脚不对称动作", coachingPoints:"先慢速掌握动作模式再加快；注重左右协调", safetyNotes:"9-13岁发展专门协调能力，可结合专项技术" ,
+              levels:{ regression:{name:'单步法慢速',sets:'2种×2组',reps:'1趟',restBetween:'45秒',coaching:'先掌握单一步法，慢速注重准确性'} , progression:{name:'组合步法+变向',sets:'5种×3组',reps:'1趟',restBetween:'20秒',coaching:'组合多种步法并加入变向，提升复杂协调能力'} } },
+            { id:"co_003", name:"节奏拍打游戏", targetQualities:["协调性","反应速度"], ageRange:[6,10], difficulty:1, equipment:["none"], duration:8, sets:"3-4轮", reps:"每轮2分钟", restBetween:"30秒", description:"教练拍手打节奏(快/慢/停/变)，学生根据节奏做相应动作(快跑/慢走/定住/变方向)", coachingPoints:"6-12岁是节奏感发展敏感期；从简单到复杂循序渐进", safetyNotes:"场地平整无障碍物" ,
+              levels:{ regression:{name:'慢速节奏',sets:'2轮',reps:'90秒',restBetween:'30秒',coaching:'教练慢速拍手，学生慢速跟随'} , progression:{name:'变速+停顿节奏',sets:'4轮',reps:'2分钟',restBetween:'15秒',coaching:'教练变速拍手并加入停顿，学生快速反应调整动作'} } },
+            { id:"co_004", name:"网球平衡协调挑战", targetQualities:["协调性","平衡能力"], ageRange:[8,14], difficulty:2, equipment:["tennis","low_hurdle"], duration:8, sets:"4个动作×3组", reps:"每个动作30秒", restBetween:"30秒", description:"低栏架上行走+网球抛接→单脚站立+网球抛接→闭眼单脚站立→栏架上侧向行走，各30秒", coachingPoints:"核心收紧目光平视固定点；从简单到难循序渐进", safetyNotes:"9-13岁是平衡能力发展敏感期；栏架旁需有保护者" ,
+              levels:{ regression:{name:'单脚站立抛接',sets:'2动作×2组',reps:'20秒',restBetween:'30秒',coaching:'先从单脚站立+抛接练起，降低栏架难度'} , progression:{name:'闭眼+栏架行走进阶',sets:'4动作×3组',reps:'45秒',restBetween:'20秒',coaching:'增加闭眼和栏架行走难度，全面提升协调和平衡'} } }
         ],
         balance: [
-            { id:"ba_001", name:"单脚平衡挑战", targetQualities:["平衡能力","本体感觉","核心力量"], ageRange:[6,12], difficulty:1, equipment:["none"], duration:6, sets:"3组", reps:"每侧30秒", restBetween:"30秒", description:"单脚站立计时挑战，逐步增加难度：睁眼→闭眼→不稳面→闭眼+不稳面", coachingPoints:"支撑腿微屈核心收紧；目光平视固定点", safetyNotes:"闭眼练习时旁需有保护者" },
-            { id:"ba_002", name:"栏架动态平衡行走", targetQualities:["平衡能力","协调性","核心力量"], ageRange:[8,14], difficulty:2, equipment:["low_hurdle","cone"], duration:8, sets:"3组", reps:"每种走法2趟(5米)", restBetween:"30秒", description:"将低栏架排列成5米行走路线：正常走→侧向走→倒退走→头顶网球走→闭眼走", coachingPoints:"脚跟到脚尖依次着地；手臂张开维持平衡", safetyNotes:"9-13岁是平衡敏感期；栏架高度不超过30cm" }
+            { id:"ba_001", name:"单脚平衡挑战", targetQualities:["平衡能力","本体感觉","核心力量"], ageRange:[6,12], difficulty:1, equipment:["none"], duration:6, sets:"3组", reps:"每侧30秒", restBetween:"30秒", description:"单脚站立计时挑战，逐步增加难度：睁眼→闭眼→不稳面→闭眼+不稳面", coachingPoints:"支撑腿微屈核心收紧；目光平视固定点", safetyNotes:"闭眼练习时旁需有保护者" ,
+              levels:{ regression:{name:'睁眼双脚交替',sets:'2组',reps:'每侧15秒',restBetween:'30秒',coaching:'先从睁眼双脚交替站练起，缩短时间'} , progression:{name:'闭眼+不稳定面',sets:'4组',reps:'每侧45秒',restBetween:'15秒',coaching:'闭眼并站在平衡垫上，全面提升本体感觉和核心控制'} } },
+            { id:"ba_002", name:"栏架动态平衡行走", targetQualities:["平衡能力","协调性","核心力量"], ageRange:[8,14], difficulty:2, equipment:["low_hurdle","cone"], duration:8, sets:"3组", reps:"每种走法2趟(5米)", restBetween:"30秒", description:"将低栏架排列成5米行走路线：正常走→侧向走→倒退走→头顶网球走→闭眼走", coachingPoints:"脚跟到脚尖依次着地；手臂张开维持平衡", safetyNotes:"9-13岁是平衡敏感期；栏架高度不超过30cm" ,
+              levels:{ regression:{name:'正常走+侧向走',sets:'2组',reps:'各1趟',restBetween:'30秒',coaching:'先掌握正常走和侧向走，降低栏架高度'} , progression:{name:'闭眼走+头顶球',sets:'4组',reps:'各2趟',restBetween:'15秒',coaching:'增加闭眼行走和头顶网球，提升动态平衡和专注力'} } }
         ],
         cooldown: [
             { id:"cd_001", name:"慢跑+步行放松", targetQualities:["心肺耐力"], ageRange:[6,18], difficulty:1, equipment:["none"], duration:4, sets:"1组", reps:"4分钟", description:"慢跑1分钟→快走1分钟→慢走2分钟，使心率逐步降至100次/分以下", coachingPoints:"呼吸逐渐放缓；保持身体直立放松", safetyNotes:"不要训练后立即坐下或躺下" },
@@ -3138,45 +3187,110 @@ const TRAINING_DB = {
             { id:"cd_004", name:"双人互拉伸展", targetQualities:["柔韧性"], ageRange:[10,18], difficulty:1, equipment:["yoga_mat"], duration:6, sets:"1组", reps:"每个动作15-20秒", description:"瑜伽垫上两人互助拉伸：背靠背坐姿体前屈→仰卧腿后侧拉伸→肩部拉伸→体侧拉伸", coachingPoints:"搭档间保持沟通；动作缓慢温和；配合呼吸加深幅度", safetyNotes:"10岁以上适合；同伴需听从指令不过度用力" }
         ],
         weight_loss: [
-            { id:"wl_001", name:"HIIT燃脂循环", targetQualities:["心肺耐力","下肢爆发力","核心力量"], ageRange:[10,18], difficulty:2, equipment:["cone","ladder"], duration:15, sets:"4-5轮循环", reps:"每个动作30秒", restBetween:"轮间60秒", description:"标志桶标记站点+绳梯，循环：绳梯快速步法30秒→标志桶折返冲刺30秒→开合跳30秒→波比跳30秒→高抬腿30秒。每轮间休息60秒", coachingPoints:"每个动作全力输出，保持高心率(170-185次/分)；注重动作质量；可根据体能调整工作和休息比例", safetyNotes:"BMI超过28的学生降低跳跃高度和频率；运动前充分热身" },
-            { id:"wl_002", name:"栏架Tabata燃脂", targetQualities:["心肺耐力","下肢爆发力","肌肉耐力"], ageRange:[10,18], difficulty:2, equipment:["low_hurdle","high_hurdle"], duration:12, sets:"8组Tabata", reps:"20秒运动/10秒休息", restBetween:"组间10秒", description:"Tabata模式(20秒全力/10秒休息×8组)：栏架连续跳→休息→高栏架跳跃→休息→交替进行8轮", coachingPoints:"20秒内全力输出；心率保持在最大心率的80-90%；注重呼吸节奏", safetyNotes:"BMI超过28的学生仅用低栏架；膝盖不适者改为无跳跃版本" },
-            { id:"wl_003", name:"抢占领地有氧游戏", targetQualities:["心肺耐力","灵敏素质","协调性"], ageRange:[8,14], difficulty:1, equipment:["cone","disc"], duration:12, sets:"4轮", reps:"每轮3分钟", restBetween:"60秒", description:"用标志桶和标志盘在场地上设置多个'领地'(小方格)，学生需在3分钟内尽可能多地跑动占领领地(放标志盘)。每轮统计占领数量", coachingPoints:"持续高速移动；注重变向和冲刺结合；保持高心率", safetyNotes:"场地需有足够空间；避免多人同时冲向同一领地" },
-            { id:"wl_004", name:"弹力带燃脂循环", targetQualities:["心肺耐力","上肢力量","核心力量"], ageRange:[12,18], difficulty:2, equipment:["band"], duration:12, sets:"4轮循环", reps:"每个动作40秒", restBetween:"轮间45秒", description:"弹力带循环：深蹲推举40秒→弹力带划船40秒→弹力带深蹲跳40秒→俯卧撑40秒→登山者40秒。每轮间休息45秒", coachingPoints:"每个动作保持中等以上强度；心率维持在160-180次/分；注重动作连贯性", safetyNotes:"12岁以上适合；弹力带阻力适中" }
+            { id:"wl_001", name:"HIIT燃脂循环", targetQualities:["心肺耐力","下肢爆发力","核心力量"], ageRange:[10,18], difficulty:2, equipment:["cone","ladder"], duration:15, sets:"4-5轮循环", reps:"每个动作30秒", restBetween:"轮间60秒", description:"标志桶标记站点+绳梯，循环：绳梯快速步法30秒→标志桶折返冲刺30秒→开合跳30秒→波比跳30秒→高抬腿30秒。每轮间休息60秒", coachingPoints:"每个动作全力输出，保持高心率(170-185次/分)；注重动作质量；可根据体能调整工作和休息比例", safetyNotes:"BMI超过28的学生降低跳跃高度和频率；运动前充分热身" ,
+              levels:{ regression:{name:'低强度循环',sets:'3轮',reps:'每个20秒',restBetween:'90秒',coaching:'降低每个动作时间，延长休息，注重动作质量'} , progression:{name:'高强度+加时',sets:'5轮',reps:'每个40秒',restBetween:'45秒',coaching:'增加每轮时间和轮数，提升心率和燃脂效率'} } },
+            { id:"wl_002", name:"栏架Tabata燃脂", targetQualities:["心肺耐力","下肢爆发力","肌肉耐力"], ageRange:[10,18], difficulty:2, equipment:["low_hurdle","high_hurdle"], duration:12, sets:"8组Tabata", reps:"20秒运动/10秒休息", restBetween:"组间10秒", description:"Tabata模式(20秒全力/10秒休息×8组)：栏架连续跳→休息→高栏架跳跃→休息→交替进行8轮", coachingPoints:"20秒内全力输出；心率保持在最大心率的80-90%；注重呼吸节奏", safetyNotes:"BMI超过28的学生仅用低栏架；膝盖不适者改为无跳跃版本" ,
+              levels:{ regression:{name:'低栏架Tabata',sets:'6组',reps:'20秒/15秒休息',restBetween:'15秒',coaching:'仅用低栏架，减少组数，增加休息'} , progression:{name:'高低栏交替Tabata',sets:'10组',reps:'20秒/5秒休息',restBetween:'5秒',coaching:'高低栏交替跳跃，增加组数缩短休息，提升强度'} } },
+            { id:"wl_003", name:"抢占领地有氧游戏", targetQualities:["心肺耐力","灵敏素质","协调性"], ageRange:[8,14], difficulty:1, equipment:["cone","disc"], duration:12, sets:"4轮", reps:"每轮3分钟", restBetween:"60秒", description:"用标志桶和标志盘在场地上设置多个'领地'(小方格)，学生需在3分钟内尽可能多地跑动占领领地(放标志盘)。每轮统计占领数量", coachingPoints:"持续高速移动；注重变向和冲刺结合；保持高心率", safetyNotes:"场地需有足够空间；避免多人同时冲向同一领地" ,
+              levels:{ regression:{name:'小场地慢速占领',sets:'3轮',reps:'2分钟',restBetween:'90秒',coaching:'缩小场地降低强度，注重持续移动'} , progression:{name:'大场地+计时占领',sets:'5轮',reps:'3分钟',restBetween:'45秒',coaching:'扩大场地并计时，提升持续高强度移动能力'} } },
+            { id:"wl_004", name:"弹力带燃脂循环", targetQualities:["心肺耐力","上肢力量","核心力量"], ageRange:[12,18], difficulty:2, equipment:["band"], duration:12, sets:"4轮循环", reps:"每个动作40秒", restBetween:"轮间45秒", description:"弹力带循环：深蹲推举40秒→弹力带划船40秒→弹力带深蹲跳40秒→俯卧撑40秒→登山者40秒。每轮间休息45秒", coachingPoints:"每个动作保持中等以上强度；心率维持在160-180次/分；注重动作连贯性", safetyNotes:"12岁以上适合；弹力带阻力适中" ,
+              levels:{ regression:{name:'轻阻力+短时',sets:'3轮',reps:'每个30秒',restBetween:'60秒',coaching:'使用轻弹力带，缩短每个动作时间'} , progression:{name:'重阻力+加时',sets:'5轮',reps:'每个50秒',restBetween:'30秒',coaching:'增加阻力和时间，提升肌肉耐力和燃脂效果'} } }
         ],
         height_growth: [
-            { id:"hg_001", name:"脊柱伸展拉伸", targetQualities:["柔韧性"], ageRange:[6,16], difficulty:1, equipment:["yoga_mat"], duration:8, sets:"1组", reps:"每个动作20-30秒×2轮", description:"瑜伽垫上脊柱伸展：猫牛式伸展(20秒)→眼镜蛇式(20秒)→婴儿式(20秒)→站立前屈(20秒)→靠墙脊柱伸展(20秒)，循环2轮", coachingPoints:"注重脊柱的纵向伸展感；每个动作配合深呼吸；不追求幅度，注重伸展感", safetyNotes:"追高训练重点：通过脊柱伸展和纵向刺激促进生长板活跃" },
-            { id:"hg_002", name:"纵向跳跃组合", targetQualities:["下肢爆发力","心肺耐力"], ageRange:[8,16], difficulty:2, equipment:["low_hurdle","high_hurdle","jump_mat"], duration:10, sets:"4组", reps:"每个动作8-10次", restBetween:"60秒", description:"全力纵跳摸高10次→连续跳过低栏架8次→跳远垫上全力立定跳远6次→跳过高栏架8次。注重向上方向的跳跃", coachingPoints:"每次跳跃全力向上；落地屈膝缓冲；注重跳跃高度而非距离", safetyNotes:"追高训练重点：纵向跳跃刺激下肢生长板；骨骺未闭合前效果最佳(男16/女14岁前)" },
-            { id:"hg_003", name:"悬垂伸展训练", targetQualities:["柔韧性","上肢力量"], ageRange:[8,16], difficulty:1, equipment:["band"], duration:8, sets:"4组", reps:"每组30秒", restBetween:"45秒", description:"弹力带辅助悬垂：将弹力带系于高处单杠，辅助身体悬垂30秒。悬垂时全身放松伸展，感受脊柱和四肢的纵向拉伸", coachingPoints:"悬垂时全身放松，让重力自然拉伸脊柱；手臂伸直；呼吸深长均匀", safetyNotes:"追高训练重点：悬垂利用重力拉伸脊柱间隙；需有单杠设施；弹力带承重需检查" },
-            { id:"hg_004", name:"全身伸展放松", targetQualities:["柔韧性","平衡能力"], ageRange:[6,16], difficulty:1, equipment:["yoga_mat"], duration:10, sets:"1组", reps:"每个动作30秒×2轮", description:"瑜伽垫上全身伸展：仰卧脊柱扭转(每侧30秒)→仰卧腿后侧拉伸(每侧30秒)→猫牛式(30秒)→下犬式(30秒)→站立体侧屈(每侧30秒)→靠墙腿伸展(30秒)，循环2轮", coachingPoints:"每个动作缓慢进入，配合呼吸加深；注重全身各部位的纵向伸展感", safetyNotes:"追高训练重点：训练后充分拉伸促进生长激素分泌和肌肉恢复" }
+            { id:"hg_001", name:"脊柱伸展拉伸", targetQualities:["柔韧性"], ageRange:[6,16], difficulty:1, equipment:["yoga_mat"], duration:8, sets:"1组", reps:"每个动作20-30秒×2轮", description:"瑜伽垫上脊柱伸展：猫牛式伸展(20秒)→眼镜蛇式(20秒)→婴儿式(20秒)→站立前屈(20秒)→靠墙脊柱伸展(20秒)，循环2轮", coachingPoints:"注重脊柱的纵向伸展感；每个动作配合深呼吸；不追求幅度，注重伸展感", safetyNotes:"追高训练重点：通过脊柱伸展和纵向刺激促进生长板活跃" ,
+              levels:{ regression:{name:'短时脊柱伸展',sets:'1组',reps:'每个15秒×1轮',restBetween:'无',coaching:'缩短每个动作时间，注重基本伸展感'} , progression:{name:'长时+深度伸展',sets:'2组',reps:'每个30秒×3轮',restBetween:'无',coaching:'延长伸展时间并加深幅度，配合深呼吸促进生长板活跃'} } },
+            { id:"hg_002", name:"纵向跳跃组合", targetQualities:["下肢爆发力","心肺耐力"], ageRange:[8,16], difficulty:2, equipment:["low_hurdle","high_hurdle","jump_mat"], duration:10, sets:"4组", reps:"每个动作8-10次", restBetween:"60秒", description:"全力纵跳摸高10次→连续跳过低栏架8次→跳远垫上全力立定跳远6次→跳过高栏架8次。注重向上方向的跳跃", coachingPoints:"每次跳跃全力向上；落地屈膝缓冲；注重跳跃高度而非距离", safetyNotes:"追高训练重点：纵向跳跃刺激下肢生长板；骨骺未闭合前效果最佳(男16/女14岁前)" ,
+              levels:{ regression:{name:'低栏架跳跃',sets:'3组',reps:'6次',restBetween:'90秒',coaching:'仅用低栏架，减少次数注重跳跃质量'} , progression:{name:'高栏架+摸高组合',sets:'5组',reps:'10次',restBetween:'45秒',coaching:'增加栏架高度和跳跃次数，加入摸高提升纵向爆发力'} } },
+            { id:"hg_003", name:"悬垂伸展训练", targetQualities:["柔韧性","上肢力量"], ageRange:[8,16], difficulty:1, equipment:["band"], duration:8, sets:"4组", reps:"每组30秒", restBetween:"45秒", description:"弹力带辅助悬垂：将弹力带系于高处单杠，辅助身体悬垂30秒。悬垂时全身放松伸展，感受脊柱和四肢的纵向拉伸", coachingPoints:"悬垂时全身放松，让重力自然拉伸脊柱；手臂伸直；呼吸深长均匀", safetyNotes:"追高训练重点：悬垂利用重力拉伸脊柱间隙；需有单杠设施；弹力带承重需检查" ,
+              levels:{ regression:{name:'弹力带辅助悬垂',sets:'3组',reps:'20秒',restBetween:'60秒',coaching:'使用弹力带辅助，缩短悬垂时间'} , progression:{name:'自重悬垂+摆动',sets:'5组',reps:'45秒',restBetween:'30秒',coaching:'过渡到自重悬垂，加入轻摆动增加脊柱拉伸效果'} } },
+            { id:"hg_004", name:"全身伸展放松", targetQualities:["柔韧性","平衡能力"], ageRange:[6,16], difficulty:1, equipment:["yoga_mat"], duration:10, sets:"1组", reps:"每个动作30秒×2轮", description:"瑜伽垫上全身伸展：仰卧脊柱扭转(每侧30秒)→仰卧腿后侧拉伸(每侧30秒)→猫牛式(30秒)→下犬式(30秒)→站立体侧屈(每侧30秒)→靠墙腿伸展(30秒)，循环2轮", coachingPoints:"每个动作缓慢进入，配合呼吸加深；注重全身各部位的纵向伸展感", safetyNotes:"追高训练重点：训练后充分拉伸促进生长激素分泌和肌肉恢复" ,
+              levels:{ regression:{name:'短时放松伸展',sets:'1组',reps:'每个15秒×1轮',restBetween:'无',coaching:'缩短伸展时间，注重放松感'} , progression:{name:'长时+全身深度放松',sets:'2组',reps:'每个45秒×3轮',restBetween:'无',coaching:'延长伸展时间，加深幅度，促进生长激素分泌和肌肉恢复'} } }
         ],
         exam_prep: [
-            { id:"ex_001", name:"1000米/800米配速训练", targetQualities:["心肺耐力","速度耐力"], ageRange:[13,15], difficulty:2, equipment:["cone","tape"], duration:15, sets:"3-4组", reps:"400米", restBetween:"2分钟", description:"皮尺标记400米圈道。按目标配速跑400米(男生1000米目标÷2.5，女生800米目标÷2)，间歇2分钟。培养配速感", coachingPoints:"前200米控制节奏不可过快；中间200米保持稳定；呼吸两步一呼两步一吸；最后100米可适当加速", safetyNotes:"中考中长跑专项；有心律问题者需医生评估" },
-            { id:"ex_002", name:"50米冲刺技术训练", targetQualities:["速度"], ageRange:[12,15], difficulty:2, equipment:["cone","tape"], duration:10, sets:"5-6组", reps:"50米", restBetween:"90秒", description:"皮尺精确测量50米，标志桶标记起终点和30米处。练习起跑→加速→途中跑→冲刺四阶段技术", coachingPoints:"起跑(0-10m)重心低步频快；加速(10-30m)逐步抬体加大步幅；途中跑(30-45m)保持最高速度；冲刺(45-50m)不减速", safetyNotes:"中考50米跑专项；充分热身后进行" },
-            { id:"ex_003", name:"立定跳远技术训练", targetQualities:["下肢爆发力"], ageRange:[12,15], difficulty:2, equipment:["jump_mat","tape","cone"], duration:12, sets:"5组", reps:"每组3-5次", restBetween:"90秒", description:"跳远垫上练习立定跳远：预摆技术(3次)→起跳技术(3次)→腾空技术(3次)→落地技术(3次)→完整技术(5次)。用皮尺测量距离", coachingPoints:"预摆时手臂上摆同时屈膝；起跳时蹬地充分展体；腾空时收腹举腿；落地时屈膝前扑。中考立定跳远专项", safetyNotes:"落地区域需有缓冲；膝盖不要内扣" },
-            { id:"ex_004", name:"引体向上进阶训练", targetQualities:["上肢力量","核心力量"], ageRange:[12,15], difficulty:2, equipment:["band"], duration:12, sets:"4组", reps:"每组力竭", restBetween:"90秒", description:"弹力带辅助引体向上：从厚带(辅助大)逐步过渡到薄带(辅助小)，最终过渡到自重引体。每组做到力竭", coachingPoints:"发力时肩胛骨下回旋，胸部触杠；下放时缓慢控制(2-3秒)；核心始终收紧。中考引体向上(男)专项", safetyNotes:"需有单杠设施；弹力带辅助量根据能力调整" },
-            { id:"ex_005", name:"仰卧起坐技术训练", targetQualities:["核心力量","肌肉耐力"], ageRange:[12,15], difficulty:2, equipment:["yoga_mat"], duration:10, sets:"4组", reps:"每组1分钟", restBetween:"60秒", description:"瑜伽垫上1分钟仰卧起坐：先做标准技术练习(10个慢速)→1分钟计时测试×4组。注重动作规范性和节奏感", coachingPoints:"双手交叉贴脑后；起身时肘触膝；下落时肩胛骨触垫；保持匀速节奏不借力。中考仰卧起坐(女)专项", safetyNotes:"腰部不适者降低组数；避免抱头借力" },
-            { id:"ex_006", name:"跳绳专项训练", targetQualities:["协调性","心肺耐力","肌肉耐力"], ageRange:[12,15], difficulty:2, equipment:["jump_rope"], duration:12, sets:"5组", reps:"1分钟", restBetween:"45秒", description:"1分钟跳绳计时训练×5组：先做技术练习(单脚交替跳)→1分钟计时测试。注重手腕摇绳和脚步节奏", coachingPoints:"前脚掌着地，膝盖微屈；手腕小幅度摇绳；保持匀速节奏。中考跳绳专项", safetyNotes:"需要跳绳器材（当前器材清单中未包含，需额外准备）" },
-            { id:"ex_007", name:"实心球投掷技术训练", targetQualities:["上肢力量","核心力量","下肢爆发力"], ageRange:[12,15], difficulty:2, equipment:["solid_ball","cone","tape"], duration:12, sets:"5组", reps:"每组5-8次", restBetween:"90秒", description:"用实心球练习原地双手正面投掷：站立姿势→持球→引球→蹬地→腰腹发力→出手。用皮尺测量距离，标志桶标记目标", coachingPoints:"双脚与肩同宽，微屈膝；引球时身体后仰重心在后；蹬地→腰腹→手臂依次发力；出手角度约38-42度。中考实心球专项", safetyNotes:"需要实心球器材（当前器材清单中未包含，需额外准备）" },
-            { id:"ex_008", name:"坐位体前屈专项训练", targetQualities:["柔韧性"], ageRange:[12,15], difficulty:1, equipment:["yoga_mat"], duration:8, sets:"1组", reps:"每个动作20-30秒×3轮", description:"瑜伽垫上坐位体前屈专项：直腿坐体前屈(保持20秒)→分腿体前屈(每侧20秒)→单腿体前屈(每侧20秒)→同伴辅助加深(20秒)，循环3轮", coachingPoints:"从髋部折叠而非弯腰；膝盖伸直但不锁死；呼气时加深幅度。中考坐位体前屈专项", safetyNotes:"不要弹震式拉伸；拉伸感为紧绷而非疼痛" },
-            { id:"ex_009", name:"球类绕杆运球训练", targetQualities:["协调性","灵敏素质","速度"], ageRange:[12,15], difficulty:2, equipment:["ball","cone","tape"], duration:12, sets:"5组", reps:"每组2次", restBetween:"60秒", description:"用标志桶按考试标准间距设置绕杆路线(标志桶间距3米，共5-6个)。练习运球绕杆技术，注重球控制和变向速度", coachingPoints:"运球高度不过腰；绕杆时外侧脚蹬地变向，球控制在身体外侧；保持低重心。中考足球/篮球绕杆专项", safetyNotes:"需要足球或篮球器材（当前器材清单中未包含，需额外准备）" }
+            { id:"ex_001", name:"1000米/800米配速训练", targetQualities:["心肺耐力","速度耐力"], ageRange:[13,15], difficulty:2, equipment:["cone","tape"], duration:15, sets:"3-4组", reps:"400米", restBetween:"2分钟", description:"皮尺标记400米圈道。按目标配速跑400米(男生1000米目标÷2.5，女生800米目标÷2)，间歇2分钟。培养配速感", coachingPoints:"前200米控制节奏不可过快；中间200米保持稳定；呼吸两步一呼两步一吸；最后100米可适当加速", safetyNotes:"中考中长跑专项；有心律问题者需医生评估" ,
+              levels:{ regression:{name:'慢配速400米',sets:'2组',reps:'400米',restBetween:'3分钟',coaching:'以慢于目标配速10秒的速度跑，建立配速感'} , progression:{name:'目标配速+600米',sets:'4组',reps:'400米',restBetween:'90秒',coaching:'以目标配速跑，缩短间歇，提升比赛能力'} } },
+            { id:"ex_002", name:"50米冲刺技术训练", targetQualities:["速度"], ageRange:[12,15], difficulty:2, equipment:["cone","tape"], duration:10, sets:"5-6组", reps:"50米", restBetween:"90秒", description:"皮尺精确测量50米，标志桶标记起终点和30米处。练习起跑→加速→途中跑→冲刺四阶段技术", coachingPoints:"起跑(0-10m)重心低步频快；加速(10-30m)逐步抬体加大步幅；途中跑(30-45m)保持最高速度；冲刺(45-50m)不减速", safetyNotes:"中考50米跑专项；充分热身后进行" ,
+              levels:{ regression:{name:'分段技术练习',sets:'4组',reps:'10-15米分段',restBetween:'90秒',coaching:'分阶段练习不跑全程，先纠正技术'} , progression:{name:'50米模拟测试',sets:'6组',reps:'50米全程',restBetween:'120秒',coaching:'模拟考试全程计时，注重技术稳定性'} } },
+            { id:"ex_003", name:"立定跳远技术训练", targetQualities:["下肢爆发力"], ageRange:[12,15], difficulty:2, equipment:["jump_mat","tape","cone"], duration:12, sets:"5组", reps:"每组3-5次", restBetween:"90秒", description:"跳远垫上练习立定跳远：预摆技术(3次)→起跳技术(3次)→腾空技术(3次)→落地技术(3次)→完整技术(5次)。用皮尺测量距离", coachingPoints:"预摆时手臂上摆同时屈膝；起跳时蹬地充分展体；腾空时收腹举腿；落地时屈膝前扑。中考立定跳远专项", safetyNotes:"落地区域需有缓冲；膝盖不要内扣" ,
+              levels:{ regression:{name:'分解技术练习',sets:'3组',reps:'每阶段3次',restBetween:'90秒',coaching:'分阶段练习预摆、起跳、腾空、落地，不跳完整'} , progression:{name:'完整技术+测距',sets:'6组',reps:'5次完整',restBetween:'60秒',coaching:'完整跳远并测量距离，模拟比赛流程'} } },
+            { id:"ex_004", name:"引体向上进阶训练", targetQualities:["上肢力量","核心力量"], ageRange:[12,15], difficulty:2, equipment:["band"], duration:12, sets:"4组", reps:"每组力竭", restBetween:"90秒", description:"弹力带辅助引体向上：从厚带(辅助大)逐步过渡到薄带(辅助小)，最终过渡到自重引体。每组做到力竭", coachingPoints:"发力时肩胛骨下回旋，胸部触杠；下放时缓慢控制(2-3秒)；核心始终收紧。中考引体向上(男)专项", safetyNotes:"需有单杠设施；弹力带辅助量根据能力调整" ,
+              levels:{ regression:{name:'厚弹力带辅助',sets:'3组',reps:'3次',restBetween:'90秒',coaching:'使用厚弹力带较大辅助，先掌握动作模式'} , progression:{name:'自重引体+负重',sets:'5组',reps:'力竭',restBetween:'120秒',coaching:'过渡到自重引体，可穿轻量负重背心'} } },
+            { id:"ex_005", name:"仰卧起坐技术训练", targetQualities:["核心力量","肌肉耐力"], ageRange:[12,15], difficulty:2, equipment:["yoga_mat"], duration:10, sets:"4组", reps:"每组1分钟", restBetween:"60秒", description:"瑜伽垫上1分钟仰卧起坐：先做标准技术练习(10个慢速)→1分钟计时测试×4组。注重动作规范性和节奏感", coachingPoints:"双手交叉贴脑后；起身时肘触膝；下落时肩胛骨触垫；保持匀速节奏不借力。中考仰卧起坐(女)专项", safetyNotes:"腰部不适者降低组数；避免抱头借力" ,
+              levels:{ regression:{name:'技术练习+短时',sets:'3组',reps:'30秒',restBetween:'60秒',coaching:'先做标准技术练习10个慢速，再30秒短时'} , progression:{name:'1分钟模拟测试',sets:'5组',reps:'1分钟',restBetween:'45秒',coaching:'模拟考试1分钟计时，注重动作规范性和速度维持'} } },
+            { id:"ex_006", name:"跳绳专项训练", targetQualities:["协调性","心肺耐力","肌肉耐力"], ageRange:[12,15], difficulty:2, equipment:["jump_rope"], duration:12, sets:"5组", reps:"1分钟", restBetween:"45秒", description:"1分钟跳绳计时训练×5组：先做技术练习(单脚交替跳)→1分钟计时测试。注重手腕摇绳和脚步节奏", coachingPoints:"前脚掌着地，膝盖微屈；手腕小幅度摇绳；保持匀速节奏。中考跳绳专项", safetyNotes:"需要跳绳器材（当前器材清单中未包含，需额外准备）" ,
+              levels:{ regression:{name:'慢速技术练习',sets:'3组',reps:'30秒',restBetween:'60秒',coaching:'先做慢速技术练习注重手脚配合'} , progression:{name:'1分钟模拟测试',sets:'6组',reps:'1分钟',restBetween:'30秒',coaching:'模拟考试1分钟计时，注重速度和耐力维持'} } },
+            { id:"ex_007", name:"实心球投掷技术训练", targetQualities:["上肢力量","核心力量","下肢爆发力"], ageRange:[12,15], difficulty:2, equipment:["solid_ball","cone","tape"], duration:12, sets:"5组", reps:"每组5-8次", restBetween:"90秒", description:"用实心球练习原地双手正面投掷：站立姿势→持球→引球→蹬地→腰腹发力→出手。用皮尺测量距离，标志桶标记目标", coachingPoints:"双脚与肩同宽，微屈膝；引球时身体后仰重心在后；蹬地→腰腹→手臂依次发力；出手角度约38-42度。中考实心球专项", safetyNotes:"需要实心球器材（当前器材清单中未包含，需额外准备）" ,
+              levels:{ regression:{name:'短距投掷',sets:'3组',reps:'3次',restBetween:'90秒',coaching:'缩短投掷距离，注重基本发力模式'} , progression:{name:'远距+目标投掷',sets:'6组',reps:'8次',restBetween:'60秒',coaching:'增加距离和目标精度，提升爆发力和技术稳定性'} } },
+            { id:"ex_008", name:"坐位体前屈专项训练", targetQualities:["柔韧性"], ageRange:[12,15], difficulty:1, equipment:["yoga_mat"], duration:8, sets:"1组", reps:"每个动作20-30秒×3轮", description:"瑜伽垫上坐位体前屈专项：直腿坐体前屈(保持20秒)→分腿体前屈(每侧20秒)→单腿体前屈(每侧20秒)→同伴辅助加深(20秒)，循环3轮", coachingPoints:"从髋部折叠而非弯腰；膝盖伸直但不锁死；呼气时加深幅度。中考坐位体前屈专项", safetyNotes:"不要弹震式拉伸；拉伸感为紧绷而非疼痛" ,
+              levels:{ regression:{name:'微屈膝前屈',sets:'1组',reps:'每个15秒×2轮',restBetween:'无',coaching:'膝盖微屈降低难度，先建立拉伸感'} , progression:{name:'直腿+负重前屈',sets:'1组',reps:'每个30秒×4轮',restBetween:'无',coaching:'膝盖伸直，可手持轻重量加深幅度'} } },
+            { id:"ex_009", name:"球类绕杆运球训练", targetQualities:["协调性","灵敏素质","速度"], ageRange:[12,15], difficulty:2, equipment:["ball","cone","tape"], duration:12, sets:"5组", reps:"每组2次", restBetween:"60秒", description:"用标志桶按考试标准间距设置绕杆路线(标志桶间距3米，共5-6个)。练习运球绕杆技术，注重球控制和变向速度", coachingPoints:"运球高度不过腰；绕杆时外侧脚蹬地变向，球控制在身体外侧；保持低重心。中考足球/篮球绕杆专项", safetyNotes:"需要足球或篮球器材（当前器材清单中未包含，需额外准备）" ,
+              levels:{ regression:{name:'大间距慢速绕杆',sets:'3组',reps:'1次',restBetween:'60秒',coaching:'加大标志桶间距，慢速注重球控制'} , progression:{name:'标准间距+计时绕杆',sets:'6组',reps:'2次',restBetween:'30秒',coaching:'标准间距计时，模拟考试流程提升速度和稳定性'} } }
+        ],
+        // ==================== NSCA 专业力量与体能训练库 ====================
+        // 数据源：NSCA (National Strength and Conditioning Association) Essentials of Strength Training and Conditioning
+        // 筛选原则：仅使用上门体育教练可携带器材（弹力带、瑜伽垫、标志桶、栏架等）
+        // 适配原则：按 NSCA 长期运动员发展模型 (LTAD) 调整年龄范围和负荷参数
+        nsca_pro: [
+            { id:"nsca_001", name:"弹力带高脚杯深蹲", targetQualities:["下肢爆发力","核心力量"], ageRange:[10,18], difficulty:2, equipment:["band"], duration:10, sets:"4组", reps:"10-12次", restBetween:"60秒", description:"NSCA推荐下肢力量基础动作。弹力带踩于双脚下方，双手抓握弹力带两端于胸前（高脚杯姿势），下蹲至大腿与地面平行后站起", coachingPoints:"下蹲时膝盖对准脚尖方向，臀部后坐；核心收紧背部保持中立位；站起时臀部和大腿同时发力", safetyNotes:"NSCA标准：膝关节不超过脚尖过多；下蹲深度根据柔韧性调整；弹力带阻力从轻开始",
+              levels:{ regression:{name:"徒手深蹲",sets:"3组",reps:"8次",restBetween:"90秒",coaching:"先掌握徒手深蹲动作模式，注重下蹲深度和膝盖对齐"} , progression:{name:"弹力带深蹲跳",sets:"4组",reps:"8次",restBetween:"90秒",coaching:"站起后加入爆发跳跃，提升下肢爆发力，注重落地缓冲"} } },
+            { id:"nsca_002", name:"弹力带罗马尼亚硬拉", targetQualities:["核心力量","下肢爆发力"], ageRange:[12,18], difficulty:2, equipment:["band"], duration:10, sets:"4组", reps:"10-12次", restBetween:"60秒", description:"NSCA推荐后链力量动作。弹力带踩于脚下，双手握住两端，髋关节铰链折叠身体向前，感受臀部和大腿后侧拉伸后回到起始位", coachingPoints:"背部始终保持平直，从髋部折叠而非弯腰；膝盖微屈不锁定；下放时感受腘绳肌拉伸", safetyNotes:"NSCA标准：脊柱中立位；下放幅度根据柔韧性决定；腰部不适者立即停止",
+              levels:{ regression:{name:"单腿臀桥",sets:"3组",reps:"每侧8次",restBetween:"60秒",coaching:"先掌握臀桥激活后链，再过渡到硬拉模式"} , progression:{name:"单腿弹力带硬拉",sets:"4组",reps:"每侧8次",restBetween:"90秒",coaching:"单腿站立做硬拉，增加平衡挑战，提升单侧后链力量"} } },
+            { id:"nsca_003", name:"弹力带站姿推举", targetQualities:["上肢力量","核心力量"], ageRange:[12,18], difficulty:2, equipment:["band"], duration:8, sets:"4组", reps:"10-12次", restBetween:"60秒", description:"NSCA推荐上肢推力动作。弹力带踩于脚下，双手握住两端于肩部，向上推举至头顶，再缓慢回到肩部", coachingPoints:"推举时核心收紧防止腰椎过伸；肩胛骨下沉；下放时离心控制2-3秒", safetyNotes:"NSCA标准：肩关节活动度不足者减小推举幅度；弹力带阻力适中",
+              levels:{ regression:{name:"跪姿弹力带推举",sets:"3组",reps:"8次",restBetween:"60秒",coaching:"跪姿降低核心稳定要求，专注于上肢推力"} , progression:{name:"弹力带推举+深蹲",sets:"4组",reps:"10次",restBetween:"90秒",coaching:"深蹲站起后立即推举，全身协调发力，提升训练效率"} } },
+            { id:"nsca_004", name:"弹力带站姿划船", targetQualities:["上肢力量","核心力量"], ageRange:[10,18], difficulty:2, equipment:["band"], duration:8, sets:"4组", reps:"12-15次", restBetween:"45秒", description:"NSCA推荐上肢拉力动作。弹力带固定于前方（或踩于脚下），双手握住两端向后划船，肩胛骨后缩", coachingPoints:"划船时肩胛骨先内收再后缩；肘部贴近身体；核心收紧不晃动", safetyNotes:"NSCA标准：肩胛骨稳定是重点；避免腰部借力代偿",
+              levels:{ regression:{name:"弹力带坐姿划船",sets:"3组",reps:"10次",restBetween:"60秒",coaching:"坐姿降低核心稳定要求，专注于肩胛骨后缩"} , progression:{name:"弹力带划船+单腿",sets:"4组",reps:"12次",restBetween:"45秒",coaching:"单腿站立做划船，增加平衡和核心抗旋转挑战"} } },
+            { id:"nsca_005", name:"分腿蹲（弓步蹲）", targetQualities:["下肢爆发力","核心力量","平衡能力"], ageRange:[10,18], difficulty:2, equipment:["none"], duration:10, sets:"4组", reps:"每侧10次", restBetween:"60秒", description:"NSCA推荐单侧力量训练。前后脚分开呈弓步姿势，后脚下沉至膝盖接近地面后站起，每侧10次", coachingPoints:"前膝对准脚尖；后腿髋部伸展；重心垂直上下而非前后移动；核心收紧", safetyNotes:"NSCA标准：前膝不超过脚尖过多；膝盖不适者减小下蹲幅度",
+              levels:{ regression:{name:"后脚垫高分腿蹲",sets:"3组",reps:"每侧8次",restBetween:"60秒",coaching:"后脚放在瑜伽垫或台阶上，降低难度，注重前腿发力"} , progression:{name:"弹力带负重分腿蹲",sets:"4组",reps:"每侧10次",restBetween:"90秒",coaching:"双手持弹力带增加阻力，提升单侧力量训练效果"} } },
+            { id:"nsca_006", name:"俯卧撑进阶系统", targetQualities:["上肢力量","核心力量"], ageRange:[10,18], difficulty:2, equipment:["yoga_mat"], duration:10, sets:"4组", reps:"8-12次", restBetween:"60秒", description:"NSCA上肢推力进阶系统：跪姿俯卧撑→标准俯卧撑→宽距俯卧撑→钻石俯卧撑，根据能力选择级别", coachingPoints:"身体成一条直线；核心收紧不塌腰；下放时胸部接近地面；推起时手臂完全伸展", safetyNotes:"NSCA标准：手腕在肩正下方；手腕不适者用拳面支撑",
+              levels:{ regression:{name:"跪姿俯卧撑",sets:"3组",reps:"8次",restBetween:"60秒",coaching:"跪姿降低负荷，先掌握标准动作模式"} , progression:{name:"击掌俯卧撑",sets:"4组",reps:"6次",restBetween:"90秒",coaching:"推起后击掌再落地，提升上肢爆发力"} } },
+            { id:"nsca_007", name:"核心抗旋转平板", targetQualities:["核心力量","平衡能力"], ageRange:[10,18], difficulty:2, equipment:["band","yoga_mat"], duration:8, sets:"3组", reps:"每侧8次", restBetween:"45秒", description:"NSCA核心抗旋转训练。弹力带固定于侧面，瑜伽垫上平板支撑姿势，单手拉弹力带至胸前再缓慢放回，对抗弹力带的旋转力", coachingPoints:"身体保持一条直线不旋转；拉绳时呼气；放回时离心控制2秒；核心始终收紧", safetyNotes:"NSCA标准：核心稳定性是力量训练的基础；腰部疼痛立即停止",
+              levels:{ regression:{name:"跪姿抗旋转平板",sets:"3组",reps:"每侧6次",restBetween:"45秒",coaching:"跪姿降低核心负荷，专注于抗旋转意识"} , progression:{name:"弹力带平板交替拉",sets:"4组",reps:"每侧10次",restBetween:"30秒",coaching:"左右交替拉弹力带，提升核心动态稳定能力"} } },
+            { id:"nsca_008", name:"增强式连续跳跃", targetQualities:["下肢爆发力","心肺耐力"], ageRange:[12,18], difficulty:3, equipment:["low_hurdle","high_hurdle","jump_mat"], duration:10, sets:"5组", reps:"每组8-10次", restBetween:"90秒", description:"NSCA增强式训练（Plyometric）。连续跳过低栏架8次→跳远垫上全力跳远6次→跳过高栏架8次，注重触地时间短和爆发力", coachingPoints:"触地时间越短越好；落地时屈膝屈髋缓冲；每次跳跃全力爆发向上；手臂配合摆动", safetyNotes:"NSCA标准：增强式训练前需有力量基础（深蹲1RM≥自重）；仅限12岁以上；落地技术是安全前提",
+              levels:{ regression:{name:"低栏架连续跳",sets:"4组",reps:"6次",restBetween:"90秒",coaching:"仅用低栏架，减少次数，注重落地缓冲技术"} , progression:{name:"栏架深度跳跃",sets:"5组",reps:"6次",restBetween:"120秒",coaching:"从高台阶跳下后立即跳过栏架，利用牵张反射提升爆发力"} } },
+            { id:"nsca_009", name:"弹力带侧向行走", targetQualities:["核心力量","下肢爆发力"], ageRange:[10,18], difficulty:1, equipment:["band"], duration:6, sets:"3组", reps:"每侧10步", restBetween:"45秒", description:"NSCA髋外展力量训练。弹力带套于双脚脚踝上方，半蹲姿势向侧方行走10步后返回，左右交替", coachingPoints:"保持半蹲姿势；膝盖对准脚尖不内扣；感受臀部外侧发力；步幅适中", safetyNotes:"NSCA标准：臀中肌力量是膝关节稳定的基础；弹力带阻力从轻开始",
+              levels:{ regression:{name:"徒手侧向行走",sets:"3组",reps:"每侧10步",restBetween:"45秒",coaching:"先掌握半蹲侧向行走的动作模式"} , progression:{name:"弹力带侧向行走+深蹲跳",sets:"4组",reps:"每侧10步+5次跳",restBetween:"60秒",coaching:"侧向行走后加入爆发深蹲跳，提升髋部爆发力"} } },
+            { id:"nsca_010", name:"弹力带复合力量循环", targetQualities:["上肢力量","核心力量","下肢爆发力"], ageRange:[13,18], difficulty:3, equipment:["band"], duration:15, sets:"4组循环", reps:"每个动作10次", restBetween:"轮间60秒", description:"NSCA复合训练法。弹力带循环：深蹲推举10次→划船10次→硬拉10次→分腿蹲(每侧5次)→侧向行走(每侧5步)，每轮间休息60秒", coachingPoints:"每个动作注重质量；全身协调发力；心率维持在150-170次/分；根据体能调整阻力", safetyNotes:"NSCA标准：复合训练适合有一定基础者；仅限13岁以上；弹力带需检查无破损",
+              levels:{ regression:{name:"简化力量循环",sets:"3组",reps:"每个8次",restBetween:"90秒",coaching:"减少动作种类和次数，延长休息，注重动作质量"} , progression:{name:"弹力带Tabata力量",sets:"5组",reps:"每个20秒/10秒休息",restBetween:"轮间45秒",coaching:"采用Tabata时间模式，提升力量耐力和心肺负荷"} } }
+        ],
+        // ==================== ACE 专业功能性训练库 ====================
+        // 数据源：ACE (American Council on Exercise) Integrated Training Model
+        // 筛选原则：仅使用上门体育教练可携带器材；强调功能性和运动表现提升
+        // 适配原则：按 ACE IFT 模型分阶段进阶，适配青少年体能发展特点
+        ace_pro: [
+            { id:"ace_001", name:"功能性动态热身流", targetQualities:["柔韧性","协调性","心肺耐力"], ageRange:[6,18], difficulty:1, equipment:["none"], duration:8, sets:"1组", reps:"每个动作8-10次", description:"ACE IFT模型第一阶段。站立动态拉伸：世界最伟大拉伸→虫爬→弓步走+转体→侧弓步走→高抬腿走→踢臀跑→侧向滑步→交叉步，每个8-10次", coachingPoints:"动作流畅衔接；注重关节全范围活动；配合呼吸节奏；由慢到快逐步增加幅度", safetyNotes:"ACE标准：动态热身应在正式训练前完成；幅度由小到大循序渐进",
+              levels:{ regression:{name:"简化动态热身",sets:"1组",reps:"每个5次",restBetween:"无",coaching:"减少动作种类和次数，注重基本活动度"} , progression:{name:"动态热身+加速跑",sets:"1组",reps:"每个10次+10米冲刺",restBetween:"无",coaching:"每个动作后加入10米加速跑，提升神经激活效果"} } },
+            { id:"ace_002", name:"平衡稳定性进阶", targetQualities:["平衡能力","核心力量","本体感觉"], ageRange:[8,18], difficulty:2, equipment:["yoga_mat","band"], duration:8, sets:"3组", reps:"每个动作30秒", restBetween:"30秒", description:"ACE功能性平衡训练。瑜伽垫上：单脚站立30秒→闭眼单脚站30秒→单脚站+弹力带对侧拉30秒→不稳定面单脚站30秒，逐步增加难度", coachingPoints:"核心收紧维持稳定；目光平视固定点；支撑腿微屈；从简单到难循序渐进", safetyNotes:"ACE标准：平衡训练是功能性和运动表现的基础；闭眼练习需有保护",
+              levels:{ regression:{name:"双脚平衡+视线转移",sets:"2组",reps:"30秒",restBetween:"30秒",coaching:"先从双脚站立配合头部转动练起，降低难度"} , progression:{name:"平衡垫+抛接球",sets:"4组",reps:"45秒",restBetween:"15秒",coaching:"在平衡垫上加入抛接网球，全面提升动态稳定和协调"} } },
+            { id:"ace_003", name:"核心稳定性循环", targetQualities:["核心力量","平衡能力"], ageRange:[10,18], difficulty:2, equipment:["yoga_mat"], duration:10, sets:"3组循环", reps:"每个动作30秒", restBetween:"30秒", description:"ACE核心训练系统。瑜伽垫上循环：前平板30秒→侧平板(每侧)30秒→臀桥30秒→鸟狗式(每侧)30秒→死虫式30秒→登山者30秒", coachingPoints:"核心始终收紧；骨盆保持中立位；呼吸均匀不憋气；每个动作注重质量", safetyNotes:"ACE标准：核心训练注重稳定性而非力量；腰部不适者降低时长",
+              levels:{ regression:{name:"短时核心循环",sets:"2组",reps:"每个15秒",restBetween:"45秒",coaching:"缩短时间，注重骨盆中立位和呼吸"} , progression:{name:"核心循环+弹力带",sets:"4组",reps:"每个45秒",restBetween:"20秒",coaching:"加入弹力带增加阻力，提升核心稳定性和力量耐力"} } },
+            { id:"ace_004", name:"功能性力量循环", targetQualities:["上肢力量","核心力量","下肢爆发力"], ageRange:[12,18], difficulty:2, equipment:["band","yoga_mat","low_hurdle"], duration:12, sets:"4组循环", reps:"每个动作40秒", restBetween:"轮间45秒", description:"ACE功能性力量训练。循环：弹力带深蹲推举40秒→俯卧撑40秒→栏架跳跃40秒→弹力带划船40秒→平板支撑40秒→弹力带硬拉40秒，每轮间休息45秒", coachingPoints:"每个动作保持中等以上强度；注重动作质量；心率维持在160-180次/分；全身协调发力", safetyNotes:"ACE标准：功能性训练注重动作模式而非负荷；12岁以上适合",
+              levels:{ regression:{name:"低强度功能循环",sets:"3组",reps:"每个30秒",restBetween:"60秒",coaching:"降低每个动作时间，延长休息，注重动作质量"} , progression:{name:"功能力量+冲刺",sets:"5组",reps:"每个40秒+5米冲刺",restBetween:"30秒",coaching:"每个动作后加入5米冲刺，提升神经激活和爆发力转换"} } },
+            { id:"ace_005", name:"ACE HIIT间歇协议", targetQualities:["心肺耐力","下肢爆发力","核心力量"], ageRange:[12,18], difficulty:2, equipment:["cone","ladder","low_hurdle"], duration:15, sets:"5轮循环", reps:"每个动作30秒", restBetween:"轮间45秒", description:"ACE推荐HIIT协议。标志桶标记站点：绳梯快速步法30秒→标志桶折返冲刺30秒→栏架连续跳30秒→波比跳30秒→开合跳30秒。5轮，每轮间休息45秒", coachingPoints:"30秒全力输出保持高心率；动作间快速切换；呼吸节奏稳定；根据体能调整强度", safetyNotes:"ACE标准：HIIT前需5分钟热身；心率不超过最大心率(220-年龄)的90%；12岁以上适合",
+              levels:{ regression:{name:"低强度间歇",sets:"4轮",reps:"每个20秒",restBetween:"60秒",coaching:"降低时间和强度，延长休息，注重完成率"} , progression:{name:"Tabata模式间歇",sets:"8轮",reps:"20秒运动/10秒休息",restBetween:"轮间30秒",coaching:"采用Tabata时间协议，提升强度和无氧能力"} } },
+            { id:"ace_006", name:"筋膜放松与恢复流", targetQualities:["柔韧性","平衡能力"], ageRange:[8,18], difficulty:1, equipment:["yoga_mat"], duration:10, sets:"1组", reps:"每个部位30-45秒", description:"ACE恢复训练。瑜伽垫上全身放松：猫牛式脊柱流动→婴儿式放松→鸽子式臀髋放松→仰卧脊柱扭转→下犬式全身拉伸→泡沫轴替代（用网球滚动放松肌筋膜），每个30-45秒", coachingPoints:"配合深呼吸放松；不追求幅度注重感受；每个部位停留足够时间；用网球可对重点紧张部位滚动放松", safetyNotes:"ACE标准：恢复训练是功能提升的重要组成；避免在急性炎症期进行",
+              levels:{ regression:{name:"简化放松流",sets:"1组",reps:"每个20秒",restBetween:"无",coaching:"选择4个基本体式，缩短时间，注重放松感"} , progression:{name:"深度放松+PNF",sets:"2组",reps:"每个60秒×2轮",restBetween:"无",coaching:"延长每个体式时间，配合PNF收缩放松技巧，深化放松效果"} } },
+            { id:"ace_007", name:"单侧力量训练组", targetQualities:["下肢爆发力","核心力量","平衡能力"], ageRange:[12,18], difficulty:3, equipment:["band","yoga_mat"], duration:12, sets:"4组", reps:"每侧8-10次", restBetween:"60秒", description:"ACE单侧训练系统。每侧完成：单腿深蹲（扶墙）8次→单腿硬拉（弹力带）8次→单腿臀桥10次→侧向弹力带行走10步→单腿站立抛接球30秒，左右交替", coachingPoints:"单侧训练纠正力量不对称；核心始终收紧维持稳定；支撑腿膝盖对准脚尖；注重离心控制", safetyNotes:"ACE标准：单侧训练是功能性提升的关键；12岁以上有力量基础者适合",
+              levels:{ regression:{name:"辅助单侧训练",sets:"3组",reps:"每侧6次",restBetween:"60秒",coaching:"扶墙辅助降低难度，注重单侧发力感"} , progression:{name:"单侧+负重",sets:"5组",reps:"每侧10次",restBetween:"90秒",coaching:"穿轻量负重背心增加负荷，提升单侧力量训练效果"} } },
+            { id:"ace_008", name:"运动表现整合训练", targetQualities:["速度","灵敏素质","协调性","核心力量"], ageRange:[10,18], difficulty:2, equipment:["cone","ladder","band"], duration:15, sets:"4组循环", reps:"每个动作30秒", restBetween:"轮间45秒", description:"ACE整合训练模型。循环：绳梯快速步法30秒→标志桶变向冲刺30秒→弹力带抗旋转平板30秒→标志桶Z字变向30秒→弹力带划船30秒→10米加速跑30秒", coachingPoints:"动作间快速切换；注重动作质量；心率维持在160-180次/分；模拟运动中多素质整合需求", safetyNotes:"ACE标准：整合训练是功能性的高级阶段；10岁以上适合；需充分热身",
+              levels:{ regression:{name:"简化整合循环",sets:"3组",reps:"每个20秒",restBetween:"60秒",coaching:"减少动作种类和时间，注重动作质量"} , progression:{name:"整合+爆发跳跃",sets:"5组",reps:"每个30秒+5次跳跃",restBetween:"30秒",coaching:"每个动作后加入爆发跳跃，提升整合训练的爆发力要求"} } }
         ]
     },
     qualityMap: {
-        "速度": ["sp_001","sp_002","sp_003","sp_004","sp_005","sp_006","sp_007"],
-        "速度素质": ["sp_001","sp_002","sp_003","sp_004","sp_005","sp_006","sp_007"],
-        "反应速度": ["sp_002","wu_007"],
-        "灵敏素质": ["ag_001","ag_002","ag_003","ag_004","ag_005","ag_006","ag_007"],
-        "协调性": ["co_001","co_002","co_003","co_004"],
-        "核心力量": ["st_001","st_002","st_004","st_006","st_008"],
-        "上肢力量": ["st_001","st_002","st_003","st_004","st_007","st_008"],
-        "下肢爆发力": ["st_005","sp_006","ag_006","hg_002","ex_003"],
-        "速度力量": ["st_005","st_004"],
-        "肌肉耐力": ["st_002","en_005"],
-        "心肺耐力": ["en_001","en_002","en_003","en_004","en_005","en_006","en_007","wl_001","wl_002","wl_003","wl_004"],
-        "速度耐力": ["en_002","en_006","en_007"],
-        "柔韧性": ["fl_001","fl_002","fl_003","fl_004","hg_001","hg_004"],
-        "平衡能力": ["ba_001","ba_002","co_004"],
-        "本体感觉": ["ba_001","ba_002"]
+        "速度": ["sp_001","sp_002","sp_003","sp_004","sp_005","sp_006","sp_007","sp_008","sp_009","sp_010","ace_008"],
+        "速度素质": ["sp_001","sp_002","sp_003","sp_004","sp_005","sp_006","sp_007","sp_008","sp_009","sp_010","ace_008"],
+        "反应速度": ["sp_002","sp_009","wu_007","ag_008"],
+        "灵敏素质": ["ag_001","ag_002","ag_003","ag_004","ag_005","ag_006","ag_007","ag_008","ag_009","ace_008"],
+        "协调性": ["co_001","co_002","co_003","co_004","sp_008","sp_010","ace_001","ace_008"],
+        "核心力量": ["st_001","st_002","st_004","st_006","st_008","sp_008","nsca_001","nsca_002","nsca_003","nsca_004","nsca_005","nsca_006","nsca_007","nsca_009","nsca_010","ace_002","ace_003","ace_004","ace_007"],
+        "上肢力量": ["st_001","st_002","st_003","st_004","st_007","st_008","nsca_003","nsca_004","nsca_006","nsca_010","ace_004"],
+        "下肢爆发力": ["st_005","sp_006","ag_006","hg_002","ex_003","ag_009","nsca_001","nsca_002","nsca_005","nsca_008","nsca_009","nsca_010","ace_004","ace_005","ace_007"],
+        "速度力量": ["st_005","st_004","nsca_008"],
+        "肌肉耐力": ["st_002","en_005","ace_003"],
+        "心肺耐力": ["en_001","en_002","en_003","en_004","en_005","en_006","en_007","wl_001","wl_002","wl_003","wl_004","ace_001","ace_004","ace_005","ace_008","nsca_008","nsca_010"],
+        "速度耐力": ["en_002","en_006","en_007","ace_005"],
+        "柔韧性": ["fl_001","fl_002","fl_003","fl_004","hg_001","hg_004","ace_001","ace_006"],
+        "平衡能力": ["ba_001","ba_002","co_004","nsca_005","nsca_007","nsca_009","ace_002","ace_003","ace_007"],
+        "本体感觉": ["ba_001","ba_002","ace_002"]
     },
     weaknessOptions: [
         { label:"速度不足（短跑成绩差）", quality:"速度" },
@@ -3511,7 +3625,7 @@ function generateTrainingPlan() {
     }
 
     // 生成1小时训练方案
-    const plan = buildOneHourPlan(targetQualities, grade, ageGroup, currentTrainingGoal, currentExamCity, student);
+    const plan = buildOneHourPlan(targetQualities, grade, ageGroup, currentTrainingGoal, currentExamCity, student, currentTrainingMode === 'auto' ? getLastTest(studentId) : null);
 
     // 渲染方案
     content.innerHTML = renderTrainingPlan(plan, student, sp, weakItemsHTML, targetQualities, currentTrainingGoal, goalLabel, gapAnalysisHTML);
@@ -3629,7 +3743,53 @@ function analyzeWeakQualities(lastTest, grade) {
     return { qualities, html };
 }
 
-function buildOneHourPlan(targetQualities, grade, ageGroupKey, goal, examCity, student) {
+// 根据体测得分确定动作难度等级（regression/base/progression）
+function getExerciseLevel(ex, lastTest) {
+    if (!lastTest || !lastTest.itemScores || !ex.levels) return 'base';
+    // 找到与该动作关联的体测项目中得分最低的
+    let minScore = 100;
+    ex.targetQualities.forEach(q => {
+        // 通过 ITEM_QUALITY_MAP 反查哪些体测项目对应这个素质
+        // 使用模糊匹配处理“速度” vs“速度素质”等差异
+        const itemKeys = Object.keys(ITEM_QUALITY_MAP || {}).filter(k => {
+            const m = ITEM_QUALITY_MAP[k];
+            if (!m) return false;
+            // 精确匹配或包含匹配
+            return m.quality === q || m.sub === q ||
+                   (m.quality && m.quality.includes(q)) ||
+                   (q && q.includes(m.quality)) ||
+                   (m.sub && m.sub.includes(q));
+        });
+        itemKeys.forEach(k => {
+            const s = lastTest.itemScores[k];
+            if (s !== undefined && s !== null && s > 0 && s < minScore) minScore = s;
+        });
+    });
+    // 如果找不到对应体测项目，默认 base
+    if (minScore >= 100) return 'base';
+    if (minScore < 50) return 'regression';
+    if (minScore >= 80) return 'progression';
+    return 'base';
+}
+
+// 获取动作在指定难度等级下的参数
+function getExerciseAtLevel(ex, level) {
+    if (!ex.levels || level === 'base') return ex;
+    const lv = ex.levels[level];
+    if (!lv) return ex;
+    return {
+        ...ex,
+        name: lv.name || ex.name,
+        sets: lv.sets || ex.sets,
+        reps: lv.reps || ex.reps,
+        restBetween: lv.restBetween || ex.restBetween,
+        coachingPoints: lv.coaching || ex.coachingPoints,
+        _level: level,
+        _levelLabel: level === 'regression' ? '退阶' : level === 'progression' ? '进阶' : '标准'
+    };
+}
+
+function buildOneHourPlan(targetQualities, grade, ageGroupKey, goal, examCity, student, lastTest) {
     const allExercises = [];
     Object.values(TRAINING_DB.exercises).forEach(arr => allExercises.push(...arr));
 
@@ -3736,7 +3896,13 @@ function buildOneHourPlan(targetQualities, grade, ageGroupKey, goal, examCity, s
         }
     });
 
-    return { warmups, mainExercises, cooldowns, warmupTime, mainTime, cooldownTime, totalTime, extraEquipmentWarnings };
+    // 根据体测得分应用进退阶难度
+    const applyLevels = (exArr) => exArr.map(ex => {
+        const level = getExerciseLevel(ex, lastTest);
+        return getExerciseAtLevel(ex, level);
+    });
+
+    return { warmups: applyLevels(warmups), mainExercises: applyLevels(mainExercises), cooldowns: applyLevels(cooldowns), warmupTime, mainTime, cooldownTime, totalTime, extraEquipmentWarnings };
 }
 
 function isAgeAppropriate(ex, grade) {
@@ -3865,6 +4031,10 @@ function renderTrainingPlan(plan, student, sp, weakItemsHTML, targetQualities, g
 function renderExerciseCard(ex, index) {
     const diffColors = { 1: '#22c55e', 2: '#f59e0b', 3: '#ef4444' };
     const diffNames = { 1: '入门', 2: '进阶', 3: '高级' };
+    // 如果有难度等级标记，显示进退阶信息
+    const levelBadge = ex._level && ex._level !== 'base' 
+        ? `<span class="exercise-difficulty" style="background:${ex._level === 'regression' ? '#3b82f620' : '#8b5cf620'};color:${ex._level === 'regression' ? '#3b82f6' : '#8b5cf6'};">${ex._levelLabel}</span>` 
+        : '';
     const qualityTags = ex.targetQualities.map(q => `<span class="ex-quality-tag">${q}</span>`).join('');
     const needsExtra = !isEquipmentAvailable(ex);
     const eqHTML = ex.equipment.map(eq => {
@@ -3878,6 +4048,7 @@ function renderExerciseCard(ex, index) {
                 <span class="exercise-num">${index + 1}</span>
                 <span class="exercise-name">${ex.name}</span>
                 <span class="exercise-difficulty" style="background:${diffColors[ex.difficulty]}20;color:${diffColors[ex.difficulty]};">${diffNames[ex.difficulty]}</span>
+                ${levelBadge}
                 ${needsExtra ? '<span class="ex-warn-badge">需额外器材</span>' : ''}
             </div>
             <div class="exercise-meta">
