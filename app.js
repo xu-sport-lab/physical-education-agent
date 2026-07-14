@@ -3792,11 +3792,10 @@ function getExerciseAtLevel(ex, level) {
 
 function buildOneHourPlan(targetQualities, grade, ageGroupKey, goal, examCity, student, lastTest, sessionDuration) {
     sessionDuration = sessionDuration || 60;
-    const is90Min = sessionDuration === 90;
-    // 60min: 2热身+5主体+2放松; 90min: 3热身+7主体+3放松
-    const warmupCount = is90Min ? 3 : 2;
-    const maxMainCount = is90Min ? 7 : 5;
-    const cooldownCount = is90Min ? 3 : 2;
+    // 第一性原理：按时间目标填充各阶段，而非按固定数量
+    const targets = sessionDuration === 90
+        ? { warmup: 15, main: 60, cooldown: 15 }
+        : { warmup: 10, main: 40, cooldown: 10 };
 
     const allExercises = [];
     Object.values(TRAINING_DB.exercises).forEach(arr => allExercises.push(...arr));
@@ -3804,11 +3803,11 @@ function buildOneHourPlan(targetQualities, grade, ageGroupKey, goal, examCity, s
     const ageOK = ex => grade >= 1 ? isAgeAppropriate(ex, grade) : true;
     const eqOK = ex => isEquipmentAvailable(ex);
 
-    // 1. 热身阶段 — 优先器材可用+年龄适合
+    // 1. 热身阶段 — 按时间目标填充
     const warmupPool = TRAINING_DB.exercises.warmup.filter(ex => ageOK(ex) && eqOK(ex));
-    const warmups = pickExercises(warmupPool, warmupCount, grade);
+    const warmups = pickExercisesByTime(warmupPool, targets.warmup, grade, 5);
 
-    // 2. 主体训练 (40分钟) — 根据训练目标选择
+    // 2. 主体训练 — 先按目标/薄弱项选择，再按时间目标补充
     let mainExercises = [];
 
     if (goal === 'weight_loss') {
@@ -3872,7 +3871,13 @@ function buildOneHourPlan(targetQualities, grade, ageGroupKey, goal, examCity, s
         }
     }
 
-    mainExercises = mainExercises.slice(0, maxMainCount);
+    // 去重
+    const seen = new Set();
+    mainExercises = mainExercises.filter(ex => {
+        if (seen.has(ex.id)) return false;
+        seen.add(ex.id);
+        return true;
+    });
 
     // 确保至少有3个主体练习
     if (mainExercises.length < 3) {
@@ -3882,13 +3887,21 @@ function buildOneHourPlan(targetQualities, grade, ageGroupKey, goal, examCity, s
         mainExercises.push(...pickExercises(auxPool, 3 - mainExercises.length, grade));
     }
 
-    // 3. 整理放松
-    const cooldownPool = TRAINING_DB.exercises.cooldown.filter(ex => ageOK(ex) && eqOK(ex));
-    const cooldowns = pickExercises(cooldownPool, cooldownCount, grade);
-    if (mainExercises.some(e => e.difficulty >= 2) && cooldowns.length < (is90Min ? 4 : 3)) {
-        const extra = cooldownPool.filter(e => !cooldowns.find(c => c.id === e.id));
-        if (extra.length > 0) cooldowns.push(extra[0]);
+    // 按时间目标补充主体练习
+    let mainTimeAccum = mainExercises.reduce((s, e) => s + e.duration, 0);
+    if (mainTimeAccum < targets.main) {
+        const usedIds2 = new Set(mainExercises.map(e => e.id));
+        const supPool = allExercises.filter(e =>
+            ageOK(e) && eqOK(e) && !usedIds2.has(e.id) &&
+            !e.id.startsWith('wu_') && !e.id.startsWith('cd_')
+        );
+        const extra = pickExercisesByTime(supPool, targets.main - mainTimeAccum, grade, 8 - mainExercises.length);
+        mainExercises.push(...extra);
     }
+
+    // 3. 整理放松 — 按时间目标填充
+    const cooldownPool = TRAINING_DB.exercises.cooldown.filter(ex => ageOK(ex) && eqOK(ex));
+    const cooldowns = pickExercisesByTime(cooldownPool, targets.cooldown, grade, 5);
 
     const warmupTime = warmups.reduce((s, e) => s + e.duration, 0);
     const mainTime = mainExercises.reduce((s, e) => s + e.duration, 0);
@@ -3931,6 +3944,31 @@ function pickExercises(pool, count, grade) {
         const idx = Math.floor(Math.random() * candidates.length);
         const ex = candidates[idx];
         if (!used.has(ex.id)) { result.push(ex); used.add(ex.id); }
+        candidates.splice(idx, 1);
+    }
+    return result;
+}
+
+// 按时间目标挑选动作：持续添加直到总时长 >= targetMinutes
+function pickExercisesByTime(pool, targetMinutes, grade, maxCount) {
+    if (pool.length === 0) return [];
+    maxCount = maxCount || 10;
+    const age = grade <= 6 ? grade + 5 : (grade <= 9 ? grade + 6 : grade + 6);
+    const preferredDifficulty = age < 10 ? 1 : 2;
+    const sorted = [...pool].sort((a, b) => Math.abs(a.difficulty - preferredDifficulty) - Math.abs(b.difficulty - preferredDifficulty));
+    const result = [];
+    const used = new Set();
+    let totalTime = 0;
+    const candidates = [...sorted];
+    while (totalTime < targetMinutes && candidates.length > 0 && result.length < maxCount) {
+        const pickRange = Math.min(candidates.length, 3);
+        const idx = Math.floor(Math.random() * pickRange);
+        const ex = candidates[idx];
+        if (!used.has(ex.id)) {
+            result.push(ex);
+            used.add(ex.id);
+            totalTime += ex.duration;
+        }
         candidates.splice(idx, 1);
     }
     return result;
