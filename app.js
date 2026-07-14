@@ -1479,7 +1479,7 @@ function getGradeClass(score) {
 async function exportPDFFromHTML(html, filename) {
     // 使用隐藏 iframe 渲染完整 HTML 文档，确保所有 CSS 选择器正确匹配
     var iframe = document.createElement('iframe');
-    iframe.style.cssText = 'position:fixed;left:-10000px;top:0;width:794px;height:1200px;border:none;';
+    iframe.style.cssText = 'position:fixed;left:-10000px;top:0;width:794px;height:auto;border:none;';
     document.body.appendChild(iframe);
     var iframeDoc = iframe.contentWindow.document;
     iframeDoc.open();
@@ -1492,6 +1492,15 @@ async function exportPDFFromHTML(html, filename) {
     });
     try {
         var iframeBody = iframe.contentWindow.document.body;
+
+        // 动态测量内容实际高度，确保 html2canvas 截取全部内容
+        var contentHeight = Math.max(
+            iframeBody.scrollHeight,
+            iframe.contentWindow.document.documentElement.scrollHeight,
+            iframeBody.offsetHeight
+        );
+        // 将 iframe 高度设为内容实际高度，避免截断
+        iframe.style.height = contentHeight + 'px';
 
         // 1. 收集"可分页断点"——所有 section 级元素的底部 y 坐标
         var breakPoints = [];
@@ -1514,7 +1523,7 @@ async function exportPDFFromHTML(html, filename) {
 
         // 2. 渲染完整 canvas（保留彩色）
         var canvas = await html2canvas(iframeBody, {
-            scale: 2, useCORS: true, backgroundColor: '#ffffff', width: 794, windowWidth: 794,
+            scale: 2, useCORS: true, backgroundColor: '#ffffff', width: 794, height: contentHeight, windowWidth: 794,
             onclone: function(clonedDoc) {
                 var allEls = clonedDoc.querySelectorAll('*');
                 allEls.forEach(function(el) {
