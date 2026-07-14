@@ -411,7 +411,19 @@
 
                     <div class="form-actions" id="trainingActions" style="display:none;">
                         <button class="btn-primary" onclick="saveTrainingPlan()">保存方案</button>
-                        <button class="btn-secondary" onclick="exportTrainingPlan()">导出</button>
+                        <button class="btn-secondary" onclick="exportTrainingPlan()">导出TXT</button>
+                        <button class="btn-secondary" onclick="generateFourWeekPlan()" style="background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff;">📅 生成4周周期计划</button>
+                        <button class="btn-secondary" onclick="exportTrainingPlanPDF()" style="background:#dc2626;color:#fff;">📄 导出PDF</button>
+                    </div>
+
+                    <!-- 4周周期化训练计划容器 -->
+                    <div id="fourWeekPlanContainer" style="display:none;">
+                        <div id="fourWeekPlanContent"></div>
+                        <div class="form-actions" style="margin-top:16px;">
+                            <button class="btn-primary" onclick="saveFourWeekPlan()">保存周期计划</button>
+                            <button class="btn-secondary" onclick="exportFourWeekPlanPDF()" style="background:#dc2626;color:#fff;">📄 导出周期计划PDF</button>
+                            <button class="btn-secondary" onclick="closeFourWeekPlan()">返回单次方案</button>
+                        </div>
                     </div>
                 </div>
             </section>

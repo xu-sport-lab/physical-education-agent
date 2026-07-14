@@ -5673,3 +5673,590 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
+// ==================== 第二期：4周周期化训练计划 ====================
+
+// 周期阶段配置
+const WEEK_PHASES = [
+    { week: 1, name: '适应期', desc: '基础动作模式，低强度，建立正确技术', intensity: '低', color: '#22c55e', levelOverride: 'regression' },
+    { week: 2, name: '提升期', desc: '增加组数/强度，引入进阶动作', intensity: '中', color: '#f59e0b', levelOverride: 'base' },
+    { week: 3, name: '强化期', desc: '高强度，模拟测试', intensity: '高', color: '#ef4444', levelOverride: 'progression' },
+    { week: 4, name: '测试与调整', desc: '模拟测试，根据结果调整下周期', intensity: '测试', color: '#8b5cf6', levelOverride: 'base' }
+];
+
+// 每日训练主题配置
+const DAY_THEMES = [
+    { day: '周一', name: '速度/爆发力日', icon: '⚡', qualities: ['速度', '下肢爆发力', '速度力量'], goal: 'general', focus: '速度与爆发力训练，注重神经激活和快肌纤维募集' },
+    { day: '周三', name: '耐力日', icon: '🏃', qualities: ['心肺耐力', '速度耐力', '肌肉耐力'], goal: 'general', focus: '有氧与无氧耐力训练，提升心肺功能和乳酸耐受能力' },
+    { day: '周五', name: '综合/技术日', icon: '🎯', qualities: ['协调性', '灵敏素质', '核心力量', '柔韧性'], goal: 'general', focus: '综合体能与技术训练，全面发展身体素质，注重动作质量' }
+];
+
+// 生成4周周期化训练计划
+function generateFourWeekPlan() {
+    const studentId = document.getElementById('trainingStudentSelect').value;
+    if (!studentId) { showToast('请先选择学生', 'error'); return; }
+    const student = students.find(s => s.id === studentId);
+    if (!student) return;
+
+    const grade = parseInt(student.grade);
+    const ageGroup = getSensitivePeriodKey(grade);
+    const sp = TRAINING_DB.sensitivePeriods[ageGroup];
+    const lastTest = currentTrainingMode === 'auto' ? getLastTest(studentId) : null;
+
+    // 获取训练目标和薄弱项
+    currentTrainingGoal = document.getElementById('trainingGoalSelect') ? document.getElementById('trainingGoalSelect').value : 'general';
+    let targetQualities = [];
+    if (currentTrainingMode === 'auto' && lastTest) {
+        const weakResult = analyzeWeakQualities(lastTest, student.grade);
+        targetQualities = weakResult.qualities;
+    } else if (currentTrainingMode === 'manual') {
+        const checkboxes = document.querySelectorAll('#weaknessCheckboxGrid input:checked');
+        targetQualities = Array.from(checkboxes).map(cb => cb.value);
+    }
+
+    // 构建4周计划
+    const plan = buildFourWeekPlan(student, grade, ageGroup, targetQualities, lastTest);
+
+    // 渲染
+    const container = document.getElementById('fourWeekPlanContainer');
+    const content = document.getElementById('fourWeekPlanContent');
+    document.getElementById('trainingContent').style.display = 'none';
+    document.getElementById('trainingActions').style.display = 'none';
+    container.style.display = 'block';
+    content.innerHTML = renderFourWeekPlan(plan, student, sp);
+    showToast('4周周期化训练计划已生成', 'success');
+}
+
+// 构建4周周期化训练计划
+function buildFourWeekPlan(student, grade, ageGroupKey, targetQualities, lastTest) {
+    const weeks = [];
+
+    for (let w = 0; w < 4; w++) {
+        const phase = WEEK_PHASES[w];
+        const sessions = [];
+
+        for (let d = 0; d < DAY_THEMES.length; d++) {
+            const theme = DAY_THEMES[d];
+            // 根据周阶段和日主题生成单次方案
+            const dayQualities = theme.qualities.filter(q =>
+                (TRAINING_DB.qualityMap[q] || []).length > 0
+            );
+
+            // 合并日主题素质和体测薄弱项
+            let mergedQualities = [...dayQualities];
+            if (targetQualities && targetQualities.length > 0) {
+                // 第1-2周以日主题为主，第3-4周加大薄弱项比重
+                const weakWeight = w >= 2 ? 2 : 1;
+                for (let i = 0; i < weakWeight; i++) {
+                    targetQualities.forEach(q => {
+                        if (!mergedQualities.includes(q)) mergedQualities.push(q);
+                    });
+                }
+            }
+
+            // 根据周阶段调整难度等级覆盖
+            const levelOverride = phase.levelOverride;
+            const plan = buildOneHourPlan(mergedQualities, grade, ageGroupKey, currentTrainingGoal, currentExamCity, student, lastTest);
+
+            // 应用周阶段难度覆盖
+            if (levelOverride && lastTest) {
+                const applyLevel = (exArr) => exArr.map(ex => {
+                    if (!ex.levels) return ex;
+                    return getExerciseAtLevel(ex, levelOverride);
+                });
+                plan.warmups = applyLevel(plan.warmups);
+                plan.mainExercises = applyLevel(plan.mainExercises);
+                plan.cooldowns = applyLevel(plan.cooldowns);
+            }
+
+            // 第4周：测试日替换为主体测试
+            if (w === 3) {
+                plan.isTestWeek = true;
+                plan.testNote = '本周以模拟测试为主，记录成绩并与周期初始数据对比，根据结果调整下周期训练重点。';
+            }
+
+            // 第3周：高强度提示
+            if (w === 2) {
+                plan.intensityNote = '本周为强化期，每个动作接近最大努力，组间休息适当缩短，模拟比赛强度。';
+            }
+
+            sessions.push({
+                day: theme.day,
+                dayName: theme.name,
+                icon: theme.icon,
+                focus: theme.focus,
+                plan: plan
+            });
+        }
+
+        weeks.push({
+            weekNum: w + 1,
+            phase: phase,
+            sessions: sessions
+        });
+    }
+
+    // 生成周期总览
+    const overview = generateCycleOverview(student, targetQualities, lastTest);
+
+    return { weeks, student, overview, startDate: new Date().toISOString().slice(0, 10) };
+}
+
+// 生成周期总览
+function generateCycleOverview(student, targetQualities, lastTest) {
+    let baseline = '暂无体测基线数据，第4周测试后将生成对比分析';
+    if (lastTest && lastTest.totalScore) {
+        baseline = `基线总分：${lastTest.totalScore}分（${getGradeLabel(lastTest.totalScore)}）`;
+        if (targetQualities && targetQualities.length > 0) {
+            baseline += `，重点提升：${targetQualities.join('、')}`;
+        }
+    }
+    return {
+        studentName: student.name,
+        grade: student.grade,
+        goal: currentTrainingGoal,
+        examCity: currentExamCity,
+        baseline: baseline,
+        initialTest: lastTest,
+        targetQualities: targetQualities || []
+    };
+}
+
+// 渲染4周周期化训练计划
+function renderFourWeekPlan(plan, student, sp) {
+    const goalLabel = TRAINING_DB.trainingGoals.find(g => g.value === plan.overview.goal)?.label || '常规体能提升';
+
+    let html = `
+    <div style="background:linear-gradient(135deg,#6366f1 0%,#8b5cf6 100%);color:#fff;border-radius:16px;padding:24px;margin-bottom:20px;">
+        <h2 style="margin:0 0 8px;font-size:22px;">📅 ${student.name}的4周周期化训练计划</h2>
+        <p style="margin:0;opacity:0.9;font-size:14px;">${sp.name}（${sp.ageRange}）· ${goalLabel} · 开始日期：${plan.startDate}</p>
+        <p style="margin:8px 0 0;opacity:0.8;font-size:13px;">📋 ${plan.overview.baseline}</p>
+    </div>
+
+    <!-- 周期结构总览 -->
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px;">
+        ${plan.weeks.map(w => `
+            <div style="border:2px solid ${w.phase.color}20;border-radius:12px;padding:16px;text-align:center;background:${w.phase.color}08;">
+                <div style="font-size:28px;margin-bottom:4px;">${w.weekNum === 4 ? '🧪' : w.weekNum === 3 ? '🔥' : w.weekNum === 2 ? '📈' : '🌱'}</div>
+                <div style="font-weight:700;color:${w.phase.color};font-size:15px;">第${w.weekNum}周</div>
+                <div style="font-size:13px;color:${w.phase.color};margin:2px 0;">${w.phase.name}</div>
+                <div style="font-size:11px;color:var(--text-secondary);line-height:1.5;">${w.phase.desc}</div>
+                <div style="margin-top:6px;font-size:11px;padding:2px 8px;border-radius:10px;background:${w.phase.color}15;color:${w.phase.color};display:inline-block;">强度：${w.phase.intensity}</div>
+            </div>
+        `).join('')}
+    </div>
+
+    <!-- 每周详细计划 -->
+    ${plan.weeks.map(week => `
+        <div style="border:1px solid #e5e7eb;border-radius:12px;margin-bottom:20px;overflow:hidden;">
+            <div style="background:${week.phase.color};color:#fff;padding:12px 20px;display:flex;align-items:center;gap:12px;">
+                <span style="font-size:20px;">${week.weekNum === 4 ? '🧪' : week.weekNum === 3 ? '🔥' : week.weekNum === 2 ? '📈' : '🌱'}</span>
+                <div>
+                    <span style="font-weight:700;font-size:16px;">第${week.weekNum}周：${week.phase.name}</span>
+                    <span style="opacity:0.85;font-size:12px;margin-left:8px;">${week.phase.desc}</span>
+                </div>
+            </div>
+            ${week.sessions.map(session => {
+                const p = session.plan;
+                let sessionHTML = `
+                <div style="padding:16px 20px;border-bottom:1px solid #f0f0f0;">
+                    <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">
+                        <span style="font-size:18px;">${session.icon}</span>
+                        <h4 style="margin:0;font-size:15px;">${session.day} · ${session.dayName}</h4>
+                        <span style="margin-left:auto;font-size:11px;color:var(--text-light);">⏱ ${p.totalTime}分钟</span>
+                    </div>
+                    <p style="font-size:12px;color:var(--text-secondary);margin:0 0 10px;">🎯 ${session.focus}</p>`;
+
+                if (p.intensityNote) {
+                    sessionHTML += `<div style="background:#fef3c7;border-left:3px solid #f59e0b;padding:8px 12px;border-radius:6px;font-size:12px;color:#92400e;margin-bottom:10px;">⚠️ ${p.intensityNote}</div>`;
+                }
+                if (p.isTestWeek) {
+                    sessionHTML += `<div style="background:#f3e8ff;border-left:3px solid #8b5cf6;padding:8px 12px;border-radius:6px;font-size:12px;color:#6b21a8;margin-bottom:10px;">🧪 ${p.testNote}</div>`;
+                }
+
+                // 训练时间线
+                sessionHTML += `
+                    <div style="display:flex;gap:2px;margin-bottom:10px;border-radius:6px;overflow:hidden;">
+                        <div style="flex:${p.warmupTime};background:#10b98120;padding:4px;text-align:center;font-size:11px;color:#065f46;">热身 ${p.warmupTime}min</div>
+                        <div style="flex:${p.mainTime};background:#f59e0b20;padding:4px;text-align:center;font-size:11px;color:#92400e;">主体 ${p.mainTime}min</div>
+                        <div style="flex:${p.cooldownTime};background:#3b82f620;padding:4px;text-align:center;font-size:11px;color:#1e40af;">放松 ${p.cooldownTime}min</div>
+                    </div>`;
+
+                // 动作列表（精简版）
+                sessionHTML += `<div style="font-size:12px;line-height:1.8;">`;
+                sessionHTML += `<div style="color:var(--text-light);font-size:11px;margin-bottom:2px;">热身：</div>`;
+                p.warmups.forEach((ex, i) => {
+                    sessionHTML += `<span style="display:inline-block;background:#10b98115;padding:2px 8px;border-radius:4px;margin:2px;font-size:11px;">${ex.name}${ex._level && ex._level !== 'base' ? `(${ex._levelLabel})` : ''}</span>`;
+                });
+                sessionHTML += `<div style="color:var(--text-light);font-size:11px;margin:6px 0 2px;">主体：</div>`;
+                p.mainExercises.forEach((ex, i) => {
+                    sessionHTML += `<span style="display:inline-block;background:#f59e0b15;padding:2px 8px;border-radius:4px;margin:2px;font-size:11px;">${ex.name}${ex._level && ex._level !== 'base' ? `(${ex._levelLabel})` : ''}</span>`;
+                });
+                sessionHTML += `<div style="color:var(--text-light);font-size:11px;margin:6px 0 2px;">放松：</div>`;
+                p.cooldowns.forEach((ex, i) => {
+                    sessionHTML += `<span style="display:inline-block;background:#3b82f615;padding:2px 8px;border-radius:4px;margin:2px;font-size:11px;">${ex.name}</span>`;
+                });
+                sessionHTML += `</div>`;
+
+                // 进度追踪
+                const sessionKey = `w${week.weekNum}_d${session.day}`;
+                sessionHTML += `
+                    <div style="margin-top:10px;display:flex;align-items:center;gap:8px;">
+                        <label style="font-size:12px;display:flex;align-items:center;gap:4px;cursor:pointer;">
+                            <input type="checkbox" id="progress_${sessionKey}" onchange="toggleSessionProgress('${sessionKey}', ${week.weekNum}, '${session.day}')" style="cursor:pointer;">
+                            <span style="color:var(--text-secondary);">标记为已完成</span>
+                        </label>
+                        <input type="text" id="notes_${sessionKey}" placeholder="训练备注..." style="flex:1;padding:4px 8px;border:1px solid #e5e7eb;border-radius:4px;font-size:12px;">
+                    </div>
+                </div>`;
+                return sessionHTML;
+            }).join('')}
+        </div>
+    `).join('')}
+
+    <!-- 第4周末：体测对比与调整建议 -->
+    <div style="background:#f3e8ff;border:2px solid #8b5cf6;border-radius:12px;padding:20px;margin-bottom:20px;">
+        <h3 style="margin:0 0 12px;color:#6b21a8;">🧪 第4周末：体测对比与下周期调整</h3>
+        <p style="font-size:13px;color:var(--text-secondary);line-height:1.7;">
+            第4周训练结束后，请对学生进行完整体测，并将结果录入系统。系统将自动对比周期前后的体测数据变化，
+            根据各项成绩提升/下降情况，自动调整下个4周周期的训练重点和难度等级。
+        </p>
+        <div style="margin-top:12px;padding:12px;background:#fff;border-radius:8px;font-size:12px;color:var(--text-secondary);">
+            <strong>📊 自动调整逻辑：</strong><br>
+            ① 各项成绩提升≥10分 → 下周期该素质降至维持量，增加其他素质比重<br>
+            ② 各项成绩提升<5分或下降 → 下周期加大该素质训练比重，降低难度等级<br>
+            ③ 总分提升≥15分 → 下周期整体难度等级上调一级<br>
+            ④ 总分提升<5分 → 下周期重新评估训练目标和动作选择策略
+        </div>
+        <button class="btn-primary" style="margin-top:12px;background:#8b5cf6;" onclick="compareCycleResults()">📊 对比体测结果并生成下周期建议</button>
+        <div id="cycleCompareResult" style="margin-top:12px;"></div>
+    </div>
+
+    <!-- 周期总结提示 -->
+    <div style="background:#f0f7ff;border:1px solid #bfdbfe;border-radius:8px;padding:16px;margin-bottom:16px;">
+        <p style="font-size:13px;color:#1e3a5f;line-height:1.7;margin:0;">
+            💡 本4周周期化训练计划基于${sp.name}（${sp.ageRange}）身体素质发展敏感期理论生成。
+            每周3次训练（周一速度/爆发力、周三耐力、周五综合/技术），循序渐进，4周后重新评估。
+            建议每次训练后记录完成情况，如学生出现不适应及时调整。
+        </p>
+    </div>
+    `;
+
+    return html;
+}
+
+// 关闭4周计划视图
+function closeFourWeekPlan() {
+    document.getElementById('fourWeekPlanContainer').style.display = 'none';
+    document.getElementById('trainingContent').style.display = 'block';
+    document.getElementById('trainingActions').style.display = 'block';
+}
+
+// 进度追踪：切换训练完成状态
+function toggleSessionProgress(sessionKey, weekNum, dayName) {
+    const checkbox = document.getElementById('progress_' + sessionKey);
+    const notesInput = document.getElementById('notes_' + sessionKey);
+    const completed = checkbox.checked;
+    const notes = notesInput.value;
+
+    // 保存到 localStorage
+    const studentId = document.getElementById('trainingStudentSelect').value;
+    const progressKey = `cycle_progress_${studentId}`;
+    let progress = {};
+    try { progress = JSON.parse(localStorage.getItem(progressKey) || '{}'); } catch(e) {}
+    progress[sessionKey] = { completed, notes, date: new Date().toISOString().slice(0, 10), weekNum, dayName };
+    localStorage.setItem(progressKey, JSON.stringify(progress));
+
+    if (completed) {
+        showToast(`第${weekNum}周 ${dayName} 训练已标记完成`, 'success');
+    }
+}
+
+// 加载已保存的进度
+function loadCycleProgress(studentId) {
+    const progressKey = `cycle_progress_${studentId}`;
+    try {
+        const progress = JSON.parse(localStorage.getItem(progressKey) || '{}');
+        Object.entries(progress).forEach(([key, data]) => {
+            const checkbox = document.getElementById('progress_' + key);
+            const notesInput = document.getElementById('notes_' + key);
+            if (checkbox) {
+                checkbox.checked = data.completed;
+                checkbox.parentElement.style.opacity = data.completed ? '0.7' : '1';
+            }
+            if (notesInput && data.notes) notesInput.value = data.notes;
+        });
+    } catch(e) { console.error('loadCycleProgress:', e); }
+}
+
+// 第4周末：对比体测结果并生成调整建议
+function compareCycleResults() {
+    const studentId = document.getElementById('trainingStudentSelect').value;
+    if (!studentId) { showToast('请先选择学生', 'error'); return; }
+    const student = students.find(s => s.id === studentId);
+    if (!student) return;
+
+    const lastTest = getLastTest(studentId);
+    if (!lastTest) {
+        document.getElementById('cycleCompareResult').innerHTML = '<div style="color:#ef4444;font-size:13px;">⚠️ 未找到体测数据，请先录入体测成绩</div>';
+        return;
+    }
+
+    // 检查是否有周期前的基线数据
+    const baselineKey = `cycle_baseline_${studentId}`;
+    let baseline = null;
+    try { baseline = JSON.parse(localStorage.getItem(baselineKey) || 'null'); } catch(e) {}
+
+    if (!baseline) {
+        // 第一次对比：保存当前体测作为基线
+        localStorage.setItem(baselineKey, JSON.stringify(lastTest));
+        document.getElementById('cycleCompareResult').innerHTML = `
+            <div style="padding:12px;background:#f0fdf4;border-radius:8px;font-size:13px;color:#166534;">
+                ✅ 已保存当前体测数据作为周期基线。<br>
+                请在4周训练完成后再次录入体测，然后点击「对比体测结果」生成对比分析。
+            </div>`;
+        return;
+    }
+
+    // 对比分析
+    const improvements = [];
+    const declines = [];
+    const unchanged = [];
+
+    if (baseline.itemScores && lastTest.itemScores) {
+        Object.entries(lastTest.itemScores).forEach(([key, currentScore]) => {
+            const prevScore = baseline.itemScores[key];
+            if (prevScore !== undefined && prevScore > 0) {
+                const diff = currentScore - prevScore;
+                const itemName = getItemName(key);
+                if (diff >= 10) {
+                    improvements.push({ item: itemName, key, diff, prev: prevScore, curr: currentScore, action: 'maintain' });
+                } else if (diff < 5) {
+                    declines.push({ item: itemName, key, diff, prev: prevScore, curr: currentScore, action: 'increase' });
+                } else {
+                    unchanged.push({ item: itemName, key, diff, prev: prevScore, curr: currentScore });
+                }
+            }
+        });
+    }
+
+    const totalDiff = (lastTest.totalScore || 0) - (baseline.totalScore || 0);
+    let levelAdjustment = '';
+    let nextCycleAdvice = '';
+
+    if (totalDiff >= 15) {
+        levelAdjustment = '整体难度等级上调一级（更多进阶动作）';
+        nextCycleAdvice += `✅ 总分提升${totalDiff}分，效果显著！下周期整体难度等级上调一级。\n`;
+    } else if (totalDiff >= 5) {
+        levelAdjustment = '维持当前难度等级，微调比重';
+        nextCycleAdvice += `📈 总分提升${totalDiff}分，有一定效果。维持当前难度，微调训练比重。\n`;
+    } else if (totalDiff >= 0) {
+        levelAdjustment = '维持当前难度等级，加大薄弱项比重';
+        nextCycleAdvice += `⚠️ 总分仅提升${totalDiff}分，效果有限。维持难度，加大薄弱项训练比重。\n`;
+    } else {
+        levelAdjustment = '降低难度等级，重新评估训练策略';
+        nextCycleAdvice += `❌ 总分下降${Math.abs(totalDiff)}分，需重新评估。降低难度等级，重新选择训练动作。\n`;
+    }
+
+    if (improvements.length > 0) {
+        nextCycleAdvice += `\n📊 显著提升项目（≥10分）：\n`;
+        improvements.forEach(i => {
+            nextCycleAdvice += `  ${i.item}：${i.prev}→${i.curr}（+${i.diff}分）→ 下周期降至维持量\n`;
+        });
+    }
+    if (declines.length > 0) {
+        nextCycleAdvice += `\n⚠️ 需重点加强项目（<5分或下降）：\n`;
+        declines.forEach(i => {
+            nextCycleAdvice += `  ${i.item}：${i.prev}→${i.curr}（${i.diff >= 0 ? '+' : ''}${i.diff}分）→ 下周期加大比重并降低难度\n`;
+        });
+    }
+
+    // 保存调整建议
+    const adviceKey = `cycle_advice_${studentId}`;
+    localStorage.setItem(adviceKey, JSON.stringify({
+        date: new Date().toISOString().slice(0, 10),
+        baseline: baseline,
+        current: lastTest,
+        totalDiff,
+        improvements,
+        declines,
+        levelAdjustment,
+        nextCycleAdvice
+    }));
+
+    // 更新基线为当前体测
+    localStorage.setItem(baselineKey, JSON.stringify(lastTest));
+
+    // 渲染对比结果
+    const resultHTML = `
+        <div style="padding:16px;background:#fff;border-radius:8px;font-size:13px;line-height:1.8;color:var(--text-primary);">
+            <h4 style="margin:0 0 10px;color:#6b21a8;">📊 周期前后体测对比</h4>
+            <div style="display:flex;gap:16px;margin-bottom:12px;">
+                <div style="text-align:center;flex:1;padding:8px;background:#f3f4f6;border-radius:6px;">
+                    <div style="font-size:11px;color:var(--text-light);">周期前</div>
+                    <div style="font-size:24px;font-weight:700;">${baseline.totalScore || '-'}</div>
+                    <div style="font-size:11px;color:var(--text-light);">分</div>
+                </div>
+                <div style="text-align:center;flex:1;padding:8px;background:#f3f4f6;border-radius:6px;">
+                    <div style="font-size:11px;color:var(--text-light);">周期后</div>
+                    <div style="font-size:24px;font-weight:700;color:${totalDiff >= 0 ? '#22c55e' : '#ef4444'};">${lastTest.totalScore || '-'}</div>
+                    <div style="font-size:11px;color:var(--text-light);">分</div>
+                </div>
+                <div style="text-align:center;flex:1;padding:8px;background:${totalDiff >= 0 ? '#f0fdf4' : '#fef2f2'};border-radius:6px;">
+                    <div style="font-size:11px;color:var(--text-light);">变化</div>
+                    <div style="font-size:24px;font-weight:700;color:${totalDiff >= 0 ? '#22c55e' : '#ef4444'};">${totalDiff >= 0 ? '+' : ''}${totalDiff}</div>
+                    <div style="font-size:11px;color:var(--text-light);">分</div>
+                </div>
+            </div>
+            <div style="white-space:pre-wrap;padding:12px;background:#faf5ff;border-radius:6px;color:#4c1d95;">${nextCycleAdvice}</div>
+            <div style="margin-top:8px;padding:8px;background:#f0fdf4;border-radius:6px;font-size:12px;color:#166534;">
+                🔧 下周期难度调整：<strong>${levelAdjustment}</strong>
+            </div>
+        </div>`;
+    document.getElementById('cycleCompareResult').innerHTML = resultHTML;
+    showToast('体测对比完成，下周期建议已生成', 'success');
+}
+
+// 保存4周周期计划
+async function saveFourWeekPlan() {
+    const studentId = document.getElementById('trainingStudentSelect').value;
+    if (!studentId) { showToast('请先选择学生', 'error'); return; }
+    const student = students.find(s => s.id === studentId);
+    if (!student) return;
+
+    const content = document.getElementById('fourWeekPlanContent').innerHTML;
+    const planData = {
+        goal: currentTrainingGoal || 'general',
+        type: 'four_week_cycle',
+        examCity: currentExamCity || '',
+        content: content,
+        startDate: new Date().toISOString().slice(0, 10)
+    };
+
+    try {
+        const created = await planDB.create(studentId, planData);
+        if (!student.trainingPlans) student.trainingPlans = [];
+        student.trainingPlans.push({
+            id: created.id,
+            date: created.created_at?.split('T')[0] || new Date().toISOString().split('T')[0],
+            type: 'four_week_cycle',
+            goal: currentTrainingGoal,
+            examCity: currentExamCity,
+            content: content
+        });
+
+        // 保存基线体测
+        const lastTest = getLastTest(studentId);
+        if (lastTest) {
+            localStorage.setItem(`cycle_baseline_${studentId}`, JSON.stringify(lastTest));
+        }
+
+        showToast('4周周期计划已保存', 'success');
+    } catch (e) {
+        console.error('saveFourWeekPlan:', e);
+        showToast('保存失败: ' + e.message, 'error');
+    }
+}
+
+// 导出单次训练方案 PDF
+async function exportTrainingPlanPDF() {
+    const studentId = document.getElementById('trainingStudentSelect').value;
+    if (!studentId) { showToast('请先选择学生', 'error'); return; }
+    const student = students.find(s => s.id === studentId);
+    if (!student) return;
+    const content = document.getElementById('trainingContent');
+    if (!content.innerHTML.trim()) { showToast('请先生成训练方案', 'error'); return; }
+
+    const html = buildPlanPDFHTML(content.innerHTML, student);
+    const filename = `${student.name}_训练方案_${new Date().toISOString().slice(0,10)}.pdf`;
+    await exportPDFFromHTML(html, filename);
+}
+
+// 导出4周周期计划 PDF
+async function exportFourWeekPlanPDF() {
+    const studentId = document.getElementById('trainingStudentSelect').value;
+    if (!studentId) { showToast('请先选择学生', 'error'); return; }
+    const student = students.find(s => s.id === studentId);
+    if (!student) return;
+    const content = document.getElementById('fourWeekPlanContent');
+    if (!content.innerHTML.trim()) { showToast('请先生成4周周期计划', 'error'); return; }
+
+    const html = buildPlanPDFHTML(content.innerHTML, student, true);
+    const filename = `${student.name}_4周周期训练计划_${new Date().toISOString().slice(0,10)}.pdf`;
+    await exportPDFFromHTML(html, filename);
+}
+
+// 构建 PDF 专用 HTML（含排版美化样式）
+function buildPlanPDFHTML(innerContent, student, isFourWeek = false) {
+    return `<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: "Microsoft YaHei", "PingFang SC", sans-serif; background: #fff; color: #1f2937; padding: 24px; }
+
+  /* PDF 头部 */
+  .pdf-header { background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%); color: #fff; border-radius: 12px; padding: 20px 24px; margin-bottom: 20px; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+  .pdf-header h1 { font-size: 20px; margin-bottom: 6px; }
+  .pdf-header p { font-size: 13px; opacity: 0.9; }
+
+  /* 通用 */
+  h3 { font-size: 16px; margin: 16px 0 8px; color: #1f2937; }
+  h4 { font-size: 14px; margin: 12px 0 6px; color: #374151; }
+  p { font-size: 12px; line-height: 1.7; color: #4b5563; }
+  .phase-goal { font-size: 11px; color: #6b7280; margin: 4px 0 8px; }
+
+  /* 训练动作卡片 */
+  .exercise-card { border: 1px solid #e5e7eb; border-radius: 8px; padding: 10px 12px; margin-bottom: 8px; }
+  .exercise-card-header { display: flex; align-items: center; gap: 6px; margin-bottom: 6px; }
+  .exercise-name { font-weight: 700; font-size: 13px; }
+  .exercise-difficulty { font-size: 10px; padding: 1px 6px; border-radius: 3px; }
+  .ex-quality-tag { font-size: 10px; padding: 1px 5px; background: #f3f4f6; border-radius: 3px; color: #6b7280; }
+  .ex-eq-tag { font-size: 10px; padding: 1px 5px; background: #ecfdf5; border-radius: 3px; color: #065f46; }
+  .exercise-desc { font-size: 11px; color: #6b7280; line-height: 1.6; margin-bottom: 4px; }
+  .exercise-coaching { font-size: 11px; color: #374151; line-height: 1.6; }
+  .exercise-safety { font-size: 10px; color: #b91c1c; margin-top: 4px; }
+
+  /* 时间线 */
+  .timeline-bar { display: flex; gap: 2px; border-radius: 6px; overflow: hidden; margin-bottom: 12px; }
+  .timeline-seg { padding: 6px; text-align: center; font-size: 11px; color: #fff; }
+  .timeline-seg.warmup { background: #10b981; }
+  .timeline-seg.main { background: #f59e0b; }
+  .timeline-seg.cooldown { background: #3b82f6; }
+
+  /* 周阶段卡片 */
+  .week-card { border: 1px solid #e5e7eb; border-radius: 8px; margin-bottom: 12px; overflow: hidden; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+  .week-header { padding: 8px 16px; color: #fff; font-weight: 700; font-size: 14px; }
+  .session-block { padding: 12px 16px; border-bottom: 1px solid #f0f0f0; }
+  .session-block:last-child { border-bottom: none; }
+  .session-title { display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; margin-bottom: 6px; }
+
+  /* 标签 */
+  .badge { font-size: 10px; padding: 1px 6px; border-radius: 3px; }
+  .badge-regression { background: #3b82f620; color: #3b82f6; }
+  .badge-progression { background: #8b5cf620; color: #8b5cf6; }
+
+  /* 提示框 */
+  .note-box { padding: 8px 12px; border-radius: 6px; font-size: 11px; margin-bottom: 8px; }
+  .note-warning { background: #fef3c7; border-left: 3px solid #f59e0b; color: #92400e; }
+  .note-test { background: #f3e8ff; border-left: 3px solid #8b5cf6; color: #6b21a8; }
+  .note-info { background: #f0f7ff; border: 1px solid #bfdbfe; color: #1e3a5f; }
+
+  /* 页脚 */
+  .pdf-footer { margin-top: 20px; padding-top: 12px; border-top: 1px solid #e5e7eb; text-align: center; font-size: 10px; color: #9ca3af; }
+</style>
+</head>
+<body>
+  <div class="pdf-header">
+    <h1>${isFourWeek ? '📅 4周周期化训练计划' : '📋 个性化训练方案'}</h1>
+    <p>学生：${student.name} · 年级：${student.grade}年级 · 日期：${new Date().toISOString().slice(0,10)}</p>
+  </div>
+  ${innerContent}
+  <div class="pdf-footer">
+    <span>上门体育教练管理系统 · 训练计划导出</span>
+  </div>
+</body>
+</html>`;
+}
