@@ -1545,8 +1545,8 @@ async function exportPDFFromHTML(html, filename) {
         if (canvasH <= pageHeightInPx) {
             // 内容不超过一页，直接输出
             pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, pdfWidth, (canvasH * pdfWidth) / canvas.width);
-        } else if (canvasH <= pageHeightInPx * 1.35) {
-            // 内容略微超出一页（35% 以内），缩放到单页输出，避免不美观的分页
+        } else if (canvasH <= pageHeightInPx * 1.05) {
+            // 内容略微超出一页（5% 以内），缩放到单页输出，避免不美观的分页
             var scaledHeight = (canvasH * pdfWidth) / canvas.width;
             pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, pdfWidth, scaledHeight);
         } else {
@@ -2305,7 +2305,7 @@ function buildScoreBreakdownHTML(lastTest) {
             <span class="bar-score" style="color:${gc.text}">${score}</span>
         </div>`;
     }).join('');
-    return `<div class="section-title">各项目得分</div><div class="bar-grid">${rows}</div>`;
+    return `<div class="bar-grid">${rows}</div>`;
 }
 
 // ==================== 素质-知识映射 ====================
