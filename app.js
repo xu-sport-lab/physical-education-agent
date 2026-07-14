@@ -941,11 +941,8 @@ function loadReportData() {
         return; 
     }
     
-    // 计算优势/薄弱项
-    const scoredItems = Object.entries(lastTest.itemScores || {}).filter(([,s]) => s > 0);
-    scoredItems.sort((a, b) => a[1] - b[1]);
-    const weakItems = scoredItems.slice(0, 3).map(([k]) => getItemName(k));
-    const strongItems = scoredItems.slice(-3).reverse().map(([k]) => getItemName(k));
+    // 计算优势/提升方向（确保不重复）
+    const { strongItems, weakItems } = getStrengthWeakItems(lastTest);
     
     preview.innerHTML = `
         <div class="report-header">
@@ -999,10 +996,92 @@ function loadReportData() {
                 <div class="summary-item"><div class="value">${lastTest.totalScore || '-'}</div><div class="label">学年总分</div></div>
                 <div class="summary-item"><div class="value">${getGradeLabel(lastTest.totalScore)}</div><div class="label">评定等级</div></div>
                 <div class="summary-item"><div class="value" style="font-size:16px">${strongItems.join('、') || '-'}</div><div class="label">优势项目</div></div>
-                <div class="summary-item"><div class="value" style="font-size:16px">${weakItems.join('、') || '-'}</div><div class="label">薄弱项目</div></div>
+                <div class="summary-item"><div class="value" style="font-size:16px">${weakItems.join('、') || '-'}</div><div class="label">提升方向</div></div>
+            </div>
+        </div>
+        <div class="report-section">
+            <h4>🔬 项目解读</h4>
+            <div style="display:flex;flex-direction:column;gap:6px;">
+                ${generateItemInterpretationsPreview(lastTest, student)}
+            </div>
+        </div>
+        <div class="report-section">
+            <h4>📝 测试总结</h4>
+            <div style="padding:10px 14px;border-radius:6px;background:#f0f7ff;border:1px solid #bfdbfe;font-size:13px;line-height:1.7;color:#1e3a5f;">
+                ${generateTestSummary(lastTest, student)}
             </div>
         </div>
     </div>`;
+}
+
+// 生成预览版项目解读 HTML（适配预览页样式）
+function generateItemInterpretationsPreview(lastTest, student) {
+    if (!lastTest.items || Object.keys(lastTest.items).length === 0) {
+        return '<div style="font-size:12px;color:var(--text-light);padding:8px;">暂无体测数据，无法生成项目解读</div>';
+    }
+
+    const levelStyles = {
+        excellent: { border: '#22c55e', bg: '#f0fdf4', label: '优秀' },
+        good: { border: '#3b82f6', bg: '#eff6ff', label: '良好' },
+        pass: { border: '#f59e0b', bg: '#fffbeb', label: '达标' },
+        needsWork: { border: '#ef4444', bg: '#fef2f2', label: '待提升' }
+    };
+
+    const rows = [];
+    for (const [key, value] of Object.entries(lastTest.items)) {
+        if (key === 'height' || key === 'weight') continue;
+        const interp = ITEM_INTERPRETATIONS[key];
+        if (!interp) continue;
+
+        const score = lastTest.itemScores?.[key];
+        if (score === undefined || score === null) continue;
+
+        const level = getInterpretationLevel(score);
+        const analysis = interp.levels[level] || interp.levels.needsWork;
+        const style = levelStyles[level];
+        const unitSuffix = isTimeItem(key) ? '' : getItemUnit(key);
+        const displayValue = isTimeItem(key) ? value : `${value}${unitSuffix}`;
+
+        rows.push(`
+            <div style="padding:8px 12px;border-radius:6px;border-left:3px solid ${style.border};background:${style.bg};line-height:1.6;">
+                <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:4px;">
+                    <span style="font-weight:700;font-size:13px;color:var(--text-primary);">${getItemName(key)}</span>
+                    <span style="font-size:12px;color:var(--text-secondary);">${displayValue}</span>
+                    <span style="font-size:13px;font-weight:700;margin-left:auto;color:${style.border};">${score}分 · ${style.label}</span>
+                </div>
+                <div style="font-size:11px;color:var(--text-secondary);margin-bottom:4px;">测试目的：${interp.purpose}</div>
+                <div style="font-size:12px;color:var(--text-primary);">${analysis}</div>
+            </div>`);
+    }
+
+    // BMI 解读
+    if (lastTest.items.height && lastTest.items.weight) {
+        const bmi = computeBMI(lastTest.items.height, lastTest.items.weight);
+        const bmiStatus = getBMIStatus(bmi, parseInt(student.grade), student.gender);
+        const bmiScore = getBMIScore(bmiStatus);
+        const bmiInterp = ITEM_INTERPRETATIONS['bmi'];
+        if (bmiInterp && bmiScore !== null) {
+            const level = getInterpretationLevel(bmiScore);
+            const analysis = bmiInterp.levels[level] || bmiInterp.levels.needsWork;
+            const style = levelStyles[level];
+            rows.push(`
+            <div style="padding:8px 12px;border-radius:6px;border-left:3px solid ${style.border};background:${style.bg};line-height:1.6;">
+                <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:4px;">
+                    <span style="font-weight:700;font-size:13px;color:var(--text-primary);">BMI指数</span>
+                    <span style="font-size:12px;color:var(--text-secondary);">${bmi} kg/m²</span>
+                    <span style="font-size:13px;font-weight:700;margin-left:auto;color:${style.border};">${bmiScore}分 · ${style.label}</span>
+                </div>
+                <div style="font-size:11px;color:var(--text-secondary);margin-bottom:4px;">测试目的：${bmiInterp.purpose}</div>
+                <div style="font-size:12px;color:var(--text-primary);">${analysis}</div>
+            </div>`);
+        }
+    }
+
+    if (rows.length === 0) {
+        return '<div style="font-size:12px;color:var(--text-light);padding:8px;">暂无评分数据，无法生成项目解读</div>';
+    }
+
+    return rows.join('');
 }
 
 // 更新对比模式的测试记录选择器
@@ -1560,10 +1639,8 @@ async function generatePDF() {
     const lastTest = getLastTest(studentId);
     if (!lastTest) { showToast('该学生暂无体测记录', 'error'); return; }
 
-    const scoredItems = Object.entries(lastTest.itemScores || {}).filter(([,s]) => s > 0);
-    scoredItems.sort((a, b) => a[1] - b[1]);
-    const weakItems = scoredItems.slice(0, 3).map(([k]) => getItemName(k));
-    const strongItems = scoredItems.slice(-3).reverse().map(([k]) => getItemName(k));
+    // 计算优势/提升方向（确保不重复）
+    const { strongItems, weakItems } = getStrengthWeakItems(lastTest);
 
     const totalScore = lastTest.totalScore || '-';
     const totalGrade = getGradeLabel(totalScore);
@@ -1713,6 +1790,33 @@ async function generatePDF() {
   .sw-card.sw-weak h4 { color: #d97706; }
   .sw-card p { font-size: 10px; color: #555; }
 
+  /* 项目解读 */
+  .interpretation { margin-bottom: 8px; }
+  .interp-row {
+    padding: 5px 8px; margin-bottom: 4px; border-radius: 5px; border-left: 3px solid #3b82f6;
+    background: #f8fafc; line-height: 1.6;
+    -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; color-adjust: exact !important;
+  }
+  .interp-row[data-level="excellent"] { border-left-color: #22c55e; background: #f0fdf4; }
+  .interp-row[data-level="good"] { border-left-color: #3b82f6; background: #eff6ff; }
+  .interp-row[data-level="pass"] { border-left-color: #f59e0b; background: #fffbeb; }
+  .interp-row[data-level="needsWork"] { border-left-color: #ef4444; background: #fef2f2; }
+  .interp-head { display: flex; align-items: baseline; gap: 6px; margin-bottom: 2px; }
+  .interp-name { font-size: 11px; font-weight: 700; color: #111; }
+  .interp-val { font-size: 10px; color: #666; }
+  .interp-score { font-size: 11px; font-weight: 700; margin-left: auto; }
+  .interp-purpose { font-size: 9px; color: #6b7280; margin-bottom: 2px; }
+  .interp-analysis { font-size: 10px; color: #374151; }
+
+  /* 测试总结 */
+  .test-summary {
+    margin-bottom: 8px; padding: 8px 12px; border-radius: 6px;
+    background: #f0f7ff; border: 1px solid #bfdbfe;
+    font-size: 10px; line-height: 1.7; color: #1e3a5f;
+    -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; color-adjust: exact !important;
+  }
+  .test-summary .summary-label { font-weight: 700; color: #1e40af; margin-right: 4px; }
+
   /* 建议区 */
   .suggestions { margin-bottom: 8px; }
   .sug-item {
@@ -1783,9 +1887,18 @@ async function generatePDF() {
     </div>
   </div>
 
+  <div class="interpretation">
+    <div class="section-title">项目解读</div>
+    ${generateItemInterpretations(lastTest, student)}
+  </div>
+
   <div class="suggestions">
     <div class="section-title">训练建议</div>
     ${generateSuggestions(lastTest, student.grade)}
+  </div>
+
+  <div class="test-summary">
+    <span class="summary-label">测试总结</span>${generateTestSummary(lastTest, student)}
   </div>
 
   <div class="footer">
@@ -2294,6 +2407,297 @@ const QUALITY_SHORT_TIPS = {
     '灵敏素质': 'T字跑+变向追逐，提升快速变向能力'
 };
 
+// ==================== 优势/提升方向计算（确保不重复）====================
+function getStrengthWeakItems(lastTest) {
+    const scoredItems = Object.entries(lastTest.itemScores || {}).filter(([,s]) => s > 0);
+    scoredItems.sort((a, b) => b[1] - a[1]); // 降序：分数高的在前
+
+    const n = scoredItems.length;
+    let strongCount, weakCount;
+    if (n <= 1) {
+        strongCount = n; weakCount = 0;
+    } else if (n <= 4) {
+        strongCount = Math.ceil(n / 2);
+        weakCount = n - strongCount;
+    } else {
+        strongCount = 3;
+        weakCount = Math.min(3, n - strongCount);
+    }
+    const strongItems = scoredItems.slice(0, strongCount).map(([k]) => getItemName(k));
+    const weakItems = scoredItems.slice(strongCount, strongCount + weakCount).reverse().map(([k]) => getItemName(k));
+    return { strongItems, weakItems };
+}
+
+// ==================== 测试项目解读数据 ====================
+const ITEM_INTERPRETATIONS = {
+    'vital_capacity': {
+        purpose: '反映肺部最大通气能力，是评估呼吸系统功能和心肺耐力基础的重要指标',
+        levels: {
+            excellent: '肺活量表现优异，说明呼吸系统发育良好，心肺功能基础扎实，建议保持规律的有氧运动习惯',
+            good: '肺活量处于较好水平，呼吸系统功能有一定基础，通过持续的有氧训练仍有提升空间',
+            pass: '肺活量达到基本标准，呼吸系统功能基本正常，建议适当增加有氧运动来进一步提升肺通气能力',
+            needsWork: '肺活量有较大提升空间，可能与呼吸肌力量不足或平时有氧运动较少有关，建议增加有氧运动和深呼吸训练'
+        }
+    },
+    'run_50m': {
+        purpose: '测试速度素质和下肢爆发力，反映神经肌肉的快速反应和短距离加速能力',
+        levels: {
+            excellent: '50米跑成绩优异，速度素质和下肢爆发力表现突出，起跑反应和步频协调性良好',
+            good: '50米跑成绩较好，速度素质有一定基础，起跑反应和步频仍有进一步提升的空间',
+            pass: '50米跑达到基本标准，速度素质基本正常，建议通过短距离冲刺和反应训练来提升爆发力和步频',
+            needsWork: '50米跑成绩有提升空间，可能与下肢爆发力、步频或起跑反应有关，建议加强短距离冲刺、反应训练和下肢力量练习'
+        }
+    },
+    'sit_and_reach': {
+        purpose: '测试躯干和下肢的柔韧性，反映关节活动度和肌肉韧带的伸展能力',
+        levels: {
+            excellent: '坐位体前屈成绩优异，身体柔韧性良好，关节活动度充足，运动损伤风险较低',
+            good: '坐位体前屈成绩较好，柔韧性有一定基础，建议保持规律拉伸以维持和提升当前水平',
+            pass: '坐位体前屈达到基本标准，柔韧性基本正常，建议增加日常拉伸练习以进一步改善关节活动度',
+            needsWork: '坐位体前屈有提升空间，柔韧性偏弱可能与平时拉伸不足或运动后放松不够有关，建议每天进行动态和静态拉伸练习'
+        }
+    },
+    'jump_rope_1min': {
+        purpose: '测试协调性和心肺耐力，反映手脚配合能力和持续性运动表现',
+        levels: {
+            excellent: '跳绳成绩优异，协调性和心肺耐力表现突出，手脚配合节奏感强，体能充沛',
+            good: '跳绳成绩较好，协调性和耐力有一定基础，建议通过变化跳法（如双摇、交叉跳）进一步提升',
+            pass: '跳绳达到基本标准，协调性基本正常，建议通过每日跳绳练习提升手脚配合和持续运动能力',
+            needsWork: '跳绳成绩有提升空间，可能与手脚协调性、腕力或耐力有关，建议从慢速开始练习跳绳节奏，循序渐进提升速度和持续时间'
+        }
+    },
+    'sit_up_1min': {
+        purpose: '测试核心肌群的力量和耐力，反映腹部肌肉的持续收缩能力',
+        levels: {
+            excellent: '仰卧起坐成绩优异，核心力量和耐力表现突出，腹部肌肉持续收缩能力强',
+            good: '仰卧起坐成绩较好，核心力量有一定基础，建议通过增加训练难度（如负重卷腹）进一步提升',
+            pass: '仰卧起坐达到基本标准，核心力量基本正常，建议通过平板支撑和卷腹练习来强化核心稳定性',
+            needsWork: '仰卧起坐成绩有提升空间，核心力量可能需要加强，建议从基础核心训练（如平板支撑、死虫式）开始，逐步提升腹部力量和耐力'
+        }
+    },
+    'pull_up': {
+        purpose: '测试上肢和背部力量，反映肩背肌群的拉力和握力水平',
+        levels: {
+            excellent: '引体向上成绩优异，上肢和背部力量突出，肩背肌群拉力和握力均表现良好',
+            good: '引体向上成绩较好，上肢力量有一定基础，建议通过增加训练量来进一步提升拉力耐力',
+            pass: '引体向上达到基本标准，上肢力量基本正常，建议通过悬垂、屈臂悬垂等辅助练习来逐步提升',
+            needsWork: '引体向上有较大提升空间，上肢和背部力量可能需要重点加强，建议从悬垂、弹力带辅助引体等循序渐进，逐步过渡到标准动作'
+        }
+    },
+    'run_50m_8': {
+        purpose: '测试速度耐力和方向变换能力，反映多次冲刺间的恢复能力',
+        levels: {
+            excellent: '50米×8往返跑成绩优异，速度耐力和方向变换能力突出，多次冲刺后恢复能力强',
+            good: '往返跑成绩较好，速度耐力有一定基础，建议通过间歇跑训练进一步提升乳酸耐受能力',
+            pass: '往返跑达到基本标准，速度耐力基本正常，建议通过短间歇跑（如50米×4组）来提升反复冲刺能力',
+            needsWork: '往返跑成绩有提升空间，速度耐力可能需要加强，可能与有氧基础不足或反复冲刺恢复较慢有关，建议逐步增加间歇跑训练量'
+        }
+    },
+    'run_800m': {
+        purpose: '测试心肺耐力和有氧运动能力，反映中长时间运动的持续供能水平',
+        levels: {
+            excellent: '800米跑成绩优异，心肺耐力和有氧能力突出，中长距离供能效率高',
+            good: '800米跑成绩较好，心肺功能有一定基础，建议通过间歇跑和变速跑来进一步提升有氧能力',
+            pass: '800米跑达到基本标准，心肺耐力基本正常，建议通过持续慢跑和间歇跑来逐步提升有氧能力',
+            needsWork: '800米跑成绩有提升空间，心肺耐力可能需要加强，建议从慢跑开始逐步建立有氧基础，循序渐进增加跑步距离和强度'
+        }
+    },
+    'run_1000m': {
+        purpose: '测试心肺耐力和有氧运动能力，反映中长时间运动的持续供能水平',
+        levels: {
+            excellent: '1000米跑成绩优异，心肺耐力和有氧能力突出，中长距离供能效率高',
+            good: '1000米跑成绩较好，心肺功能有一定基础，建议通过间歇跑和变速跑来进一步提升有氧能力',
+            pass: '1000米跑达到基本标准，心肺耐力基本正常，建议通过持续慢跑和间歇跑来逐步提升有氧能力',
+            needsWork: '1000米跑成绩有提升空间，心肺耐力可能需要加强，建议从慢跑开始逐步建立有氧基础，循序渐进增加跑步距离和强度'
+        }
+    },
+    'standing_long_jump': {
+        purpose: '测试下肢爆发力和身体协调性，反映腿部肌肉的瞬时发力能力',
+        levels: {
+            excellent: '立定跳远成绩优异，下肢爆发力和身体协调性表现突出，腿部瞬时发力能力强',
+            good: '立定跳远成绩较好，下肢爆发力有一定基础，建议通过跳箱和深蹲跳来进一步提升爆发力',
+            pass: '立定跳远达到基本标准，下肢爆发力基本正常，建议通过跳跃类练习来提升腿部力量和协调发力能力',
+            needsWork: '立定跳远有提升空间，可能与下肢爆发力不足或发力技巧不熟练有关，建议从基础跳跃练习开始，注重落地缓冲和全身协调发力'
+        }
+    },
+    'balance_stand': {
+        purpose: '测试平衡能力和本体感觉，反映前庭系统和神经肌肉的协调控制水平',
+        levels: {
+            excellent: '闭眼单脚站立成绩优异，平衡能力和本体感觉突出，神经肌肉控制精准',
+            good: '闭眼单脚站立成绩较好，平衡能力有一定基础，建议通过平衡垫等不稳定面训练进一步强化',
+            pass: '闭眼单脚站立达到基本标准，平衡能力基本正常，建议通过单脚站立练习来提升本体感觉',
+            needsWork: '闭眼单脚站立有提升空间，平衡能力可能需要加强，建议从睁眼单脚站立开始练习，逐步过渡到闭眼，并配合平衡垫训练'
+        }
+    },
+    't_test': {
+        purpose: '测试灵敏素质和方向变换能力，反映多方向快速移动和身体控制水平',
+        levels: {
+            excellent: 'T型跑成绩优异，灵敏素质和方向变换能力突出，多方向移动快速且控制精准',
+            good: 'T型跑成绩较好，灵敏素质有一定基础，建议通过敏捷梯和变向跑训练进一步提升',
+            pass: 'T型跑达到基本标准，灵敏素质基本正常，建议通过绕标志物和听信号变向练习来提升灵敏度',
+            needsWork: 'T型跑成绩有提升空间，灵敏素质可能需要加强，可能与下肢灵活性、方向变换速度或协调性有关，建议通过敏捷梯、绕标志物变向等练习循序渐进提升'
+        }
+    },
+    'bmi': {
+        purpose: '反映身体成分和体型发育状况，是评估营养状况和健康风险的重要参考',
+        levels: {
+            excellent: 'BMI处于正常范围，身体成分比例合理，营养状况良好',
+            good: 'BMI处于正常范围，身体成分比例较好，建议保持规律运动和均衡饮食',
+            pass: 'BMI略偏离正常范围，建议关注饮食结构和运动量，保持健康体重',
+            needsWork: 'BMI偏离正常范围较多，可能与饮食结构或运动量不足有关，建议调整饮食、增加运动，逐步将体重控制在健康范围内'
+        }
+    }
+};
+
+// 根据分数返回解读等级 key
+function getInterpretationLevel(score) {
+    if (score >= 90) return 'excellent';
+    if (score >= 80) return 'good';
+    if (score >= 60) return 'pass';
+    return 'needsWork';
+}
+
+const INTERPRETATION_LEVEL_LABELS = {
+    excellent: '优秀',
+    good: '良好',
+    pass: '达标',
+    needsWork: '待提升'
+};
+
+// 生成测试项目解读 HTML（用于 PDF 报告）
+function generateItemInterpretations(lastTest, student) {
+    if (!lastTest.items || Object.keys(lastTest.items).length === 0) {
+        return '<div style="font-size:10px;color:#888;padding:8px;">暂无体测数据，无法生成项目解读</div>';
+    }
+
+    const rows = [];
+    // 遍历所有测试项目（排除身高体重）
+    for (const [key, value] of Object.entries(lastTest.items)) {
+        if (key === 'height' || key === 'weight') continue;
+        const interp = ITEM_INTERPRETATIONS[key];
+        if (!interp) continue;
+
+        const score = lastTest.itemScores?.[key];
+        if (score === undefined || score === null) continue;
+
+        const level = getInterpretationLevel(score);
+        const analysis = interp.levels[level] || interp.levels.needsWork;
+        const levelLabel = INTERPRETATION_LEVEL_LABELS[level];
+        const unitSuffix = isTimeItem(key) ? '' : getItemUnit(key);
+        const displayValue = isTimeItem(key) ? value : `${value}${unitSuffix}`;
+
+        rows.push(`
+            <div class="interp-row" data-level="${level}">
+                <div class="interp-head">
+                    <span class="interp-name">${getItemName(key)}</span>
+                    <span class="interp-val">${displayValue}</span>
+                    <span class="interp-score">${score}分</span>
+                </div>
+                <div class="interp-purpose">测试目的：${interp.purpose}</div>
+                <div class="interp-analysis">${analysis}</div>
+            </div>`);
+    }
+
+    // BMI 解读
+    if (lastTest.items.height && lastTest.items.weight) {
+        const bmi = computeBMI(lastTest.items.height, lastTest.items.weight);
+        const bmiStatus = getBMIStatus(bmi, parseInt(student.grade), student.gender);
+        const bmiScore = getBMIScore(bmiStatus);
+        const bmiInterp = ITEM_INTERPRETATIONS['bmi'];
+        if (bmiInterp && bmiScore !== null) {
+            const level = getInterpretationLevel(bmiScore);
+            const analysis = bmiInterp.levels[level] || bmiInterp.levels.needsWork;
+            rows.push(`
+            <div class="interp-row" data-level="${level}">
+                <div class="interp-head">
+                    <span class="interp-name">BMI指数</span>
+                    <span class="interp-val">${bmi} kg/m²</span>
+                    <span class="interp-score">${bmiScore}分</span>
+                </div>
+                <div class="interp-purpose">测试目的：${bmiInterp.purpose}</div>
+                <div class="interp-analysis">${analysis}</div>
+            </div>`);
+        }
+    }
+
+    if (rows.length === 0) {
+        return '<div style="font-size:10px;color:#888;padding:8px;">暂无评分数据，无法生成项目解读</div>';
+    }
+
+    return rows.join('');
+}
+
+// 生成测试项目解读文本数组（用于 Excel 导出）
+function generateItemInterpretationsExcel(lastTest, student) {
+    const result = [];
+    if (!lastTest.items) return result;
+
+    for (const [key, value] of Object.entries(lastTest.items)) {
+        if (key === 'height' || key === 'weight') continue;
+        const interp = ITEM_INTERPRETATIONS[key];
+        if (!interp) continue;
+
+        const score = lastTest.itemScores?.[key];
+        if (score === undefined || score === null) continue;
+
+        const level = getInterpretationLevel(score);
+        const analysis = interp.levels[level] || interp.levels.needsWork;
+        const unitSuffix = isTimeItem(key) ? '' : getItemUnit(key);
+        const displayValue = isTimeItem(key) ? value : `${value}${unitSuffix}`;
+
+        result.push([getItemName(key), displayValue, `${score}分`, interp.purpose, analysis]);
+    }
+
+    if (lastTest.items.height && lastTest.items.weight) {
+        const bmi = computeBMI(lastTest.items.height, lastTest.items.weight);
+        const bmiStatus = getBMIStatus(bmi, parseInt(student.grade), student.gender);
+        const bmiScore = getBMIScore(bmiStatus);
+        const bmiInterp = ITEM_INTERPRETATIONS['bmi'];
+        if (bmiInterp && bmiScore !== null) {
+            const level = getInterpretationLevel(bmiScore);
+            const analysis = bmiInterp.levels[level] || bmiInterp.levels.needsWork;
+            result.push(['BMI指数', `${bmi} kg/m²`, `${bmiScore}分`, bmiInterp.purpose, analysis]);
+        }
+    }
+
+    return result;
+}
+
+// ==================== 测试总结生成 ====================
+function generateTestSummary(lastTest, student) {
+    const totalScore = lastTest.totalScore || 0;
+    const { strongItems, weakItems } = getStrengthWeakItems(lastTest);
+
+    let overall = '';
+    if (totalScore >= 90) overall = '表现优异';
+    else if (totalScore >= 80) overall = '表现良好';
+    else if (totalScore >= 60) overall = '基本达标';
+    else overall = '有较大提升空间';
+
+    let summary = `${student.name}同学本次体测总分${totalScore}分，${overall}。`;
+
+    if (strongItems.length > 0) {
+        summary += `优势项目为${strongItems.join('、')}，`;
+    }
+    if (weakItems.length > 0) {
+        summary += `${weakItems.join('、')}仍有提升空间。`;
+    } else {
+        summary += '各项发展较为均衡。';
+    }
+
+    // 根据年级给出展望
+    const gradeNum = parseInt(student.grade);
+    if (gradeNum <= 6) {
+        summary += '建议保持运动兴趣，在游戏中全面发展体能。';
+    } else if (gradeNum <= 9) {
+        summary += '建议结合中考项目要求，针对性强化薄弱环节。';
+    } else {
+        summary += '建议结合专项需求，系统化提升综合素质。';
+    }
+
+    return summary;
+}
+
 // 根据薄弱项生成训练建议（精简单行版）
 function generateSuggestions(lastTest, grade) {
     if (!lastTest.itemScores) return '<div class="sug-item">暂无训练数据</div>';
@@ -2387,20 +2791,29 @@ function generateExcel() {
 
     // 综合评价
     wsData.push(['三、综合评价']);
-    const scoredItems = Object.entries(lastTest.itemScores || {}).filter(([,s]) => s > 0);
-    scoredItems.sort((a, b) => a[1] - b[1]);
-    const weakItems = scoredItems.slice(0, 3).map(([k]) => getItemName(k));
-    const strongItems = scoredItems.slice(-3).reverse().map(([k]) => getItemName(k));
+    const { strongItems, weakItems } = getStrengthWeakItems(lastTest);
     wsData.push(['学年总分', lastTest.totalScore || '-']);
     wsData.push(['评定等级', getGradeLabel(lastTest.totalScore) || '-']);
     wsData.push(['优势项目', strongItems.join('、') || '-']);
-    wsData.push(['薄弱项目', weakItems.join('、') || '-']);
+    wsData.push(['提升方向', weakItems.join('、') || '-']);
+    wsData.push([]);
+
+    // 项目解读
+    wsData.push(['四、项目解读']);
+    wsData.push(['项目名称', '成绩', '得分', '测试目的', '个体化解读']);
+    const interpRows = generateItemInterpretationsExcel(lastTest, student);
+    interpRows.forEach(row => wsData.push(row));
+    wsData.push([]);
+
+    // 测试总结
+    wsData.push(['五、测试总结']);
+    wsData.push([generateTestSummary(lastTest, student)]);
     wsData.push([]);
 
     const ws = XLSX.utils.aoa_to_sheet(wsData);
 
     // 设置列宽
-    ws['!cols'] = [{wch: 14}, {wch: 14}, {wch: 10}, {wch: 10}];
+    ws['!cols'] = [{wch: 14}, {wch: 14}, {wch: 10}, {wch: 10}, {wch: 40}, {wch: 50}];
 
     XLSX.utils.book_append_sheet(wb, ws, '体质测试反馈');
     XLSX.writeFile(wb, `${student.name}_体质测试反馈表.xlsx`);
