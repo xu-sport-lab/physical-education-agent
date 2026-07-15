@@ -3595,9 +3595,12 @@ function generateCustomPlan() {
     const warmupTime = warmups.reduce((s, e) => s + e.duration, 0);
     const mainTime = mains.reduce((s, e) => s + e.duration, 0);
     const cooldownTime = cooldowns.reduce((s, e) => s + e.duration, 0);
-    const totalTime = warmupTime + mainTime + cooldownTime;
+    const REST_BETWEEN = 2;
+    const restTime = (warmups.length > 0 && mains.length > 0 ? REST_BETWEEN : 0)
+                   + (mains.length > 1 ? REST_BETWEEN * (mains.length - 1) : 0);
+    const totalTime = warmupTime + restTime + mainTime + cooldownTime;
 
-    const plan = { warmups, mainExercises: mains, cooldowns, warmupTime, mainTime, cooldownTime, totalTime, extraEquipmentWarnings: [] };
+    const plan = { warmups, mainExercises: mains, cooldowns, warmupTime, mainTime, cooldownTime, restTime, totalTime, extraEquipmentWarnings: [] };
 
     // Collect equipment warnings
     mains.forEach(ex => {
@@ -3615,7 +3618,7 @@ function generateCustomPlan() {
     const content = document.getElementById('trainingContent');
     content.innerHTML = renderTrainingPlan(plan, student, sp, '<div class="weakness-list"><span class="weakness-tag">教练自主选择</span></div>', [], 'general', goalLabel, '');
     document.getElementById('trainingActions').style.display = 'block';
-    showToast(`自选方案已生成：${totalTime}分钟（热身${warmupTime}+主体${mainTime}+放松${cooldownTime}）`, 'success');
+    showToast(`自选方案已生成：${totalTime}分钟（热身${warmupTime}+休息${restTime}+主体${mainTime}+放松${cooldownTime}）`, 'success');
 }
 
 async function exportCustomPlanPDF() {
@@ -4253,7 +4256,11 @@ function buildOneHourPlan(targetQualities, grade, ageGroupKey, goal, examCity, s
     const warmupTime = warmups.reduce((s, e) => s + e.duration, 0);
     const mainTime = mainExercises.reduce((s, e) => s + e.duration, 0);
     const cooldownTime = cooldowns.reduce((s, e) => s + e.duration, 0);
-    const totalTime = warmupTime + mainTime + cooldownTime;
+    // 固定休息补水时间：热身→主体间2分钟 + 主体动作间各2分钟
+    const REST_BETWEEN = 2;
+    const restTime = (warmups.length > 0 && mainExercises.length > 0 ? REST_BETWEEN : 0)
+                   + (mainExercises.length > 1 ? REST_BETWEEN * (mainExercises.length - 1) : 0);
+    const totalTime = warmupTime + restTime + mainTime + cooldownTime;
 
     // 收集需要额外器材的提示
     const extraEquipmentWarnings = [];
@@ -4270,7 +4277,7 @@ function buildOneHourPlan(targetQualities, grade, ageGroupKey, goal, examCity, s
         return getExerciseAtLevel(ex, level);
     });
 
-    return { warmups: applyLevels(warmups), mainExercises: applyLevels(mainExercises), cooldowns: applyLevels(cooldowns), warmupTime, mainTime, cooldownTime, totalTime, extraEquipmentWarnings };
+    return { warmups: applyLevels(warmups), mainExercises: applyLevels(mainExercises), cooldowns: applyLevels(cooldowns), warmupTime, mainTime, cooldownTime, restTime, totalTime, extraEquipmentWarnings };
 }
 
 function isAgeAppropriate(ex, grade) {
@@ -4394,6 +4401,7 @@ function renderTrainingPlan(plan, student, sp, weakItemsHTML, targetQualities, g
         <div class="training-timeline">
             <div class="timeline-bar">
                 <div class="timeline-seg warmup" style="flex:${plan.warmupTime}">热身 ${plan.warmupTime}min</div>
+                ${plan.restTime > 0 ? `<div class="timeline-seg" style="flex:${plan.restTime};background:#d1d5db;color:#4b5563;">休息补水 ${plan.restTime}min</div>` : ''}
                 <div class="timeline-seg main" style="flex:${plan.mainTime}">主体训练 ${plan.mainTime}min</div>
                 <div class="timeline-seg cooldown" style="flex:${plan.cooldownTime}">放松 ${plan.cooldownTime}min</div>
             </div>
@@ -4405,10 +4413,12 @@ function renderTrainingPlan(plan, student, sp, weakItemsHTML, targetQualities, g
             ${plan.warmups.map((ex, i) => renderExerciseCard(ex, i)).join('')}
         </div>
 
+        ${plan.restTime > 0 && plan.warmups.length > 0 && plan.mainExercises.length > 0 ? `<div style="text-align:center;padding:8px;margin:8px 0;background:#f3f4f6;border-radius:8px;"><span style="font-size:13px;color:#6b7280;">💧 <strong>休息补水 2分钟</strong> — 热身结束，补充水分，准备进入主体训练</span></div>` : ''}
+
         <div class="training-phase">
-            <h4>💪 二、主体训练（约${plan.mainTime}分钟）</h4>
+            <h4>💪 二、主体训练（约${plan.mainTime}分钟${plan.restTime > 0 ? ` + 休息${plan.restTime}分钟` : ''}）</h4>
             <p class="phase-goal">目标：${goal === 'weight_loss' ? '高强度燃脂+力量维持，提升基础代谢率' : goal === 'height_growth' ? '纵向跳跃刺激生长板+脊柱伸展促进骨骼生长' : goal === 'exam_prep' ? '针对中考体育项目进行专项技术训练' : '针对薄弱素质进行重点提升，结合年龄敏感期科学安排训练负荷'}</p>
-            ${plan.mainExercises.map((ex, i) => renderExerciseCard(ex, i)).join('')}
+            ${plan.mainExercises.map((ex, i) => renderExerciseCard(ex, i) + (i < plan.mainExercises.length - 1 ? '<div style="text-align:center;padding:6px;margin:6px 0;background:#f9fafb;border-radius:6px;"><span style="font-size:12px;color:#9ca3af;">💧 休息补水 2分钟</span></div>' : '')).join('')}
         </div>
 
         <div class="training-phase">
