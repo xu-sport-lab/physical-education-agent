@@ -3773,7 +3773,25 @@ function saveCustomExercise() {
     };
     if (!TRAINING_DB.exercises[category]) TRAINING_DB.exercises[category] = [];
     TRAINING_DB.exercises[category].push(exercise);
-    try { const s = JSON.parse(localStorage.getItem('customExercises') || '[]'); s.push({category, exercise}); localStorage.setItem('customExercises', JSON.stringify(s)); } catch(e) {}
+    // 持久化到 localStorage（带错误处理和验证）
+    try {
+        const s = JSON.parse(localStorage.getItem('customExercises') || '[]');
+        s.push({category, exercise});
+        const jsonStr = JSON.stringify(s);
+        localStorage.setItem('customExercises', jsonStr);
+        // 验证：立即读回确认
+        const verify = JSON.parse(localStorage.getItem('customExercises') || '[]');
+        if (verify.length !== s.length) {
+            console.error('[自建动作] 保存验证失败：期望', s.length, '条，实际读回', verify.length, '条');
+            showToast('保存可能失败，请检查浏览器存储设置', 'error');
+        } else {
+            console.log('[自建动作] 保存成功：', exercise.name, '→ localStorage共', verify.length, '条');
+        }
+    } catch(e) {
+        console.error('[自建动作] localStorage保存失败:', e.message || e);
+        showToast('保存到本地存储失败：' + (e.message || e), 'error');
+        return;
+    }
     closeCustomExerciseModal();
     renderCustomExerciseList(); renderCustomCategoryTabs();
     showToast(`✅ 动作"${name}"已保存至${CUSTOM_CATEGORY_LABELS[category] || category}分类`, 'success');
@@ -3781,12 +3799,20 @@ function saveCustomExercise() {
 function loadCustomExercises() {
     try {
         const saved = JSON.parse(localStorage.getItem('customExercises') || '[]');
+        let loadedCount = 0;
         saved.forEach(item => {
             if (!TRAINING_DB.exercises[item.category]) TRAINING_DB.exercises[item.category] = [];
-            if (!TRAINING_DB.exercises[item.category].find(e => e.id === item.exercise.id))
+            if (!TRAINING_DB.exercises[item.category].find(e => e.id === item.exercise.id)) {
                 TRAINING_DB.exercises[item.category].push(item.exercise);
+                loadedCount++;
+            }
         });
-    } catch(e) {}
+        if (loadedCount > 0) {
+            console.log('[自建动作] 从localStorage加载了', loadedCount, '个自建动作');
+        }
+    } catch(e) {
+        console.error('[自建动作] localStorage加载失败:', e.message || e);
+    }
 }
 
 async function onExamProvinceChange() {
