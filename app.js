@@ -630,7 +630,11 @@ function renderTestItems(grade, gender) {
         itemsWithBmi.splice(lastBodyShapeIdx + 1, 0, { key: 'bmi', name: 'BMI 评分', unit: '分', category: '身体形态' });
     }
 
-    container.innerHTML = itemsWithBmi.map(item => {
+    container.innerHTML = `
+    <div style="margin-bottom:12px;padding:8px 12px;background:#f0f7ff;border:1px solid #bfdbfe;border-radius:8px;font-size:12px;color:#1e3a5f;">
+        📋 评分体系：<strong>国家学生体质健康标准（2014年修订）</strong>——非中考满分线，仅用于体质健康评估
+    </div>
+    ` + itemsWithBmi.map(item => {
         if (item.key === 'bmi') {
             // BMI 是只读展示行
             return `
@@ -774,6 +778,7 @@ function getScoreFromValue(value, standard, key) {
         else if (numValue >= high - step * 6) { score = 60; gradeLevel = '刚达标'; }
         else { score = 40; gradeLevel = '待提升'; }
     }
+    console.log(`[评分] ${key}: value=${numValue} low=${low} high=${high} step=${step} reverse=${!!reverse} → score=${score} grade=${gradeLevel}`);
     return { score, grade: gradeLevel };
 }
 
@@ -1939,7 +1944,7 @@ function initReportProvinceSelector() {
     const provinces = Object.keys(TRAINING_DB.nationalProvinces);
     const ordered = ['四川'].concat(provinces.filter(p => p !== '四川'));
     provSelect.innerHTML = '<option value="">-- 选择省份 --</option>' +
-        ordered.map(p => p === '四川' ? `<option value="${p}">${p}</option>` : `<option value="" disabled>${p}（建设中）</option>`).join('');
+        ordered.map(p => `<option value="${p}">${p}</option>`).join('');
 }
 
 // ==================== 上传页省份/城市选择器 ====================
@@ -1952,7 +1957,7 @@ function initUploadProvinceSelector() {
     const provinces = Object.keys(TRAINING_DB.nationalProvinces);
     const ordered = ['四川'].concat(provinces.filter(p => p !== '四川'));
     provSelect.innerHTML = '<option value="">-- 选择省份 --</option>' +
-        ordered.map(p => p === '四川' ? `<option value="${p}">${p}</option>` : `<option value="" disabled>${p}（建设中）</option>`).join('');
+        ordered.map(p => `<option value="${p}">${p}</option>`).join('');
 }
 
 // 上传页省份变化时，填充城市列表
@@ -3846,10 +3851,10 @@ function renderCitySelector() {
     // 填充省份（只填一次）
     if (provSelect && (!provSelect.options.length || provSelect.options.length === 1)) {
         const provinces = Object.keys(TRAINING_DB.nationalProvinces);
-        // 四川排第一，其余省份标记建设中
+        // 四川排第一
         const ordered = ['四川'].concat(provinces.filter(p => p !== '四川'));
         provSelect.innerHTML = '<option value="">-- 选择省份 --</option>' +
-            ordered.map(p => p === '四川' ? `<option value="${p}">${p}</option>` : `<option value="" disabled>${p}（建设中）</option>`).join('');
+            ordered.map(p => `<option value="${p}">${p}</option>`).join('');
     }
     if (citySelect && (!citySelect.options.length || citySelect.options.length === 1)) {
         citySelect.innerHTML = '<option value="">-- 选择城市 --</option>';
