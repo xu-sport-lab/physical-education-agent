@@ -1939,7 +1939,7 @@ function initReportProvinceSelector() {
     const provinces = Object.keys(TRAINING_DB.nationalProvinces);
     const ordered = ['四川'].concat(provinces.filter(p => p !== '四川'));
     provSelect.innerHTML = '<option value="">-- 选择省份 --</option>' +
-        ordered.map(p => `<option value="${p}">${p}</option>`).join('');
+        ordered.map(p => p === '四川' ? `<option value="${p}">${p}</option>` : `<option value="" disabled>${p}（建设中）</option>`).join('');
 }
 
 // ==================== 上传页省份/城市选择器 ====================
@@ -1952,7 +1952,7 @@ function initUploadProvinceSelector() {
     const provinces = Object.keys(TRAINING_DB.nationalProvinces);
     const ordered = ['四川'].concat(provinces.filter(p => p !== '四川'));
     provSelect.innerHTML = '<option value="">-- 选择省份 --</option>' +
-        ordered.map(p => `<option value="${p}">${p}</option>`).join('');
+        ordered.map(p => p === '四川' ? `<option value="${p}">${p}</option>` : `<option value="" disabled>${p}（建设中）</option>`).join('');
 }
 
 // 上传页省份变化时，填充城市列表
@@ -3846,10 +3846,10 @@ function renderCitySelector() {
     // 填充省份（只填一次）
     if (provSelect && (!provSelect.options.length || provSelect.options.length === 1)) {
         const provinces = Object.keys(TRAINING_DB.nationalProvinces);
-        // 四川排第一
+        // 四川排第一，其余省份标记建设中
         const ordered = ['四川'].concat(provinces.filter(p => p !== '四川'));
         provSelect.innerHTML = '<option value="">-- 选择省份 --</option>' +
-            ordered.map(p => `<option value="${p}">${p}</option>`).join('');
+            ordered.map(p => p === '四川' ? `<option value="${p}">${p}</option>` : `<option value="" disabled>${p}（建设中）</option>`).join('');
     }
     if (citySelect && (!citySelect.options.length || citySelect.options.length === 1)) {
         citySelect.innerHTML = '<option value="">-- 选择城市 --</option>';
