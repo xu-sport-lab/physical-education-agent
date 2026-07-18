@@ -630,11 +630,7 @@ function renderTestItems(grade, gender) {
         itemsWithBmi.splice(lastBodyShapeIdx + 1, 0, { key: 'bmi', name: 'BMI 评分', unit: '分', category: '身体形态' });
     }
 
-    container.innerHTML = `
-    <div style="margin-bottom:12px;padding:8px 12px;background:#f0f7ff;border:1px solid #bfdbfe;border-radius:8px;font-size:12px;color:#1e3a5f;">
-        📋 评分体系：<strong>国家学生体质健康标准（2014年修订）</strong>——非中考满分线，仅用于体质健康评估
-    </div>
-    ` + itemsWithBmi.map(item => {
+    container.innerHTML = itemsWithBmi.map(item => {
         if (item.key === 'bmi') {
             // BMI 是只读展示行
             return `
@@ -778,7 +774,6 @@ function getScoreFromValue(value, standard, key) {
         else if (numValue >= high - step * 6) { score = 60; gradeLevel = '刚达标'; }
         else { score = 40; gradeLevel = '待提升'; }
     }
-    console.log(`[评分] ${key}: value=${numValue} low=${low} high=${high} step=${step} reverse=${!!reverse} → score=${score} grade=${gradeLevel}`);
     return { score, grade: gradeLevel };
 }
 
@@ -4285,13 +4280,23 @@ function buildOneHourPlan(targetQualities, grade, ageGroupKey, goal, examCity, s
     const cooldowns = pickExercisesByTime(cooldownPool, targets.cooldown, grade, 5);
 
     const warmupTime = warmups.reduce((s, e) => s + e.duration, 0);
-    const mainTime = mainExercises.reduce((s, e) => s + e.duration, 0);
+    let mainTime = mainExercises.reduce((s, e) => s + e.duration, 0);
     const cooldownTime = cooldowns.reduce((s, e) => s + e.duration, 0);
-    // 固定休息补水时间：热身→主体间2分钟 + 主体动作间各2分钟
     const REST_BETWEEN = 2;
-    const restTime = (warmups.length > 0 && mainExercises.length > 0 ? REST_BETWEEN : 0)
+    let restTime = (warmups.length > 0 && mainExercises.length > 0 ? REST_BETWEEN : 0)
                    + (mainExercises.length > 1 ? REST_BETWEEN * (mainExercises.length - 1) : 0);
-    const totalTime = warmupTime + restTime + mainTime + cooldownTime;
+    let totalTime = warmupTime + restTime + mainTime + cooldownTime;
+    // 封顶：超出 sessionDuration+5 时从主体末尾删动作
+    const maxTotal = sessionDuration + 5;
+    while (totalTime > maxTotal && mainExercises.length > 3) {
+        const removed = mainExercises.pop();
+        mainTime -= removed.duration;
+        restTime = (warmups.length > 0 && mainExercises.length > 0 ? REST_BETWEEN : 0)
+                   + (mainExercises.length > 1 ? REST_BETWEEN * (mainExercises.length - 1) : 0);
+        totalTime = warmupTime + restTime + mainTime + cooldownTime;
+        console.log(`[时长封顶] 移除"${removed.name}"(${removed.duration}min) → 总时长${totalTime}min`);
+    }
+    if (totalTime > maxTotal) console.warn(`[时长封顶] 已删至3个主体动作，仍为${totalTime}min（目标≤${maxTotal}min）`);
 
     // 收集需要额外器材的提示
     const extraEquipmentWarnings = [];
