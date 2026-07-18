@@ -3798,7 +3798,10 @@ function saveCustomExercise() {
 }
 function loadCustomExercises() {
     try {
-        const saved = JSON.parse(localStorage.getItem('customExercises') || '[]');
+        const raw = localStorage.getItem('customExercises');
+        console.log('[自建动作] localStorage原始数据:', raw ? raw.substring(0, 100) + '...' : 'null');
+        const saved = JSON.parse(raw || '[]');
+        console.log('[自建动作] localStorage中共', saved.length, '条记录');
         let loadedCount = 0;
         saved.forEach(item => {
             if (!TRAINING_DB.exercises[item.category]) TRAINING_DB.exercises[item.category] = [];
@@ -3807,8 +3810,9 @@ function loadCustomExercises() {
                 loadedCount++;
             }
         });
+        console.log('[自建动作] 成功加载', loadedCount, '个自建动作到TRAINING_DB');
         if (loadedCount > 0) {
-            console.log('[自建动作] 从localStorage加载了', loadedCount, '个自建动作');
+            setTimeout(() => showToast(`已从本地恢复${loadedCount}个自建动作`, 'success'), 2000);
         }
     } catch(e) {
         console.error('[自建动作] localStorage加载失败:', e.message || e);
